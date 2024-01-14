@@ -6,6 +6,16 @@
         insert into user(accountNumber, username, password,phoneNumber)
         values (#{id},#{username},#{password},#{phoneNumber})
     </insert>
+
+    <select id="getByPhoneNumber" resultType="user">
+        select * from user where phoneNumber=#{phone}
+    </select>
+
+    <select id="findUserById" resultType="user">
+        select * from user where accountNumber=#{accountNumber}
+    </select>
+
+
     <select id="selectCount" resultType="long">
         select count(*) from user where username=#{username}
     </select>

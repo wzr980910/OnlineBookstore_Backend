@@ -12,6 +12,15 @@ public interface UserService {
       * @return  用户是否添加成功
       */
 
+     /**
+      * 通过手机号查找用户
+      * @param phone
+      * @return
+      */
+     User getByPhoneNumber(String phone);
+
+     User findUserById(String accountNumber);
+
 
      ResponseMessage regist(User user);
 
