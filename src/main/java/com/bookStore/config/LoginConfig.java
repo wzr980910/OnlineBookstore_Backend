@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @Date: 2024/01/12/19:39
  * @Description:登录拦截器
  */
-@Configuration
+//@Configuration
 public class LoginConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -21,6 +21,7 @@ public class LoginConfig implements WebMvcConfigurer {
         InterceptorRegistration registration = registry.addInterceptor(new LoginInterceptor());
         registration.addPathPatterns("/**");    //所有路径都被拦截
         registration.excludePathPatterns(       //添加不拦截路径
+                "/adminLogin",
                 "/login",
                 "/**/*.html",
                 "/**/*.js",
