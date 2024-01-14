@@ -1,24 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bookStore.mapper.UserMapper">
-    <insert id="addUser">
-        insert into user(accountNumber, username, password,phoneNumber)
-        values (#{id},#{username},#{password},#{phoneNumber})
-    </insert>
 
-    <select id="getByPhoneNumber" resultType="user">
-        select * from user where phoneNumber=#{phone}
-    </select>
+    <resultMap id="BaseResultMap" type="com.bookStore.pojo.User">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="accountnumber" column="accountNumber" jdbcType="VARCHAR"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="username" column="userName" jdbcType="VARCHAR"/>
+            <result property="phonenumber" column="phoneNumber" jdbcType="VARCHAR"/>
+    </resultMap>
 
-    <select id="findUserById" resultType="user">
-        select * from user where accountNumber=#{accountNumber}
-    </select>
-
-
-    <select id="selectCount" resultType="long">
-        select count(*) from user where username=#{username}
-    </select>
-
-
+    <sql id="Base_Column_List">
+        id,accountNumber,password,
+        userName,phoneNumber
+    </sql>
 </mapper>

@@ -1,23 +1,18 @@
 package com.bookStore.mapper;
 
-import com.bookStore.entity.Admin;
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
-
+import com.bookStore.pojo.Admin;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * Created with Intellij IDEA.
- *
- * @Author: wzr
- * @Date: 2024/01/13/9:23
- * @Description:通过管理员名称查询管理员信息
- */
-@Repository     //将类识别为Bean，将接口的实现类交给spring管理
-@Mapper         //在运行时,会自动生成该接口的实现类对象(代理对象),并将该对象交给IOC容器管理
-public interface AdminMapper {
-
-    //登录时查询单个用户信息
-    Admin selectAdmin(String adminName,String password);
-
+* @author 邓桂材
+* @description 针对表【admin(管理员表)】的数据库操作Mapper
+* @createDate 2024-01-14 12:03:10
+* @Entity com.bookStore.pojo.Admin
+*/
+public interface AdminMapper extends BaseMapper<Admin> {
 
 }
+
+
+
+

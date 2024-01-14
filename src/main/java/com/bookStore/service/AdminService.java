@@ -1,14 +1,13 @@
 package com.bookStore.service;
 
-import com.bookStore.entity.Admin;
+import com.bookStore.pojo.Admin;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
- * Created with Intellij IDEA.
- *
- * @Author: wzr
- * @Date: 2024/01/13/9:15
- * @Description:
- */
-public interface AdminService {
-    Admin login(String adminName,String password);
+* @author 邓桂材
+* @description 针对表【admin(管理员表)】的数据库操作Service
+* @createDate 2024-01-14 12:03:10
+*/
+public interface AdminService extends IService<Admin> {
+
 }
