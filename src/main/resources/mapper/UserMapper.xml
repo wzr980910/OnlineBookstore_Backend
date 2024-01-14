@@ -2,8 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bookStore.mapper.UserMapper">
-    <insert id="addUser" parameterType="user">
-        insert into book(id, username, password)
-        values (id = #{id}, username = #{username}, password = #{password})
+    <insert id="addUser">
+        insert into user(accountNumber, username, password,phoneNumber)
+        values (#{id},#{username},#{password},#{phoneNumber})
     </insert>
+    <select id="selectCount" resultType="long">
+        select count(*) from user where username=#{username}
+    </select>
+
+
 </mapper>

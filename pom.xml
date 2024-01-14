@@ -40,6 +40,7 @@
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>2.3.1</version>
         </dependency>
+
         <!--数据库驱动-->
         <dependency>
             <groupId>com.mysql</groupId>
@@ -52,7 +53,12 @@
             <artifactId>druid</artifactId>
             <version>1.2.16</version>
         </dependency>
-
+<!--        实体类属性与数据库列名对应注解相关依赖-->
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>3.0.0</version>
+        </dependency>
         <!--集成swagger2文档-->
         <dependency>
             <groupId>io.springfox</groupId>
@@ -64,6 +70,12 @@
             <artifactId>springfox-swagger2</artifactId>
             <version>2.9.2</version>
         </dependency>
+<!--        参数校验依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
 
         <!--JWT-->
         <dependency>

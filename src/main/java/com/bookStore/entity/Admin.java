@@ -9,14 +9,18 @@ import lombok.NoArgsConstructor;
  *
  * @Author: wzr
  * @Date: 2024/01/12/19:44
- * @Description:
+ * @Description:管理员实体类
  */
 @Data                   //自动生成getter setter方法
 @NoArgsConstructor      //生成无参构造函数
 @AllArgsConstructor     //生成有参构造函数
 public class Admin {
-    private Integer id;
-    private String adminName;
-    private String password;
-    private String level;
+
+    private Integer adminID;                //管理员id
+
+    private String adminName;               //管理员名称
+
+    private String password;                //管理员密码
+
+    private String level;                   //管理员权限
 }

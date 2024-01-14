@@ -19,14 +19,14 @@ import java.util.Map;
  *
  * @Author: wzr
  * @Date: 2024/01/12/19:32
- * @Description:
+ * @Description:管理员登录Controller类
  */
 @RestController
-public class backLoginController {
+public class BackLoginController {
     private AdminService adminService;
 
     @Autowired
-    public backLoginController(AdminService adminService){
+    public BackLoginController(AdminService adminService){
         this.adminService = adminService;
     }
 
@@ -39,6 +39,7 @@ public class backLoginController {
                 Map<String, Object> map = new HashMap<>();
                 request.getSession().setAttribute(ConstantsUtil.Admin_Session, admin);
                 map.put("adminName", admin.getAdminName());
+                map.put("level",admin.getLevel());
                 responseMessage.setStatusCode(CodeNumEntity.SUCCESS.getCode());
                 responseMessage.setStatusMessage(CodeNumEntity.SUCCESS.getMessage());
                 responseMessage.setContent(map);

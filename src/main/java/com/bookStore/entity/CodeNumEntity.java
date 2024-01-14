@@ -12,6 +12,7 @@ public enum CodeNumEntity implements CodeNum{
     FAIL("400","操作失败"),
     DATABASE_ERROR("301","数据库查询错误"),
     USER_ERROR("302","用户名或密码错误"),
+    USER_EXISTS("303","用户已存在"),
     SERVER_ERROR("500","内部服务器错误");
 
     private String code;
