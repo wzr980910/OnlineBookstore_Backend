@@ -6,7 +6,7 @@ spring:
   datasource:
     username: aliyun2028857006
     password: 598949Lytxgz
-    url: jdbc:mysql://rm-cn-pe33kbti0000njgo.rwlb.cn-chengdu.rds.aliyuncs.com:3306/online_book_shop?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://rm-cn-pe33kbti0000njgo.rwlb.cn-chengdu.rds.aliyuncs.com:3306/online_book_shop?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
   mvc:
@@ -22,7 +22,11 @@ spring:
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: false
+<<<<<<< HEAD
   type-aliases-package: com.bookStore.pojo
+=======
+  type-aliases-package: com.atguigu.pojo
+>>>>>>> origin/main
   global-config:
     db-config:
       logic-delete-field: isDeleted  #全局逻辑删除

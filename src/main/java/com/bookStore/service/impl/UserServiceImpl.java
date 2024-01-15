@@ -9,6 +9,7 @@ import com.bookStore.mapper.UserMapper;
 import com.bookStore.util.JwtHelper;
 import com.bookStore.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.CoderResult;
