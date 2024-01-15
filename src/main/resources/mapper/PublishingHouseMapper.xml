@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bookStore.mapper.PublishingHouseMapper">
+
+    <resultMap id="BaseResultMap" type="com.bookStore.pojo.PublishingHouse">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="publishname" column="publishName" jdbcType="VARCHAR"/>
+            <result property="publishAddress" column="publishAddress" jdbcType="VARCHAR"/>
+            <result property="publishPhone" column="publishPhone" jdbcType="BIGINT"/>
+            <result property="publishEmail" column="publishEmail" jdbcType="VARCHAR"/>
+            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+            <result property="isDeleted" column="isDeleted" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,publishName,publishAddress,
+        publishPhone,publishEmail,createTime,
+        updateTime,isDeleted
+    </sql>
+</mapper>
