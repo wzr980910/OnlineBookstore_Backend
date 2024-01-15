@@ -22,7 +22,6 @@ import java.lang.reflect.Method;
  * @date 2024/01/13 18:57
  */
 @Component
-@Order(2)
 public class AuthenticationInterceptor implements HandlerInterceptor {
     private JwtHelper jwtHelper;
 

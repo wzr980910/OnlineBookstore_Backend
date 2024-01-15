@@ -11,7 +11,6 @@ import java.util.Date;
 
 @Data
 @Component
-@Order(0)
 @ConfigurationProperties(prefix = "jwt.token")
 public class JwtHelper {
 

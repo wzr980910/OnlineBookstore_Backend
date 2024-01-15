@@ -19,7 +19,6 @@ import java.nio.charset.CoderResult;
  * @createDate 2024-01-14 16:56:54
  */
 @Service
-@Order(0)
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         implements UserService {
     private UserMapper userMapper;
