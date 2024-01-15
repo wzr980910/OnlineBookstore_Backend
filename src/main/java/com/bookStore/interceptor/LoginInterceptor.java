@@ -1,6 +1,6 @@
 package com.bookStore.interceptor;
 
-import com.bookStore.entity.Admin;
+import com.bookStore.pojo.Admin;
 import com.bookStore.util.ConstantsUtil;
 import org.springframework.web.servlet.HandlerInterceptor;
 

@@ -1,14 +1,14 @@
 package com.bookStore.controller;
 
-import com.bookStore.entity.CodeNumEntity;
-import com.bookStore.entity.ResponseMessage;
+import com.bookStore.pojo.Admin;
+import com.bookStore.util.result.RestResult;
 import com.bookStore.service.AdminService;
 import com.bookStore.util.ConstantsUtil;
+import com.bookStore.util.result.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.bookStore.entity.Admin;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -31,8 +31,8 @@ public class BackLoginController {
     }
 
     @PostMapping("/adminLogin")
-    public ResponseMessage login(HttpServletRequest request, @RequestParam String adminName, @RequestParam String password) {
-        ResponseMessage responseMessage = new ResponseMessage();
+    public RestResult login(HttpServletRequest request, @RequestParam String adminName, @RequestParam String password) {
+        RestResult restResult = new RestResult();
         if(!adminName.trim().equals("") && !password.trim().equals("")) {
             Admin admin = adminService.login(adminName, password);
             if (admin != null) {
@@ -40,17 +40,17 @@ public class BackLoginController {
                 request.getSession().setAttribute(ConstantsUtil.Admin_Session, admin);
                 map.put("adminName", admin.getAdminName());
                 map.put("level",admin.getLevel());
-                responseMessage.setStatusCode(CodeNumEntity.SUCCESS.getCode());
-                responseMessage.setStatusMessage(CodeNumEntity.SUCCESS.getMessage());
-                responseMessage.setContent(map);
+                restResult.setCode(ResultCode.SUCCESS.getCode());
+                restResult.setMessage(ResultCode.SUCCESS.getMessage());
+                restResult.setData(map);
             } else {
-                responseMessage.setStatusCode(CodeNumEntity.USER_ERROR.getCode());
-                responseMessage.setStatusMessage(CodeNumEntity.USER_ERROR.getMessage());
+                restResult.setCode(ResultCode.USER_LOGIN_ERROR.getCode());
+                restResult.setMessage(ResultCode.USER_LOGIN_ERROR.getMessage());
             }
         } else {
-            responseMessage.setStatusCode(CodeNumEntity.USER_ERROR.getCode());
-            responseMessage.setStatusMessage(CodeNumEntity.USER_ERROR.getMessage());
+            restResult.setCode(ResultCode.USER_LOGIN_ERROR.getCode());
+            restResult.setMessage(ResultCode.USER_LOGIN_ERROR.getMessage());
         }
-        return responseMessage;
+        return restResult;
     }
 }

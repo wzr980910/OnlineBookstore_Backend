@@ -1,0 +1,27 @@
+package com.bookStore.util;
+
+/**
+ * ClassName: ThreadLocalUtils
+ * Package: com.bookStore.util
+ * Description:
+ *
+ * @Author: 邓桂材
+ * @Create: 2024/1/15 -0:11
+ * @Version: v1.0
+ */
+public class ThreadLocalUtil {
+    //提供ThreadLocal对象
+    private static final ThreadLocal THREAD_LOCAL=new ThreadLocal();
+    //根据键获取值
+    public static <T> T get(){
+        return (T) THREAD_LOCAL.get();
+    }
+    //存储键值对
+    public static void set(Object value){
+        THREAD_LOCAL.set(value);
+    }
+    //清除ThreadLocal 防止内存泄漏
+    public static void remove(){
+        THREAD_LOCAL.remove();
+    }
+}

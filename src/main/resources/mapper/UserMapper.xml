@@ -6,10 +6,10 @@
 
     <resultMap id="BaseResultMap" type="com.bookStore.pojo.User">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="accountnumber" column="accountNumber" jdbcType="VARCHAR"/>
+            <result property="accountNumber" column="accountNumber" jdbcType="VARCHAR"/>
             <result property="password" column="password" jdbcType="VARCHAR"/>
             <result property="username" column="userName" jdbcType="VARCHAR"/>
-            <result property="phonenumber" column="phoneNumber" jdbcType="VARCHAR"/>
+            <result property="phoneNumber" column="phoneNumber" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">

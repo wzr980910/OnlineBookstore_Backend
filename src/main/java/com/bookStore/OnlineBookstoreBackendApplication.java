@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication
-@MapperScan(value = "com.bookStore.mapper")
+@MapperScan("com.bookStore.mapper")
 public class OnlineBookstoreBackendApplication {
 
     public static void main(String[] args) {

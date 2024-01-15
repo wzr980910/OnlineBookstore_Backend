@@ -15,6 +15,26 @@ spring:
 
 
 
-mybatis:
-  mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.bookStore.entity
+
+
+
+# mybatis-plus的配置
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false
+  type-aliases-package: com.atguigu.pojo
+  global-config:
+    db-config:
+      logic-delete-field: isDeleted  #全局逻辑删除
+      id-type: auto #主键策略自增长
+
+#jwt配置
+jwt:
+  token:
+    tokenExpiration: 120 #有效时间,单位分钟
+    tokenSignKey: headline123456  #当前程序签名秘钥 自定义
+
+
+
+
+

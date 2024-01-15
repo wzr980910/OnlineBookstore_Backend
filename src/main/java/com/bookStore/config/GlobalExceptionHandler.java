@@ -1,17 +1,14 @@
 package com.bookStore.config;
 
-import com.bookStore.entity.ResponseMessage;
+import com.bookStore.util.result.RestResult;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @Configuration
@@ -20,7 +17,7 @@ public class GlobalExceptionHandler {
     //处理参数校验异常
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseMessage handleValidationException(MethodArgumentNotValidException ex) {
+    public RestResult handleValidationException(MethodArgumentNotValidException ex) {
         BindingResult bindingResult = ex.getBindingResult();
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
         StringBuilder errorInfo=new StringBuilder();
@@ -32,9 +29,9 @@ public class GlobalExceptionHandler {
             // 拼接错误信息
             errorInfo.append(fieldName).append(": ").append(errorMessage).append("; ");
         }
-        ResponseMessage responseMessage = new ResponseMessage();
-        responseMessage.setStatusMessage(errorInfo.toString());
-        return responseMessage;
+        RestResult restResult = new RestResult();
+        restResult.setMessage(errorInfo.toString());
+        return restResult;
     }
 
     // 其他异常处理方法...

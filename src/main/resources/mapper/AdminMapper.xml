@@ -5,18 +5,18 @@
 <mapper namespace="com.bookStore.mapper.AdminMapper">
 
     <resultMap id="BaseResultMap" type="com.bookStore.pojo.Admin">
-            <id property="adminid" column="adminId" jdbcType="INTEGER"/>
-            <result property="adminname" column="adminName" jdbcType="VARCHAR"/>
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="adminName" column="adminName" jdbcType="VARCHAR"/>
             <result property="password" column="password" jdbcType="VARCHAR"/>
             <result property="level" column="level" jdbcType="INTEGER"/>
-            <result property="isdeleted" column="isDeleted" jdbcType="TINYINT"/>
-            <result property="createtime" column="createTime" jdbcType="TIMESTAMP"/>
-            <result property="updatetime" column="updateTime" jdbcType="TIMESTAMP"/>
+            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+            <result property="isDeleted" column="isDeleted" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        adminId,adminName,password,
-        level,isDeleted,createTime,
-        updateTime
+        id,adminName,password,
+        level,createTime,updateTime,
+        isDeleted
     </sql>
 </mapper>

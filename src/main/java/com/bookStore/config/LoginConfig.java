@@ -1,5 +1,6 @@
 package com.bookStore.config;
 
+import com.bookStore.interceptor.AuthenticationInterceptor;
 import com.bookStore.interceptor.LoginInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
@@ -15,21 +16,33 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 //@Configuration
 public class LoginConfig implements WebMvcConfigurer {
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        //注册LoginInterceptor拦截器
-//        InterceptorRegistration registration = registry.addInterceptor(new LoginInterceptor());
-//        registration.addPathPatterns("/**");    //所有路径都被拦截
-//        registration.excludePathPatterns(       //添加不拦截路径
-//                "/login",
-//                "/**/*.html",
-//                "/**/*.js",
-//                "/**/*.css",
-//                "/**/*.jpg",
-//                "/swagger-ui.html",
-//                "/swagger-resources/**",
-//                "/webjars/**"
-//
-//        );
-//    }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        //注册LoginInterceptor拦截器
+        InterceptorRegistration registration = registry.addInterceptor(new LoginInterceptor());
+        registration.addPathPatterns("/**");    //所有路径都被拦截
+        registration.excludePathPatterns(       //添加不拦截路径
+                "/login",
+                "/**/*.html",
+                "/**/*.js",
+                "/**/*.css",
+                "/**/*.jpg",
+                "/swagger-ui.html",
+                "/swagger-resources/**",
+                "/webjars/**"
+
+        );
+        InterceptorRegistration authRegistration=registry.addInterceptor(new AuthenticationInterceptor());
+        authRegistration.addPathPatterns("/**");    //所有路径都被拦截
+        authRegistration.excludePathPatterns(       //添加不拦截路径
+                "/login",
+                "/**/*.html",
+                "/**/*.js",
+                "/**/*.css",
+                "/**/*.jpg",
+                "/swagger-ui.html",
+                "/swagger-resources/**",
+                "/webjars/**"
+        );
+    }
 }
