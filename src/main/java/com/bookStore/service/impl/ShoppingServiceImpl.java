@@ -28,7 +28,6 @@ public class ShoppingServiceImpl extends ServiceImpl<ShoppingMapper, Shopping>
 
     private ShoppingMapper shoppingMapper;
     private BookMapper bookMapper;
-
     private PublishingHouseMapper publishingHouseMapper;
 
     @Autowired

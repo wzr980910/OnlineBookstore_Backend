@@ -1,0 +1,40 @@
+server:
+  port: 8080
+
+#spring配置
+spring:
+  datasource:
+    username: aliyun2028857006
+    password: 598949Lytxgz
+    url: jdbc:mysql://rm-cn-pe33kbti0000njgo.rwlb.cn-chengdu.rds.aliyuncs.com:3306/online_book_shop?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+
+
+
+
+
+
+# mybatis-plus的配置
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false
+  type-aliases-package: com.bookStore.pojo
+  global-config:
+    db-config:
+      logic-delete-field: isDeleted  #全局逻辑删除
+      id-type: auto #主键策略自增长
+
+#jwt配置
+jwt:
+  token:
+    tokenExpiration: 120 #有效时间,单位分钟
+    tokenSignKey: headline123456  #当前程序签名秘钥 自定义
+
+
+
+
+

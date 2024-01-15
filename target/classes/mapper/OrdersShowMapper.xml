@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bookStore.mapper.OrdersShowMapper">
+
+    <resultMap id="BaseResultMap" type="com.bookStore.pojo.OrdersShow">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="orderId" column="orderId" jdbcType="BIGINT"/>
+            <result property="accountNumber" column="accountNumber" jdbcType="VARCHAR"/>
+            <result property="date" column="date" jdbcType="DATE"/>
+            <result property="totalPrice" column="totalPrice" jdbcType="DECIMAL"/>
+            <result property="toShoppingAddress" column="toShoppingAddress" jdbcType="VARCHAR"/>
+            <result property="contact" column="contact" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,orderId,accountNumber,
+        date,totalPrice,toShoppingAddress,
+        contact,status
+    </sql>
+</mapper>
