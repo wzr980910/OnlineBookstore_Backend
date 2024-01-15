@@ -2,22 +2,20 @@ package com.bookStore.controller;
 
 
 import com.bookStore.pojo.User;
+import com.bookStore.service.UserService;
 import com.bookStore.util.JwtHelper;
 import com.bookStore.util.result.RestResult;
-import com.bookStore.service.UserService;
 import com.bookStore.util.result.ResultCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.nio.charset.CoderResult;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.springframework.validation.annotation.Validated;
 
 @RestController
 @RequestMapping("/user")

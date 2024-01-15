@@ -8,6 +8,7 @@ import com.bookStore.mapper.UserMapper;
 import com.bookStore.util.JwtHelper;
 import com.bookStore.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.CoderResult;
@@ -18,6 +19,7 @@ import java.nio.charset.CoderResult;
  * @createDate 2024-01-14 16:56:54
  */
 @Service
+@Order(0)
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         implements UserService {
     private UserMapper userMapper;
