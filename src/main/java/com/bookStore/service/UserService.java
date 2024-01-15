@@ -17,4 +17,14 @@ public interface UserService extends IService<User> {
 
     User login(String username, String password);
 
+    /**
+     * 用户修改个人信息
+     */
+    Integer updateUser(User user);
+
+    /**
+     * 通过id查用户信息
+     */
+    User queryUserById(Integer id);
+
 }

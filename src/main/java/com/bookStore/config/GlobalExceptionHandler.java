@@ -33,6 +33,5 @@ public class GlobalExceptionHandler {
         restResult.setMessage(errorInfo.toString());
         return restResult;
     }
-
     // 其他异常处理方法...
 }

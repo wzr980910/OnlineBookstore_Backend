@@ -1,6 +1,7 @@
 package com.bookStore.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bookStore.pojo.User;
 import com.bookStore.service.UserService;
@@ -56,6 +57,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         //通过用户名和加密后的密码查找用户
         User user = userMapper.selectOne(wrapper);
         return user;
+    }
+
+    @Override
+    public Integer updateUser(User user) {
+        int insert = userMapper.updateById(user);
+        return insert;
+    }
+
+    @Override
+    public User queryUserById(Integer id) {
+        return userMapper.selectById(id);
     }
 
 

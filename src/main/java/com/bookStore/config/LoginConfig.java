@@ -31,17 +31,17 @@ public class LoginConfig implements WebMvcConfigurer {
 //                "/webjars/**"
 //
 //        );
-        InterceptorRegistration authRegistration=registry.addInterceptor(new AuthenticationInterceptor());
-        authRegistration.addPathPatterns("/**");    //所有路径都被拦截
-        authRegistration.excludePathPatterns(       //添加不拦截路径
-                "/user/login",
-                "/**/*.html",
-                "/**/*.js",
-                "/**/*.css",
-                "/**/*.jpg",
-                "/swagger-ui.html",
-                "/swagger-resources/**",
-                "/webjars/**"
-        );
+//        InterceptorRegistration authRegistration=registry.addInterceptor(new AuthenticationInterceptor());
+//        authRegistration.addPathPatterns("/**");    //所有路径都被拦截
+//        authRegistration.excludePathPatterns(       //添加不拦截路径
+//                "/user/login",
+//                "/**/*.html",
+//                "/**/*.js",
+//                "/**/*.css",
+//                "/**/*.jpg",
+//                "/swagger-ui.html",
+//                "/swagger-resources/**",
+//                "/webjars/**"
+//        );
     }
 }

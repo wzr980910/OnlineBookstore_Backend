@@ -1,8 +1,12 @@
 package com.bookStore.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.bookStore.mapper.UserMapper;
 import com.bookStore.pojo.User;
 import com.bookStore.util.JwtHelper;
+import com.bookStore.util.MD5Util;
 import com.bookStore.util.result.RestResult;
 import com.bookStore.service.UserService;
 import com.bookStore.util.result.ResultCode;
@@ -13,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.nio.charset.CoderResult;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +30,8 @@ public class UserController {
     private UserService userService;
     private JwtHelper jwtHelper;
 
+    private UserMapper userMapper;
+
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
@@ -35,6 +40,11 @@ public class UserController {
     @Autowired
     public void setJwtHelper(JwtHelper jwtHelper) {
         this.jwtHelper = jwtHelper;
+    }
+
+    @Autowired
+    public void setUserMapper(UserMapper userMapper){
+        this.userMapper = userMapper;
     }
 
     /**
@@ -94,7 +104,7 @@ public class UserController {
      * 用户登录
      *
      * @param httpServletRequest
-     * @param phone
+     * @param accountNumber
      * @param password
      * @return
      */
@@ -126,5 +136,96 @@ public class UserController {
             restResult = new RestResult(ResultCode.SUCCESS, map);
             return restResult;
         }
+    }
+
+    /**
+     * 修改密码
+     * @param userId
+     * @param oldPassword
+     * @param newPassword
+     * @return
+     */
+    @PostMapping(value = "/updatePassword")
+    @ApiOperation(value = "修改密码", notes = "用户id 旧密码 新密码 必填")
+    public RestResult updatePassword(@RequestParam Integer userId,
+                                     @RequestParam String oldPassword,
+                                     @RequestParam String newPassword) {
+        //通过id查到该用户
+        User user = userService.queryUserById(userId);
+        if (!user.getPassword().equals(MD5Util.encrypt(oldPassword))) {
+            return RestResult.failure(ResultCode.OPERATION_FAILURE, "原密码输入错误");
+        } else {
+            //设置新密码
+            user.setPassword(MD5Util.encrypt(newPassword));
+        }
+        Integer rows = userService.updateUser(user);
+        if (rows > 0) {
+            return RestResult.success(ResultCode.SUCCESS, "修改成功",user);
+        } else {
+            return RestResult.failure(ResultCode.OPERATION_FAILURE, "修改失败");
+        }
+    }
+
+    /**
+     * 个人信息
+     * @param userId
+     * @param accountNumber
+     * @param userName
+     * @param phone
+     * @return
+     */
+    @PostMapping(value = "/updateUser")
+    @ApiOperation(value = "修改用户基本信息", notes = "用户id 账号 昵称 电话号码 必填")
+    public RestResult updateUser(@RequestParam Integer userId,
+                                 @RequestParam String accountNumber,
+                                 @RequestParam String userName,
+                                 @RequestParam String phone) {
+        //通过id查到该用户
+        User user = userService.queryUserById(userId);
+        user.setAccountNumber(accountNumber);
+        user.setUsername(userName);
+        user.setPhoneNumber(phone);
+        Integer rows = userService.updateUser(user);
+        if (rows > 0) {
+            return RestResult.success(ResultCode.SUCCESS, "修改成功");
+        } else {
+            return RestResult.failure(ResultCode.OPERATION_FAILURE, "修改失败");
+        }
+    }
+
+    /**
+     * 忘记密码 将用户密码重置为123456
+     * @param phone
+     * @param accountNumber
+     * @return
+     */
+    @PostMapping(value = "/forgetPassword")
+    @ApiOperation(value = "忘记密码", notes = "账号 电话号码 必填")
+    public RestResult forgetPassword(String phone, String accountNumber){
+        QueryWrapper<User> query = Wrappers.query();
+        query.eq("phoneNumber",phone).eq("accountNumber",accountNumber);
+        User user = userMapper.selectOne(query);
+        if (user!=null){
+            user.setPassword(MD5Util.encrypt("123456"));
+            userMapper.updateById(user);
+            return RestResult.success(ResultCode.SUCCESS,"密码已重置为123456!",user);
+        }  else{
+            return RestResult.failure(ResultCode.OPERATION_FAILURE,"操作失败,账号或手机号填写有误!");
+        }
+    }
+
+    /**
+     * userId 查询用户信息
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/queryUserById")
+    @ApiOperation(value = "通过id查用户信息", notes = "用户id 必填")
+    public RestResult queryUserById(Integer id) {
+        User user = userService.queryUserById(id);
+        if (user == null) {
+            return RestResult.failure(ResultCode.OPERATION_FAILURE, "查询失败");
+        }
+        return RestResult.success(ResultCode.SUCCESS, "查询成功", user);
     }
 }
