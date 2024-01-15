@@ -1,7 +1,6 @@
 package com.bookStore.config;
 
 import com.bookStore.interceptor.AuthenticationInterceptor;
-import com.bookStore.interceptor.LoginInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
