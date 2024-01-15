@@ -25,7 +25,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     private UserService userService;
     private JwtHelper jwtHelper;
-
     @Autowired
     public void setJwtHelper(JwtHelper jwtHelper) {
         this.jwtHelper = jwtHelper;
