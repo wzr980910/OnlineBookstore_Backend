@@ -26,17 +26,17 @@ public class LoginConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
-//        InterceptorRegistration authRegistration=registry.addInterceptor(authenticationInterceptor);
-//        authRegistration.addPathPatterns("/**");    //所有路径都被拦截
-//        authRegistration.excludePathPatterns(       //添加不拦截路径
-//                "/user/login",
-//                "/**/*.html",
-//                "/**/*.js",
-//                "/**/*.css",
-//                "/**/*.jpg",
-//                "/swagger-ui.html",
-//                "/swagger-resources/**",
-//                "/webjars/**"
-//        );
+        InterceptorRegistration authRegistration=registry.addInterceptor(authenticationInterceptor);
+        authRegistration.addPathPatterns("/**");    //所有路径都被拦截
+        authRegistration.excludePathPatterns(       //添加不拦截路径
+                "/user/login",
+                "/**/*.html",
+                "/**/*.js",
+                "/**/*.css",
+                "/**/*.jpg",
+                "/swagger-ui.html",
+                "/swagger-resources/**",
+                "/webjars/**"
+        );
     }
 }

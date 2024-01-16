@@ -6,7 +6,7 @@
 
     <resultMap id="BaseResultMap" type="com.bookStore.pojo.Address">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="userNumber" column="userNumber" jdbcType="VARCHAR"/>
+            <result property="userId" column="userId" jdbcType="VARCHAR"/>
             <result property="province" column="province" jdbcType="VARCHAR"/>
             <result property="city" column="city" jdbcType="VARCHAR"/>
             <result property="county" column="county" jdbcType="VARCHAR"/>
@@ -15,7 +15,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,userNumber,province,
+        id,userId,province,
         city,county,detail,
         phone
     </sql>

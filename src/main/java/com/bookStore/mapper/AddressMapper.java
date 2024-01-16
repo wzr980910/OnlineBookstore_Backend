@@ -2,6 +2,7 @@ package com.bookStore.mapper;
 
 import com.bookStore.pojo.Address;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
 * @author 邓桂材
@@ -9,6 +10,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2024-01-14 17:33:39
 * @Entity com.bookStore.pojo.Address
 */
+@Mapper
 public interface AddressMapper extends BaseMapper<Address> {
 
 }
