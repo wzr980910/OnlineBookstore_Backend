@@ -70,8 +70,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public User queryUserById(Integer id) {
         return userMapper.selectById(id);
     }
-
-
 }
 
 

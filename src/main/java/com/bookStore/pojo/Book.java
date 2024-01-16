@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
 
@@ -14,6 +15,7 @@ import lombok.Data;
 @TableName(value ="book")
 @Data
 public class Book implements Serializable {
+
     private Long id;
 
     private String bookName;
@@ -24,7 +26,7 @@ public class Book implements Serializable {
 
     private String publishDate;
 
-    private Long price;
+    private BigDecimal price;
 
     private String picture;
 

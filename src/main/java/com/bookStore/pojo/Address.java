@@ -15,7 +15,7 @@ import lombok.Data;
 public class Address implements Serializable {
     private Long id;
 
-    private String userNumberBookId;
+    private String userNumber;
 
     private String province;
 

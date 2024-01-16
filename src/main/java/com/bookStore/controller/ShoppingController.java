@@ -32,25 +32,25 @@ public class ShoppingController {
     }
 
     /**
-     * 根据用户账号  查询购物车信息
-     * @param userName
+     * 根据用户id  查询购物车信息
+     * @param userId
      * @return
      */
-    @GetMapping(value = "/findAllByAccountName")
-    @ApiOperation(value = "查询购物车信息", notes = "账户必填")
-    public RestResult findAllByAccountName(@RequestParam String userName) {
-        Map<String, Object> mapBooks = shoppingService.findAllByAccountName(userName);
+    @GetMapping(value = "/findAllByUserId")
+    @ApiOperation(value = "查询购物车信息", notes = "id必填")
+    public RestResult findAllByUserId(@RequestParam Integer userId) {
+        Map<String, Object> mapBooks = shoppingService.findAllByUserId(userId);
         return RestResult.success(ResultCode.SUCCESS, "购物车信息", mapBooks);
     }
 
     @GetMapping(value = "/addShopping")
-    @ApiOperation(value = "添加购物车信息", notes = "图书id 图书名字 用户账号 价格 购买数量 必填")
-    public RestResult addShopping(@RequestParam Integer bookId,@RequestParam String userName,
+    @ApiOperation(value = "添加购物车信息", notes = "图书id 图书名字 用户id 价格 购买数量 必填")
+    public RestResult addShopping(@RequestParam Integer bookId,@RequestParam Integer userId,
                                   @RequestParam String bookName,@RequestParam BigDecimal price,
                                   @RequestParam Integer number){
         Shopping shopping = new Shopping();
         shopping.setBookId(Long.valueOf(bookId));
-        shopping.setUserNumberBookId(userName);
+        shopping.setUserId(userId);
         shopping.setBookName(bookName);
         shopping.setPrice(price);
         shopping.setNumber(number);

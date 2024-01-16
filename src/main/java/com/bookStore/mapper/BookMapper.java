@@ -1,7 +1,12 @@
 package com.bookStore.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.bookStore.pojo.Book;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.bookStore.pojo.vo.BookVo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author 邓桂材
@@ -11,6 +16,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface BookMapper extends BaseMapper<Book> {
 
+    IPage<Book> selectBookPage(IPage<?> page , @Param("bookVo") BookVo bookVo);
 }
 
 

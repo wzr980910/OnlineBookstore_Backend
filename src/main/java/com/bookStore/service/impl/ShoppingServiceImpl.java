@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bookStore.mapper.BookMapper;
 import com.bookStore.mapper.PublishingHouseMapper;
+import com.bookStore.mapper.StockMapper;
 import com.bookStore.pojo.Book;
 import com.bookStore.pojo.Shopping;
+import com.bookStore.pojo.Stock;
 import com.bookStore.pojo.respojo.CartBook;
 import com.bookStore.service.ShoppingService;
 import com.bookStore.mapper.ShoppingMapper;
@@ -29,6 +31,7 @@ public class ShoppingServiceImpl extends ServiceImpl<ShoppingMapper, Shopping>
     private ShoppingMapper shoppingMapper;
     private BookMapper bookMapper;
     private PublishingHouseMapper publishingHouseMapper;
+    private StockMapper stockMapper;
 
     @Autowired
     public void setShoppingMapper(ShoppingMapper shoppingMapper) {
@@ -44,11 +47,15 @@ public class ShoppingServiceImpl extends ServiceImpl<ShoppingMapper, Shopping>
     public void setPublishingHouseMapper(PublishingHouseMapper publishingHouseMapper) {
         this.publishingHouseMapper = publishingHouseMapper;
     }
+    @Autowired
+    public void setStockMapper(StockMapper stockMapper) {
+        this.stockMapper = stockMapper;
+    }
 
     @Override
-    public Map<String, Object> findAllByAccountName(String accountName) {
+    public Map<String, Object> findAllByUserId(Integer userId) {
         QueryWrapper<Shopping> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("userId", accountName);
+        queryWrapper.eq("userId", userId);
         //查询出该用户的所有购物车信息
         List<Shopping> shoppingList = shoppingMapper.selectList(queryWrapper);
         List<CartBook> cartBooks = new ArrayList<>();
@@ -57,6 +64,11 @@ public class ShoppingServiceImpl extends ServiceImpl<ShoppingMapper, Shopping>
             CartBook cartBook = new CartBook();
             Book book = bookMapper.selectById(shop.getBookId());
             cartBook.setBookName(book.getBookName());
+            QueryWrapper<Stock> queryWrapper1 = new QueryWrapper<>();
+            queryWrapper1.eq("bookId",book.getId());
+            Stock stock = stockMapper.selectOne(queryWrapper1);
+            //图书库存
+            cartBook.setStockNum(stock.getStockNum());
             cartBook.setImg(book.getPicture());
             cartBook.setPublishName(publishingHouseMapper.selectById(book.getPublishId()).getPublishName());
             cartBook.setNumber(shop.getNumber());
@@ -75,7 +87,6 @@ public class ShoppingServiceImpl extends ServiceImpl<ShoppingMapper, Shopping>
     public Integer addShopping(Shopping shopping) {
         return shoppingMapper.insert(shopping);
     }
-
 
 
 }
