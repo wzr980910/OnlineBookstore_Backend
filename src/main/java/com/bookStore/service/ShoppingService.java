@@ -13,11 +13,11 @@ import java.util.Map;
 */
 public interface ShoppingService extends IService<Shopping> {
    /**
-    * 通过用户账号查询该用户的购物车信息
-    * @param accountName
+    * 通过用户id查询该用户的购物车信息
+    * @param userId
     * @return
     */
-   Map<String,Object> findAllByAccountName(String accountName);
+   Map<String,Object> findAllByUserId(Integer userId);
 
    /**
     * 添加购物车信息

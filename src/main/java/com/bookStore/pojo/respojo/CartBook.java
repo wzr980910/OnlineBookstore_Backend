@@ -35,4 +35,9 @@ public class CartBook {
      */
     private Integer number;
 
+    /**
+     * 库存数量
+     */
+    private Integer stockNum;
+
 }
