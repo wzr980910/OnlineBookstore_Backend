@@ -2,13 +2,14 @@ package com.bookStore.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bookStore.pojo.Book;
+import com.bookStore.pojo.User;
 import com.bookStore.pojo.vo.BookVo;
 import com.bookStore.service.BookService;
 import com.bookStore.mapper.BookMapper;
+import com.github.pagehelper.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,7 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
 
     public Map<String, Object> selectBookPage(BookVo bookVo) {
         //分页
-        IPage page = new Page(bookVo.getPageNum(), bookVo.getPageSize());
+        Page<User> page = new Page<>(bookVo.getPageNum(), bookVo.getPageSize());
         //查询
         bookMapper.selectBookPage(page, bookVo);
 
