@@ -2,6 +2,7 @@ package com.bookStore.controller;
 
 import com.bookStore.pojo.Shopping;
 import com.bookStore.service.ShoppingService;
+import com.bookStore.util.ThreadLocalUtil;
 import com.bookStore.util.result.RestResult;
 import com.bookStore.util.result.ResultCode;
 import io.swagger.annotations.Api;
@@ -9,7 +10,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -33,27 +33,23 @@ public class ShoppingController {
 
     /**
      * 根据用户id  查询购物车信息
-     * @param userId
      * @return
      */
     @GetMapping(value = "/findAllByUserId")
-    @ApiOperation(value = "查询购物车信息", notes = "id必填")
-    public RestResult findAllByUserId(@RequestParam Integer userId) {
+    @ApiOperation(value = "查询购物车信息")
+    public RestResult findAllByUserId() {
+        //获得userId
+        Long userId = ThreadLocalUtil.get();
         Map<String, Object> mapBooks = shoppingService.findAllByUserId(userId);
         return RestResult.success(ResultCode.SUCCESS, "购物车信息", mapBooks);
     }
 
-    @GetMapping(value = "/addShopping")
-    @ApiOperation(value = "添加购物车信息", notes = "图书id 图书名字 用户id 价格 购买数量 必填")
-    public RestResult addShopping(@RequestParam Integer bookId,@RequestParam Integer userId,
-                                  @RequestParam String bookName,@RequestParam BigDecimal price,
-                                  @RequestParam Integer number){
-        Shopping shopping = new Shopping();
-        shopping.setBookId(Long.valueOf(bookId));
+    @PostMapping(value = "/addShopping")
+    @ApiOperation(value = "添加购物车信息", notes = "图书id 购买图书数量 必填")
+    public RestResult addShopping(@RequestBody Shopping shopping){
+        //获得userId
+        Long userId = ThreadLocalUtil.get();
         shopping.setUserId(userId);
-        shopping.setBookName(bookName);
-        shopping.setPrice(price);
-        shopping.setNumber(number);
         Integer rows = shoppingService.addShopping(shopping);
         if (rows>0) {
             return RestResult.success(ResultCode.SUCCESS, "添加购物车成功", rows);
