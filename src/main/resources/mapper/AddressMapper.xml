@@ -14,9 +14,4 @@
             <result property="phone" column="phone" jdbcType="BIGINT"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id,userId,province,
-        city,county,detail,
-        phone
-    </sql>
 </mapper>

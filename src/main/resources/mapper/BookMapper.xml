@@ -26,7 +26,10 @@
             <if test="bookVo.publishName != null">
                 left join publishing_house on book.publishId =publishing_house.id
             </if>
-
+<!--            <if test="bookVo.type != null">-->
+<!--                left join book_type on book.id=book_type.bookId-->
+<!--                left join type on book_type.typeId=type.id-->
+<!--            </if>-->
         </trim>
         <where>
             <if test="bookVo.bookName != null">
