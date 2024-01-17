@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 /**
@@ -17,14 +19,16 @@ import lombok.Data;
 public class Book implements Serializable {
 
     private Long id;
+    @TableField("ISBN")
+    private String bookIsbn;
 
     private String bookName;
 
     private String author;
 
     private Long publishId;
-
-    private String publishDate;
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+    private Date publishDate;
 
     private BigDecimal price;
 

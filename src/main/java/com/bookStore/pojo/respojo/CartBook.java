@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @author wmh
@@ -19,6 +20,14 @@ public class CartBook {
      */
     private String bookName;
     /**
+     *图书ISBN
+     */
+    private String bookIsbn;
+    /**
+     * 作者
+     */
+    private String author;
+    /**
      * 图书封面
      */
     private String img;
@@ -26,6 +35,10 @@ public class CartBook {
      * 出版社
      */
     private String publishName;
+    /**
+     * 出版时间
+     */
+    private Date publishDate;
     /**
      * 图书价格
      */
