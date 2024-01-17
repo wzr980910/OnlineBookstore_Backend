@@ -5,6 +5,7 @@ import com.bookStore.service.AddressService;
 import com.bookStore.util.ThreadLocalUtil;
 import com.bookStore.util.result.RestResult;
 import com.bookStore.util.result.ResultCode;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/address")
+@Api(value = "地址接口", tags = "地址相关的接口", description = "地址测试接口")
 public class AddressController {
     @Autowired
     private AddressService addressService;

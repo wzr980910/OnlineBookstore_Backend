@@ -32,8 +32,6 @@ public class Book implements Serializable {
 
     private String content;
 
-    private Integer typeId;
-
     private Date createTime;
 
     private Date updateTime;
