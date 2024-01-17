@@ -45,7 +45,7 @@ public class ShoppingController {
 
     @GetMapping(value = "/addShopping")
     @ApiOperation(value = "添加购物车信息", notes = "图书id 图书名字 用户id 价格 购买数量 必填")
-    public RestResult addShopping(@RequestParam Integer bookId,@RequestParam Integer userId,
+    public RestResult addShopping(@RequestParam Integer bookId,@RequestParam Long userId,
                                   @RequestParam String bookName,@RequestParam BigDecimal price,
                                   @RequestParam Integer number){
         Shopping shopping = new Shopping();

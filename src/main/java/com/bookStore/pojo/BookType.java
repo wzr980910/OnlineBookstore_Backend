@@ -15,9 +15,9 @@ import lombok.Data;
 public class BookType implements Serializable {
     private Long id;
 
-    private Long bookid;
+    private Long bookId;
 
-    private Long typeid;
+    private Long typeId;
 
     private static final long serialVersionUID = 1L;
 }

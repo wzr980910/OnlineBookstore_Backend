@@ -6,7 +6,7 @@
 
     <resultMap id="BaseResultMap" type="com.bookStore.pojo.PublishingHouse">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="publishname" column="publishName" jdbcType="VARCHAR"/>
+            <result property="publishName" column="publishName" jdbcType="VARCHAR"/>
             <result property="publishAddress" column="publishAddress" jdbcType="VARCHAR"/>
             <result property="publishPhone" column="publishPhone" jdbcType="BIGINT"/>
             <result property="publishEmail" column="publishEmail" jdbcType="VARCHAR"/>
