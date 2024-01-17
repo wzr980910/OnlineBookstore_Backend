@@ -53,7 +53,7 @@ public class ShoppingServiceImpl extends ServiceImpl<ShoppingMapper, Shopping>
     }
 
     @Override
-    public Map<String, Object> findAllByUserId(Integer userId) {
+    public Map<String, Object> findAllByUserId(Long userId) {
         QueryWrapper<Shopping> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("userId", userId);
         //查询出该用户的所有购物车信息
@@ -64,9 +64,13 @@ public class ShoppingServiceImpl extends ServiceImpl<ShoppingMapper, Shopping>
             CartBook cartBook = new CartBook();
             Book book = bookMapper.selectById(shop.getBookId());
             cartBook.setBookName(book.getBookName());
-            QueryWrapper<Stock> queryWrapper1 = new QueryWrapper<>();
-            queryWrapper1.eq("bookId",book.getId());
-            Stock stock = stockMapper.selectOne(queryWrapper1);
+            cartBook.setPublishDate(book.getPublishDate());
+            cartBook.setContent(book.getContent());
+            cartBook.setBookIsbn(book.getBookIsbn());
+
+            QueryWrapper<Stock> queryWrapperStock = new QueryWrapper<>();
+            queryWrapperStock.eq("bookId",book.getId());
+            Stock stock = stockMapper.selectOne(queryWrapperStock);
             //图书库存
             cartBook.setStockNum(stock.getStockNum());
             cartBook.setImg(book.getPicture());

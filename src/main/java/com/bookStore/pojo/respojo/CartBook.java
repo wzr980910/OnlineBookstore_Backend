@@ -1,5 +1,6 @@
 package com.bookStore.pojo.respojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,7 +39,12 @@ public class CartBook {
     /**
      * 出版时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     private Date publishDate;
+    /**
+     * 图书简介
+     */
+    private String content;
     /**
      * 图书价格
      */
