@@ -10,7 +10,5 @@
             <result property="typeId" column="typeId" jdbcType="BIGINT"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id,bookId,typeId
-    </sql>
+
 </mapper>

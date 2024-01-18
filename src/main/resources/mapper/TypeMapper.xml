@@ -10,7 +10,5 @@
             <result property="parentId" column="parentId" jdbcType="BIGINT"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id,type,parentId
-    </sql>
+
 </mapper>
