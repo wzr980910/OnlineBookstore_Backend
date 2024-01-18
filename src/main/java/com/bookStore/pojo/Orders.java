@@ -19,7 +19,15 @@ public class Orders implements Serializable {
 
     private Long bookId;
 
+    private Integer number;
+
     private Integer price;
 
     private static final long serialVersionUID = 1L;
+
+    public Orders(Long orderId, Long bookId,Integer number) {
+        this.orderId = orderId;
+        this.bookId = bookId;
+        this.number = number;
+    }
 }

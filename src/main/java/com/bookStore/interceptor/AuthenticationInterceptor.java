@@ -1,6 +1,7 @@
 package com.bookStore.interceptor;
 
 
+import com.bookStore.annotation.PassToken;
 import com.bookStore.service.UserService;
 import com.bookStore.util.JwtHelper;
 import com.bookStore.util.ThreadLocalUtil;
@@ -40,7 +41,15 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         if (!(object instanceof HandlerMethod)) {
             return true;
         }
-
+        HandlerMethod handlerMethod=(HandlerMethod)object;
+        Method method=handlerMethod.getMethod();
+        //检查是否有PassToken注释，有则跳过认证
+        if (method.isAnnotationPresent(PassToken.class)) {
+            PassToken passToken = method.getAnnotation(PassToken.class);
+            if (passToken.required()) {
+                return true;
+            }
+        }
         // 验证 token是否过期
         boolean expiration = jwtHelper.isExpiration(token);
         if (expiration) {

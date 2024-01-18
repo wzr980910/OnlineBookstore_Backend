@@ -5,19 +5,87 @@
 <mapper namespace="com.bookStore.mapper.OrdersShowMapper">
 
     <resultMap id="BaseResultMap" type="com.bookStore.pojo.OrdersShow">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="orderId" column="orderId" jdbcType="BIGINT"/>
-            <result property="accountNumber" column="accountNumber" jdbcType="VARCHAR"/>
-            <result property="date" column="date" jdbcType="DATE"/>
-            <result property="totalPrice" column="totalPrice" jdbcType="DECIMAL"/>
-            <result property="toShoppingAddress" column="toShoppingAddress" jdbcType="VARCHAR"/>
-            <result property="contact" column="contact" jdbcType="VARCHAR"/>
-            <result property="status" column="status" jdbcType="VARCHAR"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="orderId" column="orderId" jdbcType="BIGINT"/>
+        <result property="accountNumber" column="accountNumber" jdbcType="VARCHAR"/>
+        <result property="date" column="date" jdbcType="DATE"/>
+        <result property="totalPrice" column="totalPrice" jdbcType="DECIMAL"/>
+        <result property="toShoppingAddress" column="toShoppingAddress" jdbcType="VARCHAR"/>
+        <result property="contact" column="contact" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id,orderId,accountNumber,
-        date,totalPrice,toShoppingAddress,
-        contact,status
-    </sql>
+
+    <select id="selectOrderPage" resultType="com.bookStore.pojo.vo.OrderBook">
+        select c.bookName,
+        c.ISBN,
+        c.author,
+        c.picture,
+        d.publishName,
+        c.publishDate,
+        c.content,
+        c.price,
+        b.number,
+        e.province,
+        e.city,
+        e.county,
+        e.detail,
+        e.userName,
+        e.phone,
+        a.orderId,
+        a.totalPrice,
+        a.status,
+        a.date
+        from orders_show a
+        left outer join orders b on a.orderId = b.orderId
+        left outer join book c on b.bookId = c.id
+        left outer join publishing_house d on c.publishId = d.id
+        left outer join address e on a.addressId = e.id
+        <where>
+            <if test="orderId != null">
+                a.orderId = #{orderId}
+            </if>
+            <if test="bookName != null">
+                AND c.bookName like CONCAT('%',#{bookName},'%')
+            </if>
+            <if test="userId!=null">
+                AND userId = #{userId}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectOrderPageByStatus" resultType="com.bookStore.pojo.vo.OrderBook">
+        select c.bookName,
+        c.ISBN,
+        c.author,
+        c.picture,
+        d.publishName,
+        c.publishDate,
+        c.content,
+        c.price,
+        b.number,
+        e.province,
+        e.city,
+        e.county,
+        e.detail,
+        e.userName,
+        e.phone,
+        a.orderId,
+        a.totalPrice,
+        a.status,
+        a.date
+        from orders_show a
+        left outer join orders b on a.orderId = b.orderId
+        left outer join book c on b.bookId = c.id
+        left outer join publishing_house d on c.publishId = d.id
+        left outer join address e on a.addressId = e.id
+        <where>
+            <if test="orderStatus != null">
+                AND a.status = #{orderStatus}
+            </if>
+            <if test="userId != null">
+                AND userId = #{userId}
+            </if>
+        </where>
+    </select>
 </mapper>

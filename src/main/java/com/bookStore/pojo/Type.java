@@ -4,13 +4,15 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
+
 import lombok.Data;
 
 /**
  * @TableName type
  */
-@TableName(value ="type")
+@TableName(value = "type")
 @Data
 public class Type implements Serializable {
     private Long id;
