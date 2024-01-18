@@ -34,3 +34,10 @@ jwt:
   token:
     tokenExpiration: 120 #有效时间,单位分钟
     tokenSignKey: headline123456  #当前程序签名秘钥 自定义
+
+#综合排序参数自定义
+comprehensiveOrder:
+  #价格权重占0.6
+  priceDiscount: 0.6f
+  #销量权重占0.4
+  saleVolumeDiscount: 0.4f

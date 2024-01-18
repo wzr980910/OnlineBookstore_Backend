@@ -19,13 +19,28 @@
     </resultMap>
 
 
-    <select id="selectBookPage" resultType="book">
-        select distinct book.* from book
-        <!-- 如果出版社名或者图书类型名不为空，需要联表查询-->
-        <trim>
-            <if test="bookVo.publishName != null">
-                left join publishing_house on book.publishId =publishing_house.id
+    <select id="selectBookPage" resultType="bookVo">
+        select distinct book.* ,publishName
+        <trim >
+            <!-- 如果是综合排序或者按照销量排序，需要与stock表连表查询-->
+            <if test="!bookVo.comprehensiveOrder.name.equals('NO') || !bookVo.saleCountOrder.name.equals('NO')">
+                ,stock.saleVolume as saleNumber
             </if>
+            <!--综合排序的值 -->
+            <if test="!bookVo.comprehensiveOrder.name.equals('NO')">
+             , #{comprehensiveOrderParam.saleVolumeDiscount}*stock.saleVolume+
+                #{comprehensiveOrderParam.priceDiscount}*book.price as comprehensive
+            </if>
+        </trim>
+        from book
+        <!-- 需要联表查询出版社名称-->
+                left join publishing_house on book.publishId =publishing_house.id
+        <trim>
+            <!--如果是综合排序或者按照销量排序，需要与stock表连表查询 -->
+            <if test="!bookVo.comprehensiveOrder.name.equals('NO') || !bookVo.saleCountOrder.name.equals('NO')">
+                left join stock on book.id = stock.bookId
+            </if>
+            <!--如果类型名不为空，需要连表查询 -->
             <if test="bookVo.type != null">
                 LEFT JOIN book_type ON book.id=book_type.bookId
                 LEFT JOIN TYPE t1 ON book_type.typeId=t1.id
@@ -33,25 +48,71 @@
             </if>
         </trim>
         <where>
-            <if test="bookVo.bookName != null">
-                bookName like CONCAT('%',#{bookVo.bookName},'%')
+            <!-- 如果书的Id不为空，则根据书Id查询-->
+            <if test="bookVo.id != null">
+                id=#{bookVo.id}
             </if>
+            <!--如果isbn不为空，需要查询isbn -->
+            <if test="bookVo.bookIsbn != null">
+                and ISBN =#{bookVo.bookIsbn}
+            </if>
+            <!--书名不为空，根据书名模糊查询 -->
+            <if test="bookVo.bookName != null">
+                and bookName like CONCAT('%',#{bookVo.bookName},'%')
+            </if>
+            <!-- 作者不为空，根据作者模糊查询-->
             <if test="bookVo.author != null">
                 and author like '%' || #{bookVo.author} || '%'
             </if>
+            <!--如果价格不为空，则根据给定价格查询 -->
+            <if test="bookVo.price != null">
+                and price = #{bookVo.price}
+            </if>
+            <!-- 有价格上限，查询价格下限和价格上线之间的数据-->
             <if test="bookVo.priceHigh != null">
                 and price between #{bookVo.priceLow} and #{bookVo.priceHigh}
             </if>
+            <!--如果价格不存在价格上限，查询大于价格下限的数据，默认价格下限为0 -->
             <if test="bookVo.priceHigh == null">
                 and price &gt;= #{bookVo.priceLow}
             </if>
+            <!-- 如果出版社名不为空，查询指定出版社名称的数据-->
             <if test="bookVo.publishName != null">
                 and publishing_house.publishName=#{bookVo.publishName}
             </if>
+            <!--如果type不为空，连表查询指定type的数据 -->
             <if test="bookVo.type != null">
                 and (t1.type=#{bookVo.type} OR t2.type=#{bookVo.type})
             </if>
         </where>
-
+        order by
+        <!--排序-->
+        <choose>
+            <!--综合排序-->
+            <when test="!bookVo.comprehensiveOrder.name.equals('NO')">
+                 comprehensive
+                    <trim suffixOverrides=",">
+                        <if test="bookVo.comprehensiveOrder.name.equals('DESC')">
+                            desc ,
+                        </if>
+                    </trim>
+            </when>
+            <when test="!bookVo.saleCountOrder.name.equals('NO')">
+                 saleNumber
+                    <trim suffixOverrides=",">
+                        <if test="bookVo.saleCountOrder.name.equals('DESC')">
+                            desc ,
+                        </if>
+                    </trim>
+            </when>
+            <otherwise>
+               book.price
+                    <trim suffixOverrides=",">
+                        <if test="bookVo.priceOrder.name.equals('DESC')">
+                            desc ,
+                        </if>
+                    </trim>
+            </otherwise>
+        </choose>
     </select>
 </mapper>

@@ -32,7 +32,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public User selectByAccount(String accountNumber) {
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper();
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getAccountNumber, accountNumber);
         String sql = wrapper.getSqlSegment();
         System.out.println(sql);
