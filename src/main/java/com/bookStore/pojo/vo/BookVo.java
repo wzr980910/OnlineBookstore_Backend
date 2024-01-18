@@ -1,6 +1,7 @@
 package com.bookStore.pojo.vo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.bookStore.pojo.pojoenum.OrderMethod;
 import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,6 +26,8 @@ import java.util.Date;
 public class BookVo {
     private Long id;
 
+    private String bookIsbn;
+
     private String bookName;
 
     private String author;
@@ -36,6 +39,8 @@ public class BookVo {
     private BigDecimal priceLow = BigDecimal.ZERO;
 
     private BigDecimal priceHigh;
+
+    private BigDecimal price;
 
     private String picture;
 
@@ -56,4 +61,11 @@ public class BookVo {
     private String publishName;
 
     private String type;
+    //综合排序,默认按照综合排序的降序排列
+    private OrderMethod comprehensiveOrder;
+    //按照价格排序
+    private OrderMethod priceOrder;
+    //按照销量排序
+    //如果前面两个参数都为null，默认按照价格排序
+    private OrderMethod saleCountOrder=OrderMethod.ASC;
 }

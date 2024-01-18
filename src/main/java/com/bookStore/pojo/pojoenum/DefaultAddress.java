@@ -12,5 +12,4 @@ package com.bookStore.pojo.pojoenum;/**
 
     private String message;
 
-
 }
