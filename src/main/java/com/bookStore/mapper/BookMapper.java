@@ -19,7 +19,7 @@ import java.util.List;
 @Mapper
 public interface BookMapper extends BaseMapper<Book> {
 
-    IPage<BookVo> selectBookPage(IPage<?> page , @Param("bookVo") BookVo bookVo, @Param("comprehensiveOrderParam") ComprehensiveOrder comprehensiveOrder);
+    IPage<BookVo> selectBookPage(IPage<?> page , @Param("bookVo") BookVo bookVo, @Param("comParam") ComprehensiveOrder comprehensiveOrder);
 }
 
 

@@ -62,7 +62,7 @@ public class BookVo {
 
     private String type;
     //综合排序,默认按照综合排序的降序排列
-    private OrderMethod comprehensiveOrder=OrderMethod.DESC;
+    private OrderMethod comprehensiveOrder;
     //按照价格排序
     private OrderMethod priceOrder;
     //按照销量排序
