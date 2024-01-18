@@ -66,5 +66,6 @@ public class BookVo {
     //按照价格排序
     private OrderMethod priceOrder;
     //按照销量排序
-    private OrderMethod saleCountOrder;
+    //如果前面两个参数都为null，默认按照价格排序
+    private OrderMethod saleCountOrder=OrderMethod.ASC;
 }
