@@ -17,6 +17,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
         //根据名称设置属性值
         this.setFieldValByName("createTime", new Date(), metaObject);
+        this.setFieldValByName("date", new Date(), metaObject);
         this.setFieldValByName("updateTime", new Date(), metaObject);
     }
 
