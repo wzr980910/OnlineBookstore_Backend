@@ -23,12 +23,11 @@
         select distinct book.* ,publishName
         <trim >
             <!-- 如果是综合排序或者按照销量排序，需要与stock表连表查询-->
-            <if test="(bookVo.comprehensiveOrder!=null and !bookVo.comprehensiveOrder.name.equals('NO'))||
-            (bookVo.saleCountOrder!=null and !bookVo.saleCountOrder.name.equals('NO'))">
+            <if test="bookVo.comprehensiveOrder != 0 || bookVo.saleCountOrder != 0">
                 ,stock.saleVolume as saleNumber
             </if>
             <!--综合排序的值 -->
-            <if test="bookVo.comprehensiveOrder!=null and !bookVo.comprehensiveOrder.name.equals('NO')">
+            <if test="bookVo.comprehensiveOrder != 0">
              , #{comParam.saleVolumeDiscount}*stock.saleVolume+
                 #{comParam.priceDiscount}*book.price as comprehensive
             </if>
@@ -38,8 +37,7 @@
                 left join publishing_house on book.publishId =publishing_house.id
         <trim>
             <!--如果是综合排序或者按照销量排序，需要与stock表连表查询 -->
-            <if test="(bookVo.comprehensiveOrder!=null and !bookVo.comprehensiveOrder.name.equals('NO'))||
-            (bookVo.saleCountOrder!=null and !bookVo.saleCountOrder.name.equals('NO'))">
+            <if test="bookVo.comprehensiveOrder != 0 || bookVo.saleCountOrder != 0">
                 left join stock on book.id = stock.bookId
             </if>
             <!--如果类型名不为空，需要连表查询 -->
@@ -86,24 +84,27 @@
             <if test="bookVo.type != null">
                 and (t1.type=#{bookVo.type} OR t2.type=#{bookVo.type})
             </if>
+            <if test="1 == 1">
+                and book.isDeleted = 0
+            </if>
         </where>
         order by
         <!--排序-->
         <choose>
             <!--综合排序-->
-            <when test="bookVo.comprehensiveOrder !=null and !bookVo.comprehensiveOrder.name.equals('NO')">
+            <when test="bookVo.comprehensiveOrder != 0">
                  comprehensive
                     <trim suffixOverrides=",">
-                        <if test="bookVo.comprehensiveOrder.name.equals('DESC')">
+                        <if test="bookVo.comprehensiveOrder == 2">
                             desc ,
                         </if>
                     </trim>
             </when>
             <!--销量排序-->
-            <when test="bookVo.saleCountOrder !=null and !bookVo.saleCountOrder.name.equals('NO')">
+            <when test="bookVo.saleCountOrder != 0">
                  saleNumber
                     <trim suffixOverrides=",">
-                        <if test="bookVo.saleCountOrder.name.equals('DESC')">
+                        <if test="bookVo.saleCountOrder == 2">
                             desc ,
                         </if>
                     </trim>
@@ -112,7 +113,7 @@
             <otherwise>
                book.price
                     <trim suffixOverrides=",">
-                        <if test="bookVo.priceOrder.name.equals('DESC')">
+                        <if test="bookVo.priceOrder == 2">
                             desc ,
                         </if>
                     </trim>

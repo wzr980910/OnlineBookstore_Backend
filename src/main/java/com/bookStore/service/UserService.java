@@ -27,4 +27,5 @@ public interface UserService extends IService<User> {
      */
     User queryUserById(Integer id);
 
+    int updateUserAvatar(Long userId, String avatarUrl);
 }

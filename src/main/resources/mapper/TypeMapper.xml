@@ -7,7 +7,7 @@
     <resultMap id="BaseResultMap" type="com.bookStore.pojo.Type">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="type" column="type" jdbcType="VARCHAR"/>
-            <result property="parentid" column="parentId" jdbcType="BIGINT"/>
+            <result property="parentId" column="parentId" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">

@@ -6,8 +6,8 @@
 
     <resultMap id="BaseResultMap" type="com.bookStore.pojo.BookType">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="bookid" column="bookId" jdbcType="BIGINT"/>
-            <result property="typeid" column="typeId" jdbcType="BIGINT"/>
+            <result property="bookId" column="bookId" jdbcType="BIGINT"/>
+            <result property="typeId" column="typeId" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">

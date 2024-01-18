@@ -5,26 +5,34 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.bookStore.mapper.UserMapper;
 import com.bookStore.pojo.User;
+import com.bookStore.util.AliOssUtil;
 import com.bookStore.util.JwtHelper;
 import com.bookStore.util.MD5Util;
+import com.bookStore.util.ThreadLocalUtil;
 import com.bookStore.util.result.RestResult;
 import com.bookStore.service.UserService;
 import com.bookStore.util.result.ResultCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/user")
+@Validated
 //说明接口文件
 @Api(value = "用户接口", tags = "用户管理相关的接口", description = "用户测试接口")
 public class UserController {
@@ -44,7 +52,7 @@ public class UserController {
     }
 
     @Autowired
-    public void setUserMapper(UserMapper userMapper){
+    public void setUserMapper(UserMapper userMapper) {
         this.userMapper = userMapper;
     }
 
@@ -109,7 +117,6 @@ public class UserController {
      * @param password
      * @return
      */
-    //登录接口，添加该注解跳过token验证
     @ApiOperation(value = "登录接口", notes = "用户登录（只传手机号和密码参数即可）,用接口测试前请先登录（缓存用户信息）", httpMethod = "GET")
     @GetMapping("/login")
     public RestResult login(HttpServletRequest httpServletRequest, @RequestParam String accountNumber, @RequestParam String password) {
@@ -141,6 +148,7 @@ public class UserController {
 
     /**
      * 修改密码
+     *
      * @param userId
      * @param oldPassword
      * @param newPassword
@@ -161,7 +169,7 @@ public class UserController {
         }
         Integer rows = userService.updateUser(user);
         if (rows > 0) {
-            return RestResult.success(ResultCode.SUCCESS, "修改成功",user);
+            return RestResult.success(ResultCode.SUCCESS, "修改成功", user);
         } else {
             return RestResult.failure(ResultCode.OPERATION_FAILURE, "修改失败");
         }
@@ -169,6 +177,7 @@ public class UserController {
 
     /**
      * 个人信息
+     *
      * @param userId
      * @param accountNumber
      * @param userName
@@ -196,27 +205,29 @@ public class UserController {
 
     /**
      * 忘记密码 将用户密码重置为123456
+     *
      * @param phone
      * @param accountNumber
      * @return
      */
     @PostMapping(value = "/forgetPassword")
     @ApiOperation(value = "忘记密码", notes = "账号 电话号码 必填")
-    public RestResult forgetPassword(String phone, String accountNumber){
+    public RestResult forgetPassword(String phone, String accountNumber) {
         QueryWrapper<User> query = Wrappers.query();
-        query.eq("phoneNumber",phone).eq("accountNumber",accountNumber);
+        query.eq("phoneNumber", phone).eq("accountNumber", accountNumber);
         User user = userMapper.selectOne(query);
-        if (user!=null){
+        if (user != null) {
             user.setPassword(MD5Util.encrypt("123456"));
             userMapper.updateById(user);
-            return RestResult.success(ResultCode.SUCCESS,"密码已重置为123456!",user);
-        }  else{
-            return RestResult.failure(ResultCode.OPERATION_FAILURE,"操作失败,账号或手机号填写有误!");
+            return RestResult.success(ResultCode.SUCCESS, "密码已重置为123456!", user);
+        } else {
+            return RestResult.failure(ResultCode.OPERATION_FAILURE, "操作失败,账号或手机号填写有误!");
         }
     }
 
     /**
      * userId 查询用户信息
+     *
      * @param id
      * @return
      */
@@ -228,5 +239,37 @@ public class UserController {
             return RestResult.failure(ResultCode.OPERATION_FAILURE, "查询失败");
         }
         return RestResult.success(ResultCode.SUCCESS, "查询成功", user);
+    }
+
+    @PatchMapping(value = "/updateAvatar")
+    @ApiOperation(value = "更新用户头像信息", notes = "传入一个头像的url地址,param传参：avatarUrl")
+    public RestResult updateAvatar(@RequestParam @URL String avatarUrl) {
+        Long userId = (Long) ThreadLocalUtil.get();
+        int rows = userService.updateUserAvatar(userId, avatarUrl);
+        RestResult restResult = new RestResult(ResultCode.SUCCESS);
+        if (rows == 0) {
+            restResult = new RestResult(ResultCode.OPERATION_FAILURE);
+        }
+        return restResult;
+    }
+
+    @PatchMapping(value = "/upload")
+    @ApiOperation(value = "上传头像", notes = "参数类型：MultipartFile")
+    public RestResult upload(MultipartFile file) throws Exception {
+        RestResult restResult = new RestResult(ResultCode.FILE_UPLOAD_FAILURE);
+        if (file == null) {
+            return restResult;
+        }
+        //把文件的内容存到本地磁盘上
+        String originalFilename = file.getOriginalFilename();
+        //保证文件名是唯一的，从而防止文件覆盖
+        String filename = UUID.randomUUID().toString() + originalFilename.substring(originalFilename.lastIndexOf("."));
+        //file.transferTo(new File("C:\\Users\\邓桂材\\Desktop\\files\\" + filename));
+        String url = AliOssUtil.uploadFile(filename, file.getInputStream());
+        restResult = new RestResult(ResultCode.SUCCESS);
+        Map<String, String> map = new HashMap<>();
+        map.put("url", url);
+        restResult.setData(map);
+        return restResult;
     }
 }

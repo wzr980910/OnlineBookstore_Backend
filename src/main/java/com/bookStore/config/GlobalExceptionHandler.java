@@ -1,6 +1,7 @@
 package com.bookStore.config;
 
 import com.bookStore.util.result.RestResult;
+import com.bookStore.util.result.ResultCode;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -8,7 +9,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @RestControllerAdvice
 @Configuration
@@ -34,4 +39,16 @@ public class GlobalExceptionHandler {
         return restResult;
     }
     // 其他异常处理方法...
+    @ExceptionHandler(ConstraintViolationException.class)
+    public RestResult handleConstraintViolationException(ConstraintViolationException ex) {
+        Set<ConstraintViolation<?>> violations = ex.getConstraintViolations();
+        StringBuilder errorInfo=new StringBuilder();
+        for (ConstraintViolation<?> violation : violations) {
+            errorInfo.append(violation.getMessage());
+        }
+        RestResult restResult = new RestResult();
+        restResult.setMessage(errorInfo.toString());
+        restResult.setCode(ResultCode.PARAM_ERROR.getCode());
+        return restResult;
+    }
 }

@@ -7,9 +7,16 @@ package com.bookStore.pojo.pojoenum;/**
  * @Version: v1.0
  *
 */public enum DefaultAddress {
-    DEFAULT_ADDRESS,
-    NOT_DEFAULT_ADDRESS;
+    DEFAULT_ADDRESS(1),
+    NOT_DEFAULT_ADDRESS(0);
 
-    private String message;
+    private Integer value;
 
+    public Integer getValue() {
+        return value;
+    }
+
+    DefaultAddress(Integer value) {
+        this.value = value;
+    }
 }

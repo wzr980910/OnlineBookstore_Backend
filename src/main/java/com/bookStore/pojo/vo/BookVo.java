@@ -62,10 +62,10 @@ public class BookVo {
 
     private String type;
     //综合排序,默认按照综合排序的降序排列
-    private OrderMethod comprehensiveOrder;
+    private Integer comprehensiveOrder;
     //按照价格排序
-    private OrderMethod priceOrder;
+    private Integer priceOrder;
     //按照销量排序
     //如果前面两个参数都为null，默认按照价格排序
-    private OrderMethod saleCountOrder=OrderMethod.ASC;
+    private Integer saleCountOrder = OrderMethod.ASC.getValue();
 }

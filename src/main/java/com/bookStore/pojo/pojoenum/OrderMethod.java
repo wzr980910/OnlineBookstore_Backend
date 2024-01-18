@@ -10,13 +10,24 @@ package com.bookStore.pojo.pojoenum;
  * @Version: v1.0
  */
 public enum OrderMethod {
-    ASC,
-    DESC,
-    NO;
-    private Integer code;
+    //升序
+    ASC(1),
+    //降序
+    DESC(2),
+    //不排序
+    NO(0);
+    private Integer value;
+
+    OrderMethod(Integer value) {
+        this.value = value;
+    }
+
+    public Integer getValue() {
+        return value;
+    }
 
     @Override
     public String toString() {
-        return ""+code;
+        return "" + value;
     }
 }
