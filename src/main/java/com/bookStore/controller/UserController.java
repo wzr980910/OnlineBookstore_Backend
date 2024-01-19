@@ -36,8 +36,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
     private UserService userService;
     private JwtHelper jwtHelper;
+    @Autowired
+    private AliOssUtil aliOssUtil;
 
-    private UserMapper userMapper;
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -49,10 +50,7 @@ public class UserController {
         this.jwtHelper = jwtHelper;
     }
 
-    @Autowired
-    public void setUserMapper(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
+
 
     /**
      * 保存数据
@@ -236,23 +234,23 @@ public class UserController {
         return restResult;
     }
 
-    @PatchMapping(value = "/upload")
-    @ApiOperation(value = "上传头像", notes = "参数类型：MultipartFile")
-    public RestResult upload(MultipartFile file) throws Exception {
-        RestResult restResult = new RestResult(ResultCode.FILE_UPLOAD_FAILURE);
-        if (file == null) {
-            return restResult;
+    @PostMapping("/upload")
+    @ApiOperation("头像上传")
+    public RestResult imgUpload(@RequestParam(value = "file") MultipartFile file) {
+        String basePath = "userPicture/";
+        try {
+            //原始文件名
+            String originalFilename = file.getOriginalFilename();
+            //截取文件名后缀  xxx.png
+            String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            //构造新文件名称
+            String objectName = basePath + UUID.randomUUID().toString() + extension;
+            //返回文件请求路径
+            String filePath = aliOssUtil.upload(file.getBytes(), objectName);
+            return RestResult.success(filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        //把文件的内容存到本地磁盘上
-        String originalFilename = file.getOriginalFilename();
-        //保证文件名是唯一的，从而防止文件覆盖
-        String filename = UUID.randomUUID().toString() + originalFilename.substring(originalFilename.lastIndexOf("."));
-        //file.transferTo(new File("C:\\Users\\邓桂材\\Desktop\\files\\" + filename));
-        String url = AliOssUtil.uploadFile(filename, file.getInputStream());
-        restResult = new RestResult(ResultCode.SUCCESS);
-        Map<String, String> map = new HashMap<>();
-        map.put("url", url);
-        restResult.setData(map);
-        return restResult;
+        return RestResult.failure("文件上传失败");
     }
 }

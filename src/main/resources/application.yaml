@@ -41,3 +41,21 @@ comprehensiveOrder:
   priceDiscount: 0.6f
   #销量权重占0.4
   saleVolumeDiscount: 0.4f
+
+sky:
+  #oss配置
+  alioss:
+    # 要带上 https:// ,上传时要使用的
+    endpoint : https://oss-cn-chengdu.aliyuncs.com
+
+    # 根据自己的帐号配置
+    accessKeyId : LTAI5t7FeKrowJ85NXTJLuxp
+
+    # 根据自己的帐号配置
+    accessKeySecret : 0SkLNoUz3U2wFRHPRIKyd94HzS6Jsu
+
+    # 存储空间名称
+    bucketName : bookstore-picture
+
+    # Bucket域名，访问文件时作为URL前缀，注意要加上 https:// 和 结尾带上 /
+    urlPrefix : https://bookstore-picture.oss-cn-chengdu.aliyuncs.com/
