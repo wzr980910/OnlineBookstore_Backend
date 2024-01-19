@@ -8,6 +8,9 @@ import com.bookStore.service.BookService;
 import com.bookStore.util.result.RestResult;
 import com.bookStore.util.result.ResultCode;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,13 +40,16 @@ public class BookController {
     public void setBookService(BookService bookService) {
         this.bookService = bookService;
     }
+
+    @ApiOperation(value = "查询图书")
+    @ApiResponses({
+            @ApiResponse(code = 1, message = "操作成功")
+    })
     @PostMapping("/selectBookPage")
-    public RestResult selectBookByPage(@RequestBody BookVo bookVo){
-        RestResult restResult=null;
-        Map<String,Object> map=bookService.selectBookPage(bookVo);
+    public RestResult selectBookByPage(@RequestBody BookVo bookVo) {
+        Map<String, Object> map = bookService.selectBookPage(bookVo);
         //查询成功，包装数据返回
-        restResult=new RestResult(ResultCode.SUCCESS,map);
-        return restResult;
+        return new RestResult(ResultCode.SUCCESS, map);
     }
 
 }

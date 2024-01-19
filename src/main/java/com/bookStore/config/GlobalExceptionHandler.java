@@ -19,7 +19,7 @@ import java.util.Set;
 @Configuration
 public class GlobalExceptionHandler {
 
-    //处理参数校验异常
+    //方法请求参数校验异常
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public RestResult handleValidationException(MethodArgumentNotValidException ex) {
@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
         restResult.setMessage(errorInfo.toString());
         return restResult;
     }
-    // 其他异常处理方法...
+    // 对象属性校验异常
     @ExceptionHandler(ConstraintViolationException.class)
     public RestResult handleConstraintViolationException(ConstraintViolationException ex) {
         Set<ConstraintViolation<?>> violations = ex.getConstraintViolations();
