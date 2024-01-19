@@ -3,12 +3,14 @@ package com.bookStore.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bookStore.pojo.User;
 import com.bookStore.service.UserService;
 import com.bookStore.mapper.UserMapper;
 import com.bookStore.util.JwtHelper;
 import com.bookStore.util.MD5Util;
+import com.bookStore.util.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -63,6 +65,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public Integer updateUser(User user) {
+        Long userId = ThreadLocalUtil.get();
+        user.setId(userId);
         int insert = userMapper.updateById(user);
         return insert;
     }
@@ -80,11 +84,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public User queryUserById(Integer id) {
+    public User queryUserById(Long id) {
         return userMapper.selectById(id);
     }
-}
 
+    @Override
+    public User forgetPassword(String phone, String accountNumber) {
+        QueryWrapper<User> query = Wrappers.query();
+        query.eq("phoneNumber", phone).eq("accountNumber", accountNumber);
+        User user = userMapper.selectOne(query);
+        if (user != null) {
+            user.setPassword(MD5Util.encrypt("123456"));
+            userMapper.updateById(user);
+        }
+        return user;
+    }
+}
 
 
 

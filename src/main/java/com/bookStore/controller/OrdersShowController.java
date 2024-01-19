@@ -2,6 +2,7 @@ package com.bookStore.controller;
 
 
 import com.bookStore.pojo.vo.InOrderBook;
+import com.bookStore.pojo.vo.OrderBook;
 import com.bookStore.service.OrdersShowService;
 import com.bookStore.util.ThreadLocalUtil;
 import com.bookStore.util.result.RestResult;
@@ -66,11 +67,8 @@ public class OrdersShowController {
 
     @PostMapping("/addOrders")
     @ApiOperation(value = "添加订单", notes = "图书id和图书数量 既可以传单个也可以传多个 但是要一一对应")
-    public RestResult addOrders(@RequestParam Long addressId, @RequestParam String[] bookIds,
-                                @RequestParam Integer status, @RequestParam BigDecimal totalPrice,
-                                @RequestParam String[] numbers) {
+    public RestResult addOrders(@RequestBody InOrderBook inOrderBook) {
         Long userId = ThreadLocalUtil.get();
-        InOrderBook inOrderBook = new InOrderBook(addressId,bookIds,totalPrice,status,numbers);
         Integer rows = ordersShowService.addOrders(userId, inOrderBook);
         if (rows > 0) {
             return RestResult.success(ResultCode.SUCCESS, "添加订单成功", rows);

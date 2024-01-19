@@ -25,7 +25,9 @@ public interface UserService extends IService<User> {
     /**
      * 通过id查用户信息
      */
-    User queryUserById(Integer id);
+    User queryUserById(Long id);
+
+    User forgetPassword(String phone, String accountNumber);
 
     int updateUserAvatar(Long userId, String avatarUrl);
 }

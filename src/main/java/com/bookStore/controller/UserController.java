@@ -145,17 +145,16 @@ public class UserController {
     /**
      * 修改密码
      *
-     * @param userId
      * @param oldPassword
      * @param newPassword
      * @return
      */
     @PostMapping(value = "/updatePassword")
-    @ApiOperation(value = "修改密码", notes = "用户id 旧密码 新密码 必填")
-    public RestResult updatePassword(@RequestParam Integer userId,
-                                     @RequestParam String oldPassword,
+    @ApiOperation(value = "修改密码", notes = "旧密码 新密码 必填")
+    public RestResult updatePassword(@RequestParam String oldPassword,
                                      @RequestParam String newPassword) {
         //通过id查到该用户
+        Long userId = ThreadLocalUtil.get();
         User user = userService.queryUserById(userId);
         if (!user.getPassword().equals(MD5Util.encrypt(oldPassword))) {
             return RestResult.failure(ResultCode.OPERATION_FAILURE, "原密码输入错误");
@@ -172,25 +171,15 @@ public class UserController {
     }
 
     /**
-     * 个人信息
+     * 修改个人信息
      *
-     * @param userId
-     * @param accountNumber
-     * @param userName
-     * @param phone
+     * @param user
      * @return
      */
     @PostMapping(value = "/updateUser")
-    @ApiOperation(value = "修改用户基本信息", notes = "用户id 账号 昵称 电话号码 必填")
-    public RestResult updateUser(@RequestParam Integer userId,
-                                 @RequestParam String accountNumber,
-                                 @RequestParam String userName,
-                                 @RequestParam String phone) {
+    @ApiOperation(value = "修改用户基本信息", notes = "参数可选")
+    public RestResult updateUser(@RequestBody User user) {
         //通过id查到该用户
-        User user = userService.queryUserById(userId);
-        user.setAccountNumber(accountNumber);
-        user.setUsername(userName);
-        user.setPhoneNumber(phone);
         Integer rows = userService.updateUser(user);
         if (rows > 0) {
             return RestResult.success(ResultCode.SUCCESS, "修改成功");
@@ -208,13 +197,9 @@ public class UserController {
      */
     @PostMapping(value = "/forgetPassword")
     @ApiOperation(value = "忘记密码", notes = "账号 电话号码 必填")
-    public RestResult forgetPassword(String phone, String accountNumber) {
-        QueryWrapper<User> query = Wrappers.query();
-        query.eq("phoneNumber", phone).eq("accountNumber", accountNumber);
-        User user = userMapper.selectOne(query);
+    public RestResult forgetPassword(@RequestParam String phone, @RequestParam String accountNumber) {
+        User user = userService.forgetPassword(phone, accountNumber);
         if (user != null) {
-            user.setPassword(MD5Util.encrypt("123456"));
-            userMapper.updateById(user);
             return RestResult.success(ResultCode.SUCCESS, "密码已重置为123456!", user);
         } else {
             return RestResult.failure(ResultCode.OPERATION_FAILURE, "操作失败,账号或手机号填写有误!");
@@ -229,7 +214,7 @@ public class UserController {
      */
     @GetMapping(value = "/queryUserById")
     @ApiOperation(value = "通过id查用户信息", notes = "用户id 必填")
-    public RestResult queryUserById(Integer id) {
+    public RestResult queryUserById(Long id) {
         User user = userService.queryUserById(id);
         if (user == null) {
             return RestResult.failure(ResultCode.OPERATION_FAILURE, "查询失败");
