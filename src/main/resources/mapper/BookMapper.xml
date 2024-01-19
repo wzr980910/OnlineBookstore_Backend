@@ -50,7 +50,7 @@
         <where>
             <!-- 如果书的Id不为空，则根据书Id查询-->
             <if test="bookVo.id != null">
-                id=#{bookVo.id}
+                book.id=#{bookVo.id}
             </if>
             <!--如果isbn不为空，需要查询isbn -->
             <if test="bookVo.bookIsbn != null">
