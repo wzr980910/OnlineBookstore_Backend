@@ -5,9 +5,7 @@ import com.bookStore.service.AddressService;
 import com.bookStore.util.ThreadLocalUtil;
 import com.bookStore.util.result.RestResult;
 import com.bookStore.util.result.ResultCode;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +25,11 @@ public class AddressController {
     private AddressService addressService;
 
     //说明是什么方法(可以理解为方法注释)
-    @ApiOperation(value = "添加地址", notes = "添加地址")
+    @ApiOperation(value = "添加地址", notes = "添加地址,此时地址Id不需要")
+    @ApiResponses({
+            @ApiResponse(code=1,message = "操作成功"),
+            @ApiResponse(code = 101,message = "操作失败")
+    })
     @PostMapping("addAddress")
     public RestResult addAddress(@RequestBody @Valid Address address) {
         RestResult restResult = new RestResult(ResultCode.OPERATION_FAILURE);
@@ -42,34 +44,52 @@ public class AddressController {
 
     //说明是什么方法(可以理解为方法注释)
     @ApiOperation(value = "修改地址", notes = "修改地址")
+    @ApiResponses({
+            @ApiResponse(code=1,message = "操作成功"),
+            @ApiResponse(code = 101,message = "操作失败"),
+            @ApiResponse(code = 1004,message = "参数缺失")
+    })
     @PutMapping("updateAddress")
     public RestResult updateAddress(@RequestBody @Valid Address address) {
-        RestResult restResult = new RestResult(ResultCode.OPERATION_FAILURE);
+        RestResult restResult =null;
         //没有地址id值
         if (address.getId() == null) {
+            restResult=new RestResult(ResultCode.PARAM_NOT_COMPLETE);
             return restResult;
         }
         Long userId = (Long) ThreadLocalUtil.get();
         int rows = addressService.updateAddress(userId, address);
         if (rows > 0) {
             restResult = new RestResult(ResultCode.SUCCESS);
+        }else {
+            restResult = new RestResult(ResultCode.OPERATION_FAILURE);
         }
         return restResult;
     }
 
     //说明是什么方法(可以理解为方法注释)
+
+    @ApiImplicitParam(name="addreddId",value="需要删除地址的Id",required = true,paramType = "form")
     @ApiOperation(value = "删除地址", notes = "删除地址")
+    @ApiResponses({
+            @ApiResponse(code=1,message = "操作成功"),
+            @ApiResponse(code = 101,message = "操作失败"),
+            @ApiResponse(code = 1004,message = "参数缺失")
+    })
     @DeleteMapping("deleteAddress")
     public RestResult deleteAddress(@NotNull Long addressId) {
-        RestResult restResult = new RestResult(ResultCode.OPERATION_FAILURE);
+        RestResult restResult = null;
         //没有传入地址Id
         if(addressId == null){
+            restResult=new RestResult(ResultCode.PARAM_NOT_COMPLETE);
             return restResult;
         }
         Long userId = (Long) ThreadLocalUtil.get();
         int rows = addressService.deleteAddress(userId, addressId);
         if (rows > 0) {
             restResult = new RestResult(ResultCode.SUCCESS);
+        }else {
+            restResult = new RestResult(ResultCode.OPERATION_FAILURE);
         }
         return restResult;
     }

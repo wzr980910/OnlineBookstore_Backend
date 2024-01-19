@@ -26,31 +26,31 @@ import javax.validation.constraints.Pattern;
 @Data
 @ApiModel(description = "地址信息")
 public class Address implements Serializable {
-    @ApiModelProperty(value = "地址ID", example = "8")
+    @ApiModelProperty(value = "地址ID", example = "8",required = true)
     private Long id;
 
     @ApiModelProperty(value = "用户ID", example = "1")
     private Long userId;
 
-    @ApiModelProperty(value = "省份", example = "四川")
+    @ApiModelProperty(value = "省份", example = "四川",required = true)
     private String province;
 
-    @ApiModelProperty(value = "城市", example = "成都")
+    @ApiModelProperty(value = "城市", example = "成都",required = true)
     private String city;
 
-    @ApiModelProperty(value = "国家", example = "中国")
+    @ApiModelProperty(value = "国家", example = "中国",required = true)
     private String county = "中国";
 
-    @ApiModelProperty(value = "详细地址", example = "")
+    @ApiModelProperty(value = "详细地址", example = "xx县xx镇",required = true)
     private String detail;
 
     @NotBlank(message = "手机号不能为空")
     @Pattern(regexp = "^1\\d{10}$", message = "请输入正确的手机格式")
-    @ApiModelProperty(value = "手机号", example = "16766565656")
+    @ApiModelProperty(value = "手机号", example = "16766565656",required = true)
     private String phone;
 
     @NotBlank
-    @ApiModelProperty(value = "用户姓名", example = "不用传")
+    @ApiModelProperty(value = "用户姓名", example = "张三",required = true)
     private String userName;
 
     @EnumValue
