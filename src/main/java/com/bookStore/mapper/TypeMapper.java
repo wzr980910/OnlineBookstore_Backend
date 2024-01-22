@@ -1,7 +1,9 @@
 package com.bookStore.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.bookStore.pojo.Type;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.bookStore.pojo.respojo.TypeBook;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -12,6 +14,7 @@ import org.apache.ibatis.annotations.Mapper;
 */
 @Mapper
 public interface TypeMapper extends BaseMapper<Type> {
+    IPage<TypeBook> selectPageType(IPage<?> page);
 
 }
 

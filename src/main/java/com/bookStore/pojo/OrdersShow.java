@@ -24,7 +24,6 @@ public class OrdersShow implements Serializable {
 
     private Long addressId;
 
-    private String accountNumber;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:ss:mm",timezone = "GMT+8")
     @TableField(fill = FieldFill.INSERT)
@@ -32,10 +31,6 @@ public class OrdersShow implements Serializable {
 
     private BigDecimal totalPrice;
 
-    @TableField("shoppingAddress")
-    private String toShoppingAddress;
-
-    private String contact;
 
     /**
      * 订单状态
