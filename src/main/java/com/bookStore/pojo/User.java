@@ -26,9 +26,9 @@ public class User implements Serializable {
     @TableId
     private Long id;
 
-    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9_]{5,19}$",
-            message = "账号由字母、数字和下划线组成，以字母开头，长度在6到20个字符之间")
-    @ApiModelProperty(value = "用户账号",notes = "账号由字母、数字和下划线组成，以字母开头，长度在6到20个字符之间")
+    @Pattern(regexp = "^\\d{3,20}$",
+            message = "账号数字组成长度在3到20个字符之间")
+    @ApiModelProperty(value = "用户账号",notes = "账号数字组成长度在3到20个字符之间")
     private String accountNumber;
 
     @Pattern(regexp = "^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>?]{8,20}$"
