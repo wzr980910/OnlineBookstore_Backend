@@ -5,7 +5,7 @@
 <mapper namespace="com.bookStore.mapper.TypeMapper">
 
 
-    <select id="selectPageType" resultType="com.bookStore.pojo.respojo.TypeBook">
+    <select id="selectAllType" resultType="com.bookStore.pojo.respojo.TypeBook">
         select a.type as type,
                b.type as parentType
         from type as a,type as b where b.id = a.parentId

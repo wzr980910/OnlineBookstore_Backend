@@ -21,7 +21,6 @@ public class Orders implements Serializable {
 
     private Integer number;
 
-    private Integer price;
 
     private static final long serialVersionUID = 1L;
 

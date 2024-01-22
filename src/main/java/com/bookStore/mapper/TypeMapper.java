@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bookStore.pojo.respojo.TypeBook;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
 * @author 邓桂材
 * @description 针对表【type(图书类型表)】的数据库操作Mapper
@@ -14,7 +16,7 @@ import org.apache.ibatis.annotations.Mapper;
 */
 @Mapper
 public interface TypeMapper extends BaseMapper<Type> {
-    IPage<TypeBook> selectPageType(IPage<?> page);
+    List<TypeBook> selectAllType();
 
 }
 

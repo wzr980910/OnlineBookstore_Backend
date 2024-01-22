@@ -17,7 +17,7 @@ public interface TypeService extends IService<Type> {
      * 查询所有图书类别
      * @return
      */
-    Map<String,Object> queryAllType(Integer currentPage,Integer size);
+    Map<String,Object> queryAllType();
 
     /**
      * 通过父类id查询图书类别

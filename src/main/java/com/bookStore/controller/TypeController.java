@@ -26,9 +26,8 @@ public class TypeController {
 
     @GetMapping(value = "/queryAllType")
     @ApiOperation(value = "查询所有类别信息", notes = "不需要传参数")
-    public RestResult queryAllType(@RequestParam(defaultValue = "1") Integer currentPage,
-                                   @RequestParam(defaultValue = "10") Integer size) {
-        Map<String, Object> map = typeService.queryAllType(currentPage, size);
+    public RestResult queryAllType() {
+        Map<String, Object> map = typeService.queryAllType();
         if (map != null) {
             return RestResult.success(ResultCode.SUCCESS, "查询成功", map);
         }
