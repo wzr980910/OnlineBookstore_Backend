@@ -27,13 +27,12 @@ public class TypeServiceImpl extends ServiceImpl<TypeMapper, Type>
     private TypeMapper typeMapper;
 
     @Override
-    public Map<String, Object> queryAllType(Integer currentPage, Integer size) {
-        Page<TypeBook> page = new Page<>(currentPage, size);
-        IPage<TypeBook> typeBookIPage = typeMapper.selectPageType(page);
+    public Map<String, Object> queryAllType() {
+        List<TypeBook> typeBooks = typeMapper.selectAllType();
         //封装查询到的内容
-        Map<String, Object> pageInfo = new HashMap<>();
-        pageInfo.put("pageInfo",typeBookIPage);
-        return pageInfo;
+        Map<String, Object> map = new HashMap<>();
+        map.put("typeList",typeBooks);
+        return map;
     }
 
     @Override
