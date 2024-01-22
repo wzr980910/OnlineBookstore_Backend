@@ -1,6 +1,6 @@
 package com.bookStore.config.wxpay;
 
-import com.bookStore.util.WxPayTemplate;
+import com.bookStore.util.WxPay;
 import com.wechat.pay.contrib.apache.httpclient.WechatPayHttpClientBuilder;
 import com.wechat.pay.contrib.apache.httpclient.auth.AutoUpdateCertificatesVerifier;
 import com.wechat.pay.contrib.apache.httpclient.auth.PrivateKeySigner;
@@ -33,7 +33,7 @@ public class WxAutoConfiguation {
         return WechatPayHttpClientBuilder.create().withMerchant(wxPayProperties.getMchId(), wxPayProperties.getMchSerialNo(), merchantPrivateKey).withValidator(new WechatPay2Validator(verifier)).build();
     }
     @Bean
-    public WxPayTemplate WxPayTemplate(WxPayProperties wxPayProperties, CloseableHttpClient httpClient){
-        return new WxPayTemplate(wxPayProperties,httpClient);
+    public WxPay WxPayTemplate(WxPayProperties wxPayProperties, CloseableHttpClient httpClient){
+        return new WxPay(wxPayProperties,httpClient);
     }
 }

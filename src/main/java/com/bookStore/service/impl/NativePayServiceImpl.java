@@ -1,23 +1,20 @@
 package com.bookStore.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.bookStore.mapper.BookMapper;
-import com.bookStore.pojo.Book;
-import com.bookStore.pojo.Orders;
-import com.bookStore.pojo.vo.BookVo;
-import com.bookStore.pojo.wxpay.NotifyDto;
-import com.bookStore.service.BookService;
+import com.bookStore.mapper.OrdersShowMapper;
+import com.bookStore.pojo.OrdersShow;
+import com.bookStore.pojo.pojoenum.OrderStatus;
+import com.bookStore.pojo.pay.wxpay.NotifyDto;
 import com.bookStore.service.NativePayService;
-import com.bookStore.util.WxPayTemplate;
+import com.bookStore.util.WxPay;
 import com.google.gson.Gson;
 import com.wechat.pay.contrib.apache.httpclient.util.AesUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.GeneralSecurityException;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,26 +28,44 @@ import java.util.Map;
  */
 @Service
 public class NativePayServiceImpl implements NativePayService {
-    private String apiV3Key = "CZBK51236435wxpay435434323FFDuv3";
+    @Value("${wxpay.api-v3-key}")
+    private String apiV3Key;
     @Autowired
-    private WxPayTemplate wxPayTemplate;
+    private WxPay wxPay;
     @Autowired
-    private BookService bookService;
+    private OrdersShowMapper ordersShowMapper;
+
 
     @Override
     //支付
-    public String pay(Orders orders) {
-        LambdaUpdateWrapper<Book> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(Book::getId, orders.getBookId());
-        BookVo bookVo = new BookVo();
-        bookVo.setId(orders.getBookId());
-        Page<BookVo> page = bookService.selectBookPage(bookVo);
-        List<BookVo> bookVoList = page.getRecords();
-        BookVo bookVoSelected = bookVoList.get(0);
-        String bookName = bookVoSelected.getBookName();
-        String code_url = null;
+    public String pay(Long orderId) {
+        //从数据库中查询订单状态
+        LambdaQueryWrapper<OrdersShow> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(OrdersShow::getOrderId, orderId);
+        OrdersShow ordersShow = null;
         try {
-            code_url = wxPayTemplate.CreateOrder(orders.getPrice(), "购买图书:" + bookName, String.valueOf(orders.getOrderId()));
+            ordersShow = ordersShowMapper.selectOne(wrapper);
+            //未查询到订单信息
+            if (ordersShow == null) {
+                return "Fail";
+            }
+            //订单状态异常
+            if (!ordersShow.getStatus().equals(OrderStatus.WAIT_PAYMENT.getCode())) {
+                return "Fail";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //数据库错误
+            throw new RuntimeException(e);
+        }
+        //将订单状态改为待付款
+        LambdaUpdateWrapper<OrdersShow> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(OrdersShow::getOrderId, ordersShow.getOrderId());
+        updateWrapper.set(OrdersShow::getStatus, OrderStatus.WAIT_PAYMENT.getCode());
+        ordersShowMapper.update(updateWrapper);
+        String code_url;
+        try {
+            code_url = wxPay.CreateOrder(ordersShow.getTotalPrice(), "购买图书", ordersShow.getOrderId());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -59,18 +74,27 @@ public class NativePayServiceImpl implements NativePayService {
 
     @Override
     public String payNotify(NotifyDto dto) {
+        String outTradeNo;
         try {
             //解密微信传递过来的参数
             String json = new AesUtil(apiV3Key.getBytes()).decryptToString(dto.getResource().getAssociated_data().getBytes(),
                     dto.getResource().getNonce().getBytes(),
                     dto.getResource().getCiphertext());
             Gson gson = new Gson();
-            String outTradeNo = gson.fromJson(json, Map.class).get("out_trade_no").toString();
-            System.out.println("支付成功的订单号" + outTradeNo);
+            outTradeNo = gson.fromJson(json, Map.class).get("out_trade_no").toString();
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
             return "Fail";
         }
+        updateOrderShowStatus(outTradeNo);
         return "Success";
+    }
+
+    //将订单状态改为代发货
+    private void updateOrderShowStatus(String outTradeNo) {
+        LambdaUpdateWrapper<OrdersShow> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(OrdersShow::getOrderId, outTradeNo);
+        wrapper.set(OrdersShow::getStatus, OrderStatus.WAIT_SEND.getCode());
+        ordersShowMapper.update(wrapper);
     }
 }

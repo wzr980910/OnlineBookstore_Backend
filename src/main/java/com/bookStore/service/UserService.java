@@ -11,7 +11,7 @@ import java.nio.charset.CoderResult;
  * @createDate 2024-01-14 16:56:54
  */
 public interface UserService extends IService<User> {
-    public User selectByAccount(String accountNumber);
+    User selectByAccount(String accountNumber);
 
     Integer insert(User user);
 
@@ -30,4 +30,6 @@ public interface UserService extends IService<User> {
     User forgetPassword(String phone, String accountNumber);
 
     int updateUserAvatar(Long userId, String avatarUrl);
+
+    User selectByWechatId(String openid);
 }

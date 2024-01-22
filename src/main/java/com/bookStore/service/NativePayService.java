@@ -1,7 +1,6 @@
 package com.bookStore.service;
 
-import com.bookStore.pojo.Orders;
-import com.bookStore.pojo.wxpay.NotifyDto;
+import com.bookStore.pojo.pay.wxpay.NotifyDto;
 
 /**
  * ClassName: NativePayService
@@ -13,7 +12,7 @@ import com.bookStore.pojo.wxpay.NotifyDto;
  * @Version: v1.0
  */
 public interface NativePayService {
-    String pay(Orders orders);
+    String pay(Long orderId);
 
 
     String payNotify(NotifyDto dto) ;

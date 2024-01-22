@@ -1,8 +1,8 @@
 package com.bookStore.util;
 
 import com.bookStore.config.wxpay.WxPayProperties;
-import com.bookStore.pojo.pay.Amount;
-import com.bookStore.pojo.pay.NativePayParams;
+import com.bookStore.pojo.pay.wxpay.Amount;
+import com.bookStore.pojo.pay.wxpay.NativePayParams;
 import com.google.gson.Gson;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -26,31 +27,31 @@ import java.util.Map;
  * @Version: v1.0
  */
 @Component
-public class WxPayTemplate {
+public class WxPay {
     @Autowired
     private WxPayProperties wxPayProperties;
     private CloseableHttpClient httpClient;
 
-    public WxPayTemplate(WxPayProperties wxPayProperties, CloseableHttpClient httpClient) {
+    public WxPay(WxPayProperties wxPayProperties, CloseableHttpClient httpClient) {
         this.wxPayProperties = wxPayProperties;
         this.httpClient = httpClient;
     }
 
     //支付
-    public String CreateOrder(Integer total, String description, String outTradeNo) throws Exception {
+    public String CreateOrder(BigDecimal total, String description, Long outTradeNo) throws Exception {
         String code_url = "";
         HttpPost httpPost = new HttpPost("https://api.mch.weixin.qq.com/v3/pay/transactions/native");
         Amount amount = Amount.builder()
                 .currency("CNY")
-                .total(total)
+                .total(total.multiply(new BigDecimal(1)).intValue())
                 .build();
         NativePayParams payParams = NativePayParams
                 .builder()
                 .appid(wxPayProperties.getAppId())
                 .mchid(wxPayProperties.getMchId())
                 .description(description)
-                .out_trade_no(outTradeNo)
-                .notify_url("https://36d5634033.vicp.fun/native/notify")
+                .out_trade_no(String.valueOf(outTradeNo))
+                .notify_url("https://8fb99a7.r3.cpolar.top/native/notify")
                 .amount(amount)
                 .build();
         Gson gson = new Gson();
@@ -71,7 +72,6 @@ public class WxPayTemplate {
                     System.out.println("failed,resp code = " + statusCode + ",return body = " + EntityUtils.toString(response.getEntity()));
                     throw new IOException("request failed");
                 }
-
                 System.out.println("success");
             }
         } finally {

@@ -59,5 +59,6 @@ public class User implements Serializable {
 
     private Integer isDeleted;
 
+    private String wechatId;
     private static final long serialVersionUID = 1L;
 }

@@ -30,6 +30,7 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
     private BookMapper bookMapper;
     @Autowired
     private ComprehensiveOrder comprehensiveOrder;
+
     @Autowired
     public void setBookMapper(BookMapper bookMapper) {
         this.bookMapper = bookMapper;
@@ -39,9 +40,8 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
     public Page<BookVo> selectBookPage(BookVo bookVo) {
         //分页
         Page<BookVo> page = new Page<>(bookVo.getPageNum(), bookVo.getPageSize());
-
         //查询
-        bookMapper.selectBookPage(page, bookVo,comprehensiveOrder);
+        bookMapper.selectBookPage(page, bookVo, comprehensiveOrder);
         return page;
 
 

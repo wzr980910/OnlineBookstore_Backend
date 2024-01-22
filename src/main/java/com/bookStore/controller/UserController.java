@@ -1,32 +1,39 @@
 package com.bookStore.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.bookStore.mapper.UserMapper;
+import cn.hutool.extra.qrcode.QrCodeUtil;
+import cn.hutool.json.JSON;
 import com.bookStore.pojo.User;
+import com.bookStore.pojo.login.wxlogin.WechatUser;
+import com.bookStore.pojo.login.wxlogin.WxMpConfig;
+import com.bookStore.service.UserService;
+import com.bookStore.service.WeChatMpService;
 import com.bookStore.util.AliOssUtil;
 import com.bookStore.util.JwtHelper;
 import com.bookStore.util.MD5Util;
 import com.bookStore.util.ThreadLocalUtil;
 import com.bookStore.util.result.RestResult;
-import com.bookStore.service.UserService;
 import com.bookStore.util.result.ResultCode;
-import io.swagger.annotations.*;
+import com.bookStore.util.result.WechatLoginUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/user")
@@ -38,7 +45,10 @@ public class UserController {
     private JwtHelper jwtHelper;
     @Autowired
     private AliOssUtil aliOssUtil;
-
+    @Autowired
+    WeChatMpService weChatMpService;
+    @Autowired
+    private WxMpConfig wxMpConfig;
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -49,7 +59,6 @@ public class UserController {
     public void setJwtHelper(JwtHelper jwtHelper) {
         this.jwtHelper = jwtHelper;
     }
-
 
 
     /**
@@ -253,5 +262,50 @@ public class UserController {
             e.printStackTrace();
         }
         return RestResult.failure("文件上传失败");
+    }
+
+
+    /*
+     * @param signature 微信加密签名，signature结合了开发者填写的 token 参数和请求中的 timestamp 参数、nonce参数。
+     * @param timestamp 时间戳
+     * @param nonce     这是个随机数
+     * @param echostr   随机字符串，验证成功后原样返回
+     */
+    @GetMapping("wx")
+    public String get(@RequestParam(required = false) String signature,
+                    @RequestParam(required = false) String timestamp,
+                    @RequestParam(required = false) String nonce,
+                    @RequestParam(required = false) String echostr,
+                    HttpServletResponse response) throws IOException {
+        if (!this.weChatMpService.checkSignature(timestamp, nonce, signature)) {
+            return null;
+        }
+        return echostr;
+    }
+    //前端调用
+    @GetMapping("/wxLogin")
+    @ResponseBody
+    public void wxLogin(HttpServletResponse response) throws IOException {
+        //redirece_url是回调的地址，要转成UrlEncode格式
+        String redirecrUrl= URLEncoder.encode("https://5489e1aa.r6.cpolar.top/user/wxCallback", StandardCharsets.UTF_8);
+        //构造二维码地址
+        String url="https://open.weixin.qq.com/connect/oauth2/authorize?appid="+wxMpConfig.getAppid()
+                +"&redirect_uri="+redirecrUrl+"&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+        //生成二维码，扫描后跳转上面地址
+        response.setContentType("image/png");
+        QrCodeUtil.generate(url,300,300,"jpg",response.getOutputStream());
+    }
+    //微信服务器调用
+    @RequestMapping("/wxCallback")
+    @ResponseBody
+    public String pcCallback(String code, String state, HttpServletRequest request, HttpServletResponse response,
+                             HttpSession session) throws IOException {
+        WechatUser wechatUser= WechatLoginUtil.getUserInfo(code);
+        //在数据库查询个人信息
+        User user=userService.selectByWechatId(wechatUser.getOpenid());
+        if(user == null){
+            new User();
+        }
+        return null;
     }
 }
