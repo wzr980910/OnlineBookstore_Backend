@@ -30,6 +30,7 @@ public class LoginConfig implements WebMvcConfigurer {
         authRegistration.addPathPatterns("/**");    //所有路径都被拦截
         authRegistration.excludePathPatterns(       //添加不拦截路径
                 "/user/login",
+                "/book/selectBookPage",
                 "/**/*.html",
                 "/**/*.js",
                 "/**/*.css",

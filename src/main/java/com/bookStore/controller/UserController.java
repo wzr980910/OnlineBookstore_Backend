@@ -61,8 +61,6 @@ public class UserController {
 
     @PostMapping(value = "/regist")
     //方法参数说明，name参数名；value参数说明，备注；dataType参数类型；required 是否必传；defaultValue 默认值
-    @ApiImplicitParam(name = "user", value = "新增用户数据")
-    //说明是什么方法(可以理解为方法注释)
     @ApiOperation(value = "添加用户", notes = "添加用户")
     public RestResult regist(@Valid @RequestBody User user) {
         RestResult restResult = new RestResult();

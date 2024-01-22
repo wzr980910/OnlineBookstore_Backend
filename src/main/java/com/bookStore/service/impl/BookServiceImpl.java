@@ -36,31 +36,15 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
     }
 
 
-    public Map<String, Object> selectBookPage(BookVo bookVo) {
+    public Page<BookVo> selectBookPage(BookVo bookVo) {
         //分页
-        Page<User> page = new Page<>(bookVo.getPageNum(), bookVo.getPageSize());
+        Page<BookVo> page = new Page<>(bookVo.getPageNum(), bookVo.getPageSize());
 
         //查询
         bookMapper.selectBookPage(page, bookVo,comprehensiveOrder);
+        return page;
 
-//        List records = page.getRecords();
-//        System.out.println(records);
-        //封装查询到的内容
-        Map<String, Object> pageInfo = new HashMap<>();
-        //从page中获得返回的数据，作为value放入map中，对应k值为pageData
-        pageInfo.put("pageData", page.getRecords());
-        //从page中返回当前是第几页
-        pageInfo.put("pageNum", page.getCurrent());
-        //从page中返回当前页容量
-        pageInfo.put("pageSize", page.getSize());
-        //返回总页数
-        pageInfo.put("totalPage", page.getPages());
-        //返回结果总条数
-        pageInfo.put("totalSize", page.getTotal());
 
-        Map<String, Object> pageInfoMap = new HashMap<>();
-        pageInfoMap.put("pageInfo", pageInfo);
-        return pageInfoMap;
     }
 }
 
