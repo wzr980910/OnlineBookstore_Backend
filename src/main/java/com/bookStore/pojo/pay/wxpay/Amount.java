@@ -1,4 +1,4 @@
-package com.bookStore.pojo.pay;
+package com.bookStore.pojo.pay.wxpay;
 
 import lombok.Builder;
 import lombok.Data;

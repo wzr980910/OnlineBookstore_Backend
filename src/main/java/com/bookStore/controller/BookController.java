@@ -43,26 +43,13 @@ public class BookController {
 
     @ApiOperation(value = "查询图书")
     @ApiResponses({
-            @ApiResponse(code = 1, message = "操作成功")
+            @ApiResponse(code = 200, message = "操作成功")
     })
     @PostMapping("/selectBookPage")
     public RestResult selectBookByPage(@RequestBody BookVo bookVo) {
         IPage<BookVo> page = bookService.selectBookPage(bookVo);
-        //封装查询到的内容
-        Map<String, Object> pageInfo = new HashMap<>();
-        //从page中获得返回的数据，作为value放入map中，对应k值为pageData
-        pageInfo.put("pageData", page.getRecords());
-        //从page中返回当前是第几页
-        pageInfo.put("pageNum", page.getCurrent());
-        //从page中返回当前页容量
-        pageInfo.put("pageSize", page.getSize());
-        //返回总页数
-        pageInfo.put("totalPage", page.getPages());
-        //返回结果总条数
-        pageInfo.put("totalSize", page.getTotal());
-
         Map<String, Object> pageInfoMap = new HashMap<>();
-        pageInfoMap.put("pageInfo", pageInfo);
+        pageInfoMap.put("page", page);
         //查询成功，包装数据返回
         return new RestResult(ResultCode.SUCCESS,pageInfoMap);
     }

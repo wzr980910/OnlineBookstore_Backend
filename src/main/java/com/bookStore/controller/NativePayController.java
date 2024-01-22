@@ -1,13 +1,14 @@
 package com.bookStore.controller;
 
-import com.bookStore.pojo.Orders;
-import com.bookStore.pojo.wxpay.NotifyDto;
+import com.bookStore.pojo.pay.wxpay.NotifyDto;
 import com.bookStore.service.NativePayService;
-import com.bookStore.util.WxPayTemplate;
+import com.bookStore.service.OrdersShowService;
 import com.bookStore.util.result.RestResult;
 import com.bookStore.util.result.ResultCode;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,10 +30,14 @@ import java.util.Map;
 @RequestMapping("/native")
 public class NativePayController {
     @Autowired
+    private OrdersShowService ordersShowService;
+    @Autowired
     private NativePayService nativePayService;
+
     //支付成功后微信通知调用的接口
     @PostMapping("/notify")
     public Map<String, String> payNotify(@RequestBody NotifyDto dto) {
+        System.out.println("收到微信回调");
         Map<String, String> resMap = new HashMap<>();
         String res = nativePayService.payNotify(dto);
         if (res.equals("Success")) {
@@ -44,10 +49,22 @@ public class NativePayController {
         }
         return resMap;
     }
-    //未写完的支付
+
+    @ApiOperation(value = "微信支付", notes = "微信支付")
+    @ApiResponses({
+            @ApiResponse(code=200,message = "操作成功"),
+            @ApiResponse(code = 5001,message = "订单状态异常")
+    })
     @PostMapping("wxpay")
-    public RestResult wxPay(@RequestBody Orders orders)  {
-        String code_url=nativePayService.pay(orders);
-        return new RestResult(ResultCode.SUCCESS,code_url);
+    public RestResult wxPay(Long orderId) {
+        RestResult restResult;
+        //支付
+        String code_url = nativePayService.pay(orderId);
+        if (code_url.equals("Fail")) {
+            restResult = new RestResult(ResultCode.ORDER_STATUS_ERROR);
+            return restResult;
+        }
+        return new RestResult(ResultCode.SUCCESS, code_url);
     }
+
 }

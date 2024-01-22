@@ -101,4 +101,11 @@ wxpay:
   #V3密钥
   api-v3-key: CZBK51236435wxpay435434323FFDuv3
 
+#微信登录配置
+wx:
+  mp:
+    appid: wxb39f812269200a69
+    secret: c7a5b85343b8a73c32d263761b2c5900
+    token: token
+    aesKey: 123
 

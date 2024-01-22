@@ -29,7 +29,9 @@ public class LoginConfig implements WebMvcConfigurer {
         InterceptorRegistration authRegistration=registry.addInterceptor(authenticationInterceptor);
         authRegistration.addPathPatterns("/**");    //所有路径都被拦截
         authRegistration.excludePathPatterns(       //添加不拦截路径
+                "/native/notify",
                 "/user/login",
+                "/user/wx",
                 "/book/selectBookPage",
                 "/**/*.html",
                 "/**/*.js",

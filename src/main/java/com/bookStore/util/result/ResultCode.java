@@ -8,7 +8,7 @@ package com.bookStore.util.result;
  */
 public enum ResultCode {
     /* 成功状态码 */
-    SUCCESS(1,"成功"),
+    SUCCESS(200,"成功"),
     FILE_UPLOAD_SUCCESS(2,"文件上传成功"),
     /* 未知异常：100-199 */
     UNKNOWN_ERROR(100,"未知错误"),
@@ -52,8 +52,9 @@ public enum ResultCode {
     ASSERT_ERROR(3022,"断言异常"),
     FILE_UPLOAD_FAILURE(3013,"文件上传失败"),
     /* 数据库错误：4001-4099*/
-    DB_INSERT_ERROR(4001,"数据库插入报错");
-
+    DB_INSERT_ERROR(4001,"数据库插入报错"),
+    /* 订单状态错误*/
+    ORDER_STATUS_ERROR(5001,"订单状态异常");
     private Integer code;
     private String message;
 

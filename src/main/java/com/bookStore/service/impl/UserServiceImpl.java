@@ -99,6 +99,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         return user;
     }
+
+    @Override
+    public User selectByWechatId(String openid) {
+        LambdaQueryWrapper<User> wrapper=new LambdaQueryWrapper<>();
+        wrapper.eq(User::getWechatId,openid);
+        return userMapper.selectOne(wrapper);
+    }
 }
 
 

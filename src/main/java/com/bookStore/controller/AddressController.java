@@ -27,7 +27,7 @@ public class AddressController {
     //说明是什么方法(可以理解为方法注释)
     @ApiOperation(value = "添加地址", notes = "添加地址,此时地址Id不需要")
     @ApiResponses({
-            @ApiResponse(code=1,message = "操作成功"),
+            @ApiResponse(code=200,message = "操作成功"),
             @ApiResponse(code = 101,message = "操作失败")
     })
     @PostMapping("addAddress")
@@ -45,7 +45,7 @@ public class AddressController {
     //说明是什么方法(可以理解为方法注释)
     @ApiOperation(value = "修改地址", notes = "修改地址")
     @ApiResponses({
-            @ApiResponse(code=1,message = "操作成功"),
+            @ApiResponse(code=200,message = "操作成功"),
             @ApiResponse(code = 101,message = "操作失败"),
             @ApiResponse(code = 1004,message = "参数缺失")
     })
@@ -72,7 +72,7 @@ public class AddressController {
     @ApiImplicitParam(name="addreddId",value="需要删除地址的Id",required = true,paramType = "form")
     @ApiOperation(value = "删除地址", notes = "删除地址")
     @ApiResponses({
-            @ApiResponse(code=1,message = "操作成功"),
+            @ApiResponse(code=200,message = "操作成功"),
             @ApiResponse(code = 101,message = "操作失败"),
             @ApiResponse(code = 1004,message = "参数缺失")
     })
