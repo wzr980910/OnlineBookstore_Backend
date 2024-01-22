@@ -5,14 +5,18 @@
 <mapper namespace="com.bookStore.mapper.OrdersMapper">
 
     <resultMap id="BaseResultMap" type="com.bookStore.pojo.Orders">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="orderId" column="orderId" jdbcType="BIGINT"/>
-            <result property="bookId" column="bookId" jdbcType="BIGINT"/>
-            <result property="price" column="price" jdbcType="DECIMAL"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="orderId" column="orderId" jdbcType="BIGINT"/>
+        <result property="bookId" column="bookId" jdbcType="BIGINT"/>
+        <result property="price" column="price" jdbcType="DECIMAL"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id,orderId,bookId,
-        price
-    </sql>
+
+    <insert id="insertOrdersBatch" parameterType="java.util.List">
+        insert into orders (orderId, bookId, number)
+        values
+        <foreach collection="ordersList" item="orders" separator=",">
+            (#{orders.orderId},#{orders.bookId},#{orders.number})
+        </foreach>
+    </insert>
 </mapper>

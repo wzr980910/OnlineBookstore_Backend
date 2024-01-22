@@ -4,11 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bookStore.mapper.TypeMapper">
 
-    <resultMap id="BaseResultMap" type="com.bookStore.pojo.Type">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="type" column="type" jdbcType="VARCHAR"/>
-            <result property="parentId" column="parentId" jdbcType="BIGINT"/>
-    </resultMap>
+
+    <select id="selectPageType" resultType="com.bookStore.pojo.respojo.TypeBook">
+        select a.type as type,
+               b.type as parentType
+        from type as a,type as b where b.id = a.parentId
+    </select>
 
 
 </mapper>

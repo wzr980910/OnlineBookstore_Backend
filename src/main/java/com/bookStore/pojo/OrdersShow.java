@@ -13,7 +13,7 @@ import lombok.Data;
 /**
  * @TableName orders_show
  */
-@TableName(value = "orders_show")
+@TableName(value ="orders_show")
 @Data
 public class OrdersShow implements Serializable {
     private Long id;
@@ -25,11 +25,12 @@ public class OrdersShow implements Serializable {
     private Long addressId;
 
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:ss:mm", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:ss:mm",timezone = "GMT+8")
     @TableField(fill = FieldFill.INSERT)
     private Date date;
 
     private BigDecimal totalPrice;
+
 
     /**
      * 订单状态
@@ -37,11 +38,11 @@ public class OrdersShow implements Serializable {
      */
     private Integer status;
 
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
