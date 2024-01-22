@@ -49,7 +49,7 @@
                 AND c.bookName like CONCAT('%',#{bookName},'%')
             </if>
             <if test="userId!=null">
-                AND userId = #{userId}
+                AND a.userId = #{userId}
             </if>
         </where>
     </select>
@@ -84,7 +84,7 @@
                 AND a.status = #{orderStatus}
             </if>
             <if test="userId != null">
-                AND userId = #{userId}
+                AND a.userId = #{userId}
             </if>
         </where>
     </select>

@@ -236,6 +236,7 @@ public class UserController {
     @ApiOperation("头像上传")
     public RestResult imgUpload(@RequestParam(value = "file") MultipartFile file) {
         String basePath = "userPicture/";
+        Long userId = ThreadLocalUtil.get();
         try {
             //原始文件名
             String originalFilename = file.getOriginalFilename();
@@ -245,6 +246,8 @@ public class UserController {
             String objectName = basePath + UUID.randomUUID().toString() + extension;
             //返回文件请求路径
             String filePath = aliOssUtil.upload(file.getBytes(), objectName);
+            //保存到user表中
+            userService.updateUserAvatar(userId,filePath);
             return RestResult.success(filePath);
         } catch (IOException e) {
             e.printStackTrace();
