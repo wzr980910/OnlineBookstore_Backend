@@ -13,8 +13,5 @@
             <result property="isdelete" column="isDelete" jdbcType="TINYINT"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id,imgUrl,isDisplay,
-        createTime,updateTime,isDelete
-    </sql>
+
 </mapper>

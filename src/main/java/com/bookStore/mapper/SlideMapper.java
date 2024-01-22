@@ -2,6 +2,7 @@ package com.bookStore.mapper;
 
 import com.bookStore.pojo.Slide;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
 * @author 邓桂材
@@ -9,6 +10,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2024-01-22 11:08:14
 * @Entity com.bookStore.pojo.Slide
 */
+@Mapper
 public interface SlideMapper extends BaseMapper<Slide> {
 
 }

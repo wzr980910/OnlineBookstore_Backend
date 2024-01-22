@@ -14,11 +14,11 @@ import lombok.Data;
 @Data
 public class TokenInfo {
     //网页授权接口凭证，与基础支持的access_token不同
-    private String accessToken;
+    private String access_token;
     //超时时间，单位秒
-    private String expiresIn;
+    private String expires_in;
     //刷新凭证
-    private String refreshToken;
+    private String refresh_token;
     //用户唯一标识
     private String openid;
     //用户授权作用域

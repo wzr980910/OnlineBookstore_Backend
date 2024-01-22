@@ -6,6 +6,7 @@ import cn.hutool.json.JSON;
 import com.bookStore.pojo.User;
 import com.bookStore.pojo.login.wxlogin.WechatUser;
 import com.bookStore.pojo.login.wxlogin.WxMpConfig;
+import com.bookStore.pojo.pojoenum.Gender;
 import com.bookStore.service.UserService;
 import com.bookStore.service.WeChatMpService;
 import com.bookStore.util.AliOssUtil;
@@ -15,6 +16,7 @@ import com.bookStore.util.ThreadLocalUtil;
 import com.bookStore.util.result.RestResult;
 import com.bookStore.util.result.ResultCode;
 import com.bookStore.util.result.WechatLoginUtil;
+import com.google.gson.Gson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -123,8 +125,13 @@ public class UserController {
     @ApiOperation(value = "登录接口", notes = "用户登录（只传手机号和密码参数即可）,用接口测试前请先登录（缓存用户信息）", httpMethod = "GET")
     @GetMapping("/login")
     public RestResult login(HttpServletRequest httpServletRequest, @RequestParam String accountNumber, @RequestParam String password) {
-        Map<String, Object> map = new HashMap<>();
         RestResult restResult = null;
+        Long userId = ThreadLocalUtil.get();
+        //已经通过其他方式登录成功了
+        if (userId != null) {
+            User user = userService.queryUserById(userId);
+            return getRestResult(user);
+        }
         //验证用户账号是否存在
         User userTemp = userService.selectByAccount(accountNumber);
         //不存在
@@ -140,13 +147,20 @@ public class UserController {
             return restResult;
             //登录验证成功
         } else {
-            //根据唯一id生成token
-            String token = jwtHelper.createToken(userLogin.getId());
-            map.put("user", userLogin);
-            map.put("token", token);
-            restResult = new RestResult(ResultCode.SUCCESS, map);
+            restResult = getRestResult(userLogin);
             return restResult;
         }
+    }
+
+    private RestResult getRestResult(User userLogin) {
+        RestResult restResult;
+        //根据唯一id生成token
+        Map<String, Object> map = new HashMap<>();
+        String token = jwtHelper.createToken(userLogin.getId());
+        map.put("user", userLogin);
+        map.put("token", token);
+        restResult = new RestResult(ResultCode.SUCCESS, map);
+        return restResult;
     }
 
     /**
@@ -256,7 +270,7 @@ public class UserController {
             //返回文件请求路径
             String filePath = aliOssUtil.upload(file.getBytes(), objectName);
             //保存到user表中
-            userService.updateUserAvatar(userId,filePath);
+            userService.updateUserAvatar(userId, filePath);
             return RestResult.success(filePath);
         } catch (IOException e) {
             e.printStackTrace();
@@ -273,39 +287,52 @@ public class UserController {
      */
     @GetMapping("wx")
     public String get(@RequestParam(required = false) String signature,
-                    @RequestParam(required = false) String timestamp,
-                    @RequestParam(required = false) String nonce,
-                    @RequestParam(required = false) String echostr,
-                    HttpServletResponse response) throws IOException {
+                      @RequestParam(required = false) String timestamp,
+                      @RequestParam(required = false) String nonce,
+                      @RequestParam(required = false) String echostr,
+                      HttpServletResponse response) throws IOException {
         if (!this.weChatMpService.checkSignature(timestamp, nonce, signature)) {
             return null;
         }
         return echostr;
     }
+
     //前端调用
     @GetMapping("/wxLogin")
     @ResponseBody
     public void wxLogin(HttpServletResponse response) throws IOException {
         //redirece_url是回调的地址，要转成UrlEncode格式
-        String redirecrUrl= URLEncoder.encode("https://5489e1aa.r6.cpolar.top/user/wxCallback", StandardCharsets.UTF_8);
+        String redirecrUrl = URLEncoder.encode("https://44aa1df6.r15.cpolar.top/user/wxCallback", StandardCharsets.UTF_8);
         //构造二维码地址
-        String url="https://open.weixin.qq.com/connect/oauth2/authorize?appid="+wxMpConfig.getAppid()
-                +"&redirect_uri="+redirecrUrl+"&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+        String url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + wxMpConfig.getAppid()
+                + "&redirect_uri=" + redirecrUrl + "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
         //生成二维码，扫描后跳转上面地址
         response.setContentType("image/png");
-        QrCodeUtil.generate(url,300,300,"jpg",response.getOutputStream());
+        QrCodeUtil.generate(url, 300, 300, "jpg", response.getOutputStream());
     }
+
     //微信服务器调用
     @RequestMapping("/wxCallback")
     @ResponseBody
     public String pcCallback(String code, String state, HttpServletRequest request, HttpServletResponse response,
                              HttpSession session) throws IOException {
-        WechatUser wechatUser= WechatLoginUtil.getUserInfo(code);
+         WechatUser wechatUser = WechatLoginUtil.getUserInfo(code,wxMpConfig.getAppid(),wxMpConfig.getSecret());
         //在数据库查询个人信息
-        User user=userService.selectByWechatId(wechatUser.getOpenid());
-        if(user == null){
-            new User();
+        User user = userService.selectByWechatId(wechatUser.getOpenid());
+        //没有该数据就添加用户
+        if (user == null) {
+            User userAdd = new User();
+            //将微信提供的信息设置到用户信息中
+            userAdd.setWechatId(wechatUser.getOpenid());
+            userAdd.setUsername(wechatUser.getNickname());
+            userAdd.setPicture(wechatUser.getHeadimgurl());
+            userAdd.setGender(wechatUser.getSex());
+            userService.insert(userAdd);
         }
-        return null;
+        //重新查询，获取userId
+        User userNew = userService.selectByWechatId(wechatUser.getOpenid());
+        ThreadLocalUtil.set(userNew.getId());
+        Gson gson = new Gson();
+        return gson.toJson(wechatUser);
     }
 }

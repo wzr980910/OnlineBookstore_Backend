@@ -17,7 +17,7 @@ public class WechatUser {
     private String openid;
     //昵称
     private String nickname;
-    //性别
+    //性别,1男，2女，0未知
     private Integer sex;
     //国家
     private String country;
@@ -25,9 +25,8 @@ public class WechatUser {
     private String city;
     private String province;
     //头像
-    private String headImgUrl;
-    //微信用户特权
-    private String privilege;
+    private String headimgurl;
+
     //只有在用户将公众号绑定到微信开放平台账号后，才会出现该字段
     private String unionId;
 }

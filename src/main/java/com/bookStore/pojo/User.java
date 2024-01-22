@@ -40,8 +40,8 @@ public class User implements Serializable {
     @ApiModelProperty(value = "用户密码",notes ="用户名只包含字母和数字，长度在3到20个字符之间")
     private String username;
 
-    @ApiModelProperty(value = "用户密码",notes = "1表示男，2表示女")
-    private Gender gender;
+    @ApiModelProperty(value = "用户密码",notes = "1表示男，2表示女,0未知")
+    private Integer gender;
 
     @ApiModelProperty(value = "用户头像地址",notes = "需要真实url地址")
     private String picture;

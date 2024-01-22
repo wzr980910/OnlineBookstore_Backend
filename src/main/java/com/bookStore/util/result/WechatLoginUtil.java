@@ -25,17 +25,13 @@ import java.io.IOException;
  */
 
 public class WechatLoginUtil {
-    @Value("wx.mp.appid")
-    private static String appid;
-    @Value("wx.mp.secret")
-    private static String secret;
 
-    public static WechatUser getUserInfo(String code) throws IOException {
+    public static WechatUser getUserInfo(String code ,String appid,String secret) throws IOException {
         //构造http请求客户端
         HttpClient httpClient= HttpClients.createDefault();
         //用code交换token，code为微信扫码后微信服务器响应回来的值
         String tokenUrl="https://api.weixin.qq.com/sns/oauth2/access_token?appid="+appid+"&secret="+secret+
-                "&code=CODE&grant_type=authorization_code";
+                "&code="+code+"&grant_type=authorization_code";
         //发请求
         HttpGet httpGet = new HttpGet(tokenUrl);
         String responseResult="";
@@ -48,7 +44,7 @@ public class WechatLoginUtil {
         Gson gson = new Gson();
         TokenInfo tokenInfo = gson.fromJson(responseResult, TokenInfo.class);
         //用accessToken获取个人用户信息
-        String userInfoUrl="https://api.weixin.qq.com/sns/userinfo?access_token="+tokenInfo.getAccessToken()+
+        String userInfoUrl="https://api.weixin.qq.com/sns/userinfo?access_token="+tokenInfo.getAccess_token()+
                 "&openid="+tokenInfo.getOpenid()+"&lang=zh_CN";
         //构造http请求客户端
         HttpGet httpGetUserInfo = new HttpGet(userInfoUrl);

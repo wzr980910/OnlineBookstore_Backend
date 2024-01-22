@@ -45,8 +45,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public Integer insert(User user) {
-        String passwordEncrypt = MD5Util.encrypt(user.getPassword());
-        user.setPassword(passwordEncrypt);
+        if (user.getPassword() != null) {
+            String passwordEncrypt = MD5Util.encrypt(user.getPassword());
+            user.setPassword(passwordEncrypt);
+        }
+        user.setIsDeleted(0);
         int insert = userMapper.insert(user);
         return insert;
     }
@@ -102,8 +105,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public User selectByWechatId(String openid) {
-        LambdaQueryWrapper<User> wrapper=new LambdaQueryWrapper<>();
-        wrapper.eq(User::getWechatId,openid);
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getWechatId, openid);
         return userMapper.selectOne(wrapper);
     }
 }
