@@ -1,11 +1,13 @@
 package com.bookStore.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.util.Date;
+
+import com.bookStore.pojo.pojoenum.DeleteState;
+import com.bookStore.pojo.pojoenum.DisplaySlides;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 /**
@@ -16,15 +18,24 @@ import lombok.Data;
 public class Slide implements Serializable {
     private Long id;
 
-    private String imgurl;
+    private String imgUrl;
 
-    private Integer isdisplay;
+    /**
+     * 默认不展示到前台
+     */
+    private Integer isDisplay = DisplaySlides.NOT_DISPLAY.getCode();
 
-    private Date createtime;
+    @TableField(fill = FieldFill.INSERT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date createTime;
 
-    private Date updatetime;
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date updateTime;
 
-    private Integer isdelete;
+
+    private Integer isDelete = DeleteState.NO_DELETE.getCode();
+
 
     private static final long serialVersionUID = 1L;
 }

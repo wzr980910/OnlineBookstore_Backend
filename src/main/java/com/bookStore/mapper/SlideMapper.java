@@ -1,8 +1,12 @@
 package com.bookStore.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bookStore.pojo.Slide;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
 * @author 邓桂材
@@ -12,6 +16,9 @@ import org.apache.ibatis.annotations.Mapper;
 */
 @Mapper
 public interface SlideMapper extends BaseMapper<Slide> {
+    IPage<Slide> queryAllPage(IPage<?> page);
+
+    Integer deleteBatchSlideIds(List<String> ids);
 
 }
 

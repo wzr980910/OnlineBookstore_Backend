@@ -7,8 +7,10 @@ import com.aliyun.oss.OSSException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
+import java.util.UUID;
 
 /**
  * Created with Intellij IDEA.
@@ -27,13 +29,19 @@ public class AliOssUtil {
     private String bucketName;
 
     /**
-     * 文件上传
      *
-     * @param bytes 文件的字节数组
-     * @param objectName 文件名uuid
-     * @return 返回文件的 阿里云url 路径
+     * @param bytes  文件字节数组
+     * @param file   文件
+     * @param basePath  文件根路径
+     * @return
      */
-    public  String upload(byte[] bytes, String objectName) {
+    public  String upload(byte[] bytes, MultipartFile file, String basePath) {
+        //原始文件名
+        String originalFilename = file.getOriginalFilename();
+        //截取文件名后缀  xxx.png
+        String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+        //构造新文件名称
+        String objectName = basePath + UUID.randomUUID().toString() + extension;
 
         // 创建OSSClient实例。
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);

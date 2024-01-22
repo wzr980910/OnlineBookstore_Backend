@@ -4,14 +4,26 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bookStore.mapper.SlideMapper">
 
-    <resultMap id="BaseResultMap" type="com.bookStore.pojo.Slide">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="imgurl" column="imgUrl" jdbcType="VARCHAR"/>
-            <result property="isdisplay" column="isDisplay" jdbcType="TINYINT"/>
-            <result property="createtime" column="createTime" jdbcType="TIMESTAMP"/>
-            <result property="updatetime" column="updateTime" jdbcType="TIMESTAMP"/>
-            <result property="isdelete" column="isDelete" jdbcType="TINYINT"/>
-    </resultMap>
+
+    <select id="queryAllPage" resultType="com.bookStore.pojo.Slide">
+        select slide.id,
+               slide.imgUrl,
+               slide.isDisplay,
+               slide.createTime,
+               slide.updateTime,
+               slide.isDelete
+        from slide
+        where slide.isDelete = 0
+    </select>
+
+    <update id="deleteBatchSlideIds" parameterType="java.util.List">
+        update slide
+        set slide.isDelete = 1
+        where slide.id in
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
 
 
 </mapper>
