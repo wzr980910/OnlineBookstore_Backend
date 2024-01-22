@@ -10,7 +10,7 @@
         <result property="bookId" column="bookId" jdbcType="BIGINT"/>
         <result property="price" column="price" jdbcType="DECIMAL"/>
     </resultMap>
-    
+
 
     <insert id="insertOrdersBatch" parameterType="java.util.List">
         insert into orders (orderId, bookId, number)
