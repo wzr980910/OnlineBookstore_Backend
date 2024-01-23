@@ -51,7 +51,7 @@ public class WxPay {
                 .mchid(wxPayProperties.getMchId())
                 .description(description)
                 .out_trade_no(String.valueOf(outTradeNo))
-                .notify_url("https://8fb99a7.r3.cpolar.top/native/notify")
+                .notify_url("http://72bc314d.r5.cpolar.top/native/notify")
                 .amount(amount)
                 .build();
         Gson gson = new Gson();

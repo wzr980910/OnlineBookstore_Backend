@@ -1,8 +1,10 @@
 package com.bookStore.controller;
 
 
+import com.bookStore.pojo.Shopping;
 import com.bookStore.pojo.vo.InOrderBook;
 import com.bookStore.pojo.vo.OrderBook;
+import com.bookStore.pojo.vo.OrderVo;
 import com.bookStore.service.OrdersShowService;
 import com.bookStore.util.ThreadLocalUtil;
 import com.bookStore.util.result.RestResult;
@@ -65,18 +67,26 @@ public class OrdersShowController {
     }
 
 
-    @PostMapping("/addOrders")
-    @ApiOperation(value = "添加订单", notes = "图书id和图书数量 既可以传单个也可以传多个 但是要一一对应")
-    public RestResult addOrders(@RequestBody InOrderBook inOrderBook) {
-        Long userId = ThreadLocalUtil.get();
-        Integer rows = ordersShowService.addOrders(userId, inOrderBook);
-        if (rows > 0) {
-            return RestResult.success(ResultCode.SUCCESS, "添加订单成功", rows);
-        } else {
-            return RestResult.success(ResultCode.OPERATION_FAILURE, "添加失败");
-        }
-
+//    @PostMapping("/addOrders")
+//    @ApiOperation(value = "添加订单", notes = "图书id和图书数量 既可以传单个也可以传多个 但是要一一对应")
+//    public RestResult addOrders(@RequestBody InOrderBook inOrderBook) {
+//        Long userId = ThreadLocalUtil.get();
+//        Integer rows = ordersShowService.addOrders(userId, inOrderBook);
+//        if (rows > 0) {
+//            return RestResult.success(ResultCode.SUCCESS, "添加订单成功", rows);
+//        } else {
+//            return RestResult.success(ResultCode.OPERATION_FAILURE, "添加失败");
+//        }
+//    }
+    @PostMapping("addOrders")
+    @ApiOperation(value = "添加订单")
+    public RestResult addOrder(@RequestBody OrderVo orderVo){
+        Long userId = (Long) ThreadLocalUtil.get();
+        //生成订单
+        Integer rows = ordersShowService.addOrders(userId, orderVo);
+        return null;
     }
+
 
 
 }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.bookStore.pojo.pojoenum.OrderStatus;
 import com.bookStore.pojo.vo.InOrderBook;
 import com.bookStore.pojo.vo.OrderBook;
+import com.bookStore.pojo.vo.OrderVo;
 
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,8 @@ public interface OrdersShowService extends IService<OrdersShow> {
     Map<String,Object> queryOrdersPageByStatus(Integer currentPage, Integer size,
                                                Long userId,Integer status);
 
-    Integer addOrders(Long userId, InOrderBook inOrderBook);
+    Integer addOrders(Long userId, OrderVo orderVo);
+
+//    Integer addOrders(Long userId, InOrderBook inOrderBook);
 
 }
