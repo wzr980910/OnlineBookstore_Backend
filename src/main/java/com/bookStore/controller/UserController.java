@@ -1,6 +1,7 @@
 package com.bookStore.controller;
 
 
+import cn.hutool.db.Session;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.json.JSON;
 import com.bookStore.pojo.User;
@@ -26,6 +27,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -51,6 +53,7 @@ public class UserController {
     WeChatMpService weChatMpService;
     @Autowired
     private WxMpConfig wxMpConfig;
+    private HttpSession session;
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -117,16 +120,19 @@ public class UserController {
     /**
      * 用户登录
      *
-     * @param httpServletRequest
+     * @param
      * @param accountNumber
      * @param password
      * @return
      */
     @ApiOperation(value = "登录接口", notes = "用户登录（只传手机号和密码参数即可）,用接口测试前请先登录（缓存用户信息）", httpMethod = "GET")
     @GetMapping("/login")
-    public RestResult login(HttpServletRequest httpServletRequest, @RequestParam String accountNumber, @RequestParam String password) {
+    public RestResult login(@RequestParam String accountNumber, @RequestParam String password) {
         RestResult restResult = null;
-        Long userId = ThreadLocalUtil.get();
+        Long userId = null;
+        if (this.session != null) {
+            userId = (Long) this.session.getAttribute("userId");
+        }
         //已经通过其他方式登录成功了
         if (userId != null) {
             User user = userService.queryUserById(userId);
@@ -272,7 +278,6 @@ public class UserController {
         return RestResult.failure("文件上传失败");
     }
 
-
     /*
      * @param signature 微信加密签名，signature结合了开发者填写的 token 参数和请求中的 timestamp 参数、nonce参数。
      * @param timestamp 时间戳
@@ -283,8 +288,8 @@ public class UserController {
     public String get(@RequestParam(required = false) String signature,
                       @RequestParam(required = false) String timestamp,
                       @RequestParam(required = false) String nonce,
-                      @RequestParam(required = false) String echostr,
-                      HttpServletResponse response) throws IOException {
+                      @RequestParam(required = false) String echostr
+                      )  {
         if (!this.weChatMpService.checkSignature(timestamp, nonce, signature)) {
             return null;
         }
@@ -294,23 +299,34 @@ public class UserController {
     //前端调用
     @GetMapping("/wxLogin")
     @ResponseBody
-    public void wxLogin(HttpServletResponse response) throws IOException {
+    public void wxLogin(HttpServletResponse response, HttpSession session) throws IOException {
+        this.session = session;
         //redirece_url是回调的地址，要转成UrlEncode格式
-        String redirecrUrl = URLEncoder.encode("https://44aa1df6.r15.cpolar.top/user/wxCallback", StandardCharsets.UTF_8);
+        String redirecrUrl = URLEncoder.encode("http://72bc314d.r5.cpolar.top/user/wxCallback", StandardCharsets.UTF_8);
         //构造二维码地址
         String url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + wxMpConfig.getAppid()
                 + "&redirect_uri=" + redirecrUrl + "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
         //生成二维码，扫描后跳转上面地址
         response.setContentType("image/png");
-        QrCodeUtil.generate(url, 300, 300, "jpg", response.getOutputStream());
+        ServletOutputStream outputStream = null;
+        try {
+            outputStream = response.getOutputStream();
+            QrCodeUtil.generate(url, 300, 300, "jpg", outputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } finally {
+            if (outputStream != null) {
+                outputStream.close();
+            }
+        }
     }
 
     //微信服务器调用
     @RequestMapping("/wxCallback")
     @ResponseBody
-    public String pcCallback(String code, String state, HttpServletRequest request, HttpServletResponse response,
-                             HttpSession session) throws IOException {
-         WechatUser wechatUser = WechatLoginUtil.getUserInfo(code,wxMpConfig.getAppid(),wxMpConfig.getSecret());
+    public String pcCallback(String code) throws IOException {
+        WechatUser wechatUser = WechatLoginUtil.getUserInfo(code, wxMpConfig.getAppid(), wxMpConfig.getSecret());
         //在数据库查询个人信息
         User user = userService.selectByWechatId(wechatUser.getOpenid());
         //没有该数据就添加用户
@@ -325,8 +341,7 @@ public class UserController {
         }
         //重新查询，获取userId
         User userNew = userService.selectByWechatId(wechatUser.getOpenid());
-        ThreadLocalUtil.set(userNew.getId());
-        Gson gson = new Gson();
-        return gson.toJson(wechatUser);
+        this.session.setAttribute("userId", userNew.getId());
+        return "登录成功";
     }
 }

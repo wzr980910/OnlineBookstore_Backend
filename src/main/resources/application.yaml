@@ -1,6 +1,7 @@
 server:
   port: 8080
 
+
 #spring配置
 spring:
   datasource:
@@ -108,4 +109,3 @@ wx:
     secret: c7a5b85343b8a73c32d263761b2c5900
     token: token
     aesKey: 123
-
