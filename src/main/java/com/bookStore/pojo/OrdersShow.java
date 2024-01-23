@@ -25,9 +25,6 @@ public class OrdersShow implements Serializable {
     private Long addressId;
 
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:ss:mm",timezone = "GMT+8")
-    @TableField(fill = FieldFill.INSERT)
-    private Date date;
 
     private BigDecimal totalPrice;
 

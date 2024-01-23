@@ -47,12 +47,24 @@ public class ShoppingServiceImpl extends ServiceImpl<ShoppingMapper, Shopping>
     @Override
     public Integer addShopping(Shopping shopping) {
         QueryWrapper<Shopping> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("bookId", shopping.getBookId());
+        queryWrapper.eq("bookId", shopping.getBookId()).eq("userId", shopping.getUserId());
         Long count = shoppingMapper.selectCount(queryWrapper);
         if (count > 0) {
-
+            //查找已存在的购物车信息
+            Shopping newShopping = shoppingMapper.selectOne(queryWrapper);
+            Integer number = newShopping.getNumber();
+            //更改已存在得图书数量
+            shopping.setNumber(shopping.getNumber() + number);
+            return shoppingMapper.updateShopping(shopping.getNumber(), shopping.getBookId());
         }
+        //添加不存在的购物车信息
         return shoppingMapper.insert(shopping);
+    }
+
+    @Override
+    public Integer deleteShopping(Long userId, List<String> bookIdsList) {
+        int rows = shoppingMapper.deleteShopping(userId, bookIdsList);
+        return rows;
     }
 
 

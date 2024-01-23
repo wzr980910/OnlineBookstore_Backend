@@ -6,6 +6,9 @@ import com.bookStore.pojo.Shopping;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bookStore.pojo.respojo.CartBook;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author 邓桂材
@@ -17,6 +20,10 @@ import org.apache.ibatis.annotations.Mapper;
 public interface ShoppingMapper extends BaseMapper<Shopping> {
 
     IPage<CartBook> selectPageShopping(IPage<?> page,Long userId);
+
+    int updateShopping(Integer number,Long bookId);
+
+    int deleteShopping(@Param("userId") Long userId, @Param("bookIdsList") List<String> bookIdsList);
 
 }
 

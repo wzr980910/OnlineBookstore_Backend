@@ -34,6 +34,7 @@ public class ShoppingController {
 
     /**
      * 根据用户id  查询购物车信息
+     *
      * @return
      */
     @GetMapping(value = "/findAllByUserId")
@@ -42,37 +43,38 @@ public class ShoppingController {
                                       @RequestParam(defaultValue = "10") Integer size) {
         //获得userId
         Long userId = ThreadLocalUtil.get();
-        Map<String, Object> mapBooks = shoppingService.findAllByUserId(currentPage,size,userId);
+        Map<String, Object> mapBooks = shoppingService.findAllByUserId(currentPage, size, userId);
         if (mapBooks != null) {
-            return  RestResult.success(ResultCode.SUCCESS, "查询成功", mapBooks);
-        }else {
-           return RestResult.failure(ResultCode.OPERATION_FAILURE,"查询失败");
+            return RestResult.success(ResultCode.SUCCESS, "查询成功", mapBooks);
+        } else {
+            return RestResult.failure(ResultCode.OPERATION_FAILURE, "查询失败");
         }
     }
 
     @PostMapping(value = "/addShopping")
-    @ApiOperation(value = "添加购物车信息", notes = "图书id 购买图书数量 必填")
-    public RestResult addShopping(@RequestBody Shopping shopping){
-
+    @ApiOperation(value = "添加购物车信息", notes = "图书id 图书名字 图书价格 图书数量 必填")
+    public RestResult addShopping(@RequestBody Shopping shopping) {
         //获得userId
         Long userId = ThreadLocalUtil.get();
         shopping.setUserId(userId);
         Integer rows = shoppingService.addShopping(shopping);
-        if (rows>0) {
+        if (rows > 0) {
             return RestResult.success(ResultCode.SUCCESS, "添加购物车成功", rows);
-        }else {
-            return RestResult.failure(ResultCode.OPERATION_FAILURE,"添加失败");
+        } else {
+            return RestResult.failure(ResultCode.OPERATION_FAILURE, "添加失败");
         }
     }
 
     @PostMapping(value = "/deleteShopping")
-    @ApiOperation(value = "删除购物车信息", notes = "可以删除一个，也可以删除多个")
-    public RestResult deleteShopping(String[] idsList){
-        List<String> strings = Arrays.asList(idsList);
-        if (shoppingService.removeByIds(strings)){
-            return RestResult.success(ResultCode.SUCCESS,"删除成功",idsList);
+    @ApiOperation(value = "删除购物车信息", notes = "可以删除一个，也可以删除多个 通过bookId删除")
+    public RestResult deleteShopping(@RequestBody String[] bookIdsList) {
+        List<String> strings = Arrays.asList(bookIdsList);
+        Long userId = ThreadLocalUtil.get();
+        Integer rows = shoppingService.deleteShopping(userId, strings);
+        if (rows > 0) {
+            return RestResult.success(ResultCode.SUCCESS,"删除成功",rows);
         }
-        return RestResult.failure(ResultCode.OPERATION_FAILURE,"删除失败");
+        return RestResult.failure(ResultCode.OPERATION_FAILURE, "删除失败");
     }
 
 }

@@ -27,8 +27,9 @@ public interface ShoppingService extends IService<Shopping> {
    Integer addShopping(Shopping shopping);
 
    /**
-    * 通过id批量删除购物车信息
+    * 批量删除购物车信息 可以删除多个，也可以删除一个
     */
+   Integer deleteShopping(Long userId,List<String> bookIdsList);
 
 
 }

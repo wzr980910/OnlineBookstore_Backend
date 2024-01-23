@@ -27,4 +27,21 @@
                  left join book b on a.bookId = b.id
         where a.userId = #{userId}
     </select>
+
+    <update id="updateShopping">
+        update shopping
+        set shopping.number = #{number}
+        where shopping.bookId = #{bookId}
+    </update>
+
+    <delete id="deleteShopping">
+        delete from shopping
+        where userId = #{userId}
+        <if test="bookIdsList != null">
+            and bookId in
+            <foreach collection="bookIdsList" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </delete>
 </mapper>
