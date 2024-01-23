@@ -1,6 +1,7 @@
 package com.bookStore.pojo.respojo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,47 +17,11 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 public class CartBook {
-    /**
-     * 图书名
-     */
-    private String bookName;
-    /**
-     *图书ISBN
-     */
-    private String bookIsbn;
-    /**
-     * 作者
-     */
-    private String author;
-    /**
-     * 图书封面
-     */
-    private String img;
-    /**
-     * 出版社
-     */
-    private String publishName;
-    /**
-     * 出版时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
-    private Date publishDate;
-    /**
-     * 图书简介
-     */
-    private String content;
-    /**
-     * 图书价格
-     */
-    private BigDecimal price;
-    /**
-     * 购买数量
-     */
-    private Integer number;
-
-    /**
-     * 库存数量
-     */
-    private Integer stockNum;
-
+   private Long id;
+   private Long bookId;
+   private Long userId;
+   private String bookImg;
+   private String bookName;
+   private BigDecimal price;
+   private Integer number;
 }

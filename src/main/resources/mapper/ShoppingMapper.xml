@@ -5,19 +5,26 @@
 <mapper namespace="com.bookStore.mapper.ShoppingMapper">
 
     <resultMap id="BaseResultMap" type="com.bookStore.pojo.Shopping">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="bookId" column="bookId" jdbcType="BIGINT"/>
-            <result property="userId" column="userId" jdbcType="VARCHAR"/>
-            <result property="bookName" column="bookName" jdbcType="VARCHAR"/>
-            <result property="price" column="price" jdbcType="DECIMAL"/>
-            <result property="number" column="number" jdbcType="INTEGER"/>
-            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bookId" column="bookId" jdbcType="BIGINT"/>
+        <result property="userId" column="userId" jdbcType="VARCHAR"/>
+        <result property="bookName" column="bookName" jdbcType="VARCHAR"/>
+        <result property="price" column="price" jdbcType="DECIMAL"/>
+        <result property="number" column="number" jdbcType="INTEGER"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id,bookId,userId,
-        bookName,price,number,
-        createTime,updateTime
-    </sql>
+    <select id="selectPageShopping" resultType="com.bookStore.pojo.respojo.CartBook">
+        select a.id,
+               a.bookId,
+               a.userId,
+               b.picture as bookImg,
+               a.bookName,
+               a.price,
+               a.number
+        from shopping a
+                 left join book b on a.bookId = b.id
+        where a.userId = #{userId}
+    </select>
 </mapper>

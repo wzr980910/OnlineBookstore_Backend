@@ -17,7 +17,7 @@ public interface ShoppingService extends IService<Shopping> {
     * @param userId
     * @return
     */
-   Map<String,Object> findAllByUserId(Long userId);
+   Map<String,Object> findAllByUserId(Integer currentPage,Integer size,Long userId);
 
    /**
     * 添加购物车信息

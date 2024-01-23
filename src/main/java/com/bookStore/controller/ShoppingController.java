@@ -1,6 +1,7 @@
 package com.bookStore.controller;
 
 import com.bookStore.pojo.Shopping;
+
 import com.bookStore.service.ShoppingService;
 import com.bookStore.util.ThreadLocalUtil;
 import com.bookStore.util.result.RestResult;
@@ -37,16 +38,22 @@ public class ShoppingController {
      */
     @GetMapping(value = "/findAllByUserId")
     @ApiOperation(value = "查询购物车信息")
-    public RestResult findAllByUserId() {
+    public RestResult findAllByUserId(@RequestParam(defaultValue = "1") Integer currentPage,
+                                      @RequestParam(defaultValue = "10") Integer size) {
         //获得userId
         Long userId = ThreadLocalUtil.get();
-        Map<String, Object> mapBooks = shoppingService.findAllByUserId(userId);
-        return RestResult.success(ResultCode.SUCCESS, "购物车信息", mapBooks);
+        Map<String, Object> mapBooks = shoppingService.findAllByUserId(currentPage,size,userId);
+        if (mapBooks != null) {
+            return  RestResult.success(ResultCode.SUCCESS, "查询成功", mapBooks);
+        }else {
+           return RestResult.failure(ResultCode.OPERATION_FAILURE,"查询失败");
+        }
     }
 
     @PostMapping(value = "/addShopping")
     @ApiOperation(value = "添加购物车信息", notes = "图书id 购买图书数量 必填")
     public RestResult addShopping(@RequestBody Shopping shopping){
+
         //获得userId
         Long userId = ThreadLocalUtil.get();
         shopping.setUserId(userId);

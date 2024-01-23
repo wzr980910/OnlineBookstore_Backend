@@ -1,17 +1,19 @@
 package com.bookStore.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bookStore.mapper.BookMapper;
 import com.bookStore.mapper.PublishingHouseMapper;
 import com.bookStore.mapper.StockMapper;
-import com.bookStore.pojo.Book;
 import com.bookStore.pojo.Shopping;
-import com.bookStore.pojo.Stock;
 import com.bookStore.pojo.respojo.CartBook;
 import com.bookStore.service.ShoppingService;
 import com.bookStore.mapper.ShoppingMapper;
+import com.bookStore.util.result.RestResult;
+import com.bookStore.util.result.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,68 +30,28 @@ import java.util.Map;
 @Service
 public class ShoppingServiceImpl extends ServiceImpl<ShoppingMapper, Shopping>
         implements ShoppingService {
-
+    @Autowired
     private ShoppingMapper shoppingMapper;
-    private BookMapper bookMapper;
-    private PublishingHouseMapper publishingHouseMapper;
-    private StockMapper stockMapper;
 
-    @Autowired
-    public void setShoppingMapper(ShoppingMapper shoppingMapper) {
-        this.shoppingMapper = shoppingMapper;
-    }
-
-    @Autowired
-    public void setBookMapper(BookMapper bookMapper) {
-        this.bookMapper = bookMapper;
-    }
-
-    @Autowired
-    public void setPublishingHouseMapper(PublishingHouseMapper publishingHouseMapper) {
-        this.publishingHouseMapper = publishingHouseMapper;
-    }
-    @Autowired
-    public void setStockMapper(StockMapper stockMapper) {
-        this.stockMapper = stockMapper;
-    }
 
     @Override
-    public Map<String, Object> findAllByUserId(Long userId) {
-        QueryWrapper<Shopping> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("userId", userId);
+    public Map<String, Object> findAllByUserId(Integer currentPage, Integer size, Long userId) {
+        Page<CartBook> page = new Page<>(currentPage, size);
+        IPage<CartBook> cartBookIPage = shoppingMapper.selectPageShopping(page, userId);
         //查询出该用户的所有购物车信息
-        List<Shopping> shoppingList = shoppingMapper.selectList(queryWrapper);
-        List<CartBook> cartBooks = new ArrayList<>();
-        for (Shopping shop :
-                shoppingList) {
-            CartBook cartBook = new CartBook();
-            Book book = bookMapper.selectById(shop.getBookId());
-            cartBook.setBookName(book.getBookName());
-            cartBook.setPublishDate(book.getPublishDate());
-            cartBook.setContent(book.getContent());
-            cartBook.setBookIsbn(book.getBookIsbn());
-
-            QueryWrapper<Stock> queryWrapperStock = new QueryWrapper<>();
-            queryWrapperStock.eq("bookId",book.getId());
-            Stock stock = stockMapper.selectOne(queryWrapperStock);
-            //图书库存
-            cartBook.setStockNum(stock.getStockNum());
-            cartBook.setImg(book.getPicture());
-            cartBook.setPublishName(publishingHouseMapper.selectById(book.getPublishId()).getPublishName());
-            cartBook.setNumber(shop.getNumber());
-            cartBook.setPrice(shop.getPrice());
-            cartBooks.add(cartBook);
-        }
-        //查询购物车物品的数量
-        Long num = shoppingMapper.selectCount(queryWrapper);
-        Map<String, Object> map = new HashMap<>();
-        map.put("cartBooks", cartBooks);
-        map.put("num", num);
-        return map;
+        Map<String, Object> pageInfo = new HashMap<>();
+        pageInfo.put("pageInfo", cartBookIPage);
+        return pageInfo;
     }
 
     @Override
     public Integer addShopping(Shopping shopping) {
+        QueryWrapper<Shopping> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("bookId", shopping.getBookId());
+        Long count = shoppingMapper.selectCount(queryWrapper);
+        if (count > 0) {
+
+        }
         return shoppingMapper.insert(shopping);
     }
 

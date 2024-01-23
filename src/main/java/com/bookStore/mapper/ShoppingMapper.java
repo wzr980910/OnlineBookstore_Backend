@@ -1,7 +1,10 @@
 package com.bookStore.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bookStore.pojo.Shopping;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.bookStore.pojo.respojo.CartBook;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -12,6 +15,8 @@ import org.apache.ibatis.annotations.Mapper;
 */
 @Mapper
 public interface ShoppingMapper extends BaseMapper<Shopping> {
+
+    IPage<CartBook> selectPageShopping(IPage<?> page,Long userId);
 
 }
 

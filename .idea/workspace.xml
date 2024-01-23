@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="110f1bef-d96f-42e1-ade1-c90846fca957" name="Changes" comment="删除target文件">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bookStore/controller/ShoppingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bookStore/controller/ShoppingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bookStore/mapper/ShoppingMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bookStore/mapper/ShoppingMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bookStore/pojo/respojo/CartBook.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bookStore/pojo/respojo/CartBook.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bookStore/service/ShoppingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bookStore/service/ShoppingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bookStore/service/impl/ShoppingServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bookStore/service/impl/ShoppingServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/ShoppingMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mapper/ShoppingMapper.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+    </option>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="AnnotationType" />
+        <option value="Class" />
+        <option value="Enum" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="$PROJECT_DIR$/../../../apache-maven-3.6.3" />
+        <option name="useMavenConfig" value="true" />
+        <option name="userSettingsFile" value="D:\apache-maven-3.6.3\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectId" id="2aq0BzHhcTyuFtKCQefK45PZSx8" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "D:/案例/onlineBook/OnlineBookstore_Backend",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "MavenSettings",
+    "spring.configuration.checksum": "2c0584c841c3fbe7cc6f065a6ec66fa0"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\案例\onlineBook\OnlineBookstore_Backend\src\main\java\com\bookStore\pojo\pojoenum" />
+      <recent name="D:\案例\onlineBook\OnlineBookstore_Backend\src\main\java\com\bookStore\controller" />
+      <recent name="D:\案例\onlineBook\OnlineBookstore_Backend\src\main\java\com\bookStore\config" />
+      <recent name="D:\案例\onlineBook\OnlineBookstore_Backend\src\main\resources\mapper" />
+      <recent name="D:\案例\onlineBook\OnlineBookstore_Backend\src\main\java\com\bookStore\service\impl" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\案例\onlineBook\OnlineBookstore_Backend\src\main\java\com\bookStore\pojo\pojoenum" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.bookStore.utils" />
+      <recent name="com.bookStore.interceptor" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.OnlineBookstoreBackendApplication">
+    <configuration name="OrderNumberGeneratorUtil" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.bookStore.util.OrderNumberGeneratorUtil" />
+      <module name="OnlineBookstore_Backend" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.bookStore.util.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="OnlineBookstoreBackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="OnlineBookstore_Backend" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.bookStore.OnlineBookstoreBackendApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.OrderNumberGeneratorUtil" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="110f1bef-d96f-42e1-ade1-c90846fca957" name="Changes" comment="" />
+      <created>1705030670602</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1705030670602</updated>
+      <workItem from="1705030671995" duration="22211000" />
+      <workItem from="1705125505829" duration="6630000" />
+      <workItem from="1705133211935" duration="19731000" />
+      <workItem from="1705201698593" duration="581000" />
+      <workItem from="1705202307997" duration="2740000" />
+      <workItem from="1705280956447" duration="67450000" />
+      <workItem from="1705457664404" duration="455000" />
+      <workItem from="1705458220917" duration="57604000" />
+      <workItem from="1705627140162" duration="19828000" />
+      <workItem from="1705759709769" duration="1187000" />
+      <workItem from="1705799870812" duration="37583000" />
+      <workItem from="1705925609038" duration="3157000" />
+      <workItem from="1705971240355" duration="5561000" />
+      <workItem from="1705976894935" duration="31000" />
+      <workItem from="1705976940002" duration="6000" />
+      <workItem from="1705976975505" duration="19000" />
+      <workItem from="1705977059828" duration="231000" />
+      <workItem from="1705977302875" duration="218000" />
+    </task>
+    <task id="LOCAL-00001" summary="第二修改">
+      <created>1705055715399</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1705055715400</updated>
+    </task>
+    <task id="LOCAL-00002" summary="第三修改">
+      <created>1705134735691</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1705134735691</updated>
+    </task>
+    <task id="LOCAL-00003" summary="前后台分离的最后一次修改">
+      <created>1705202587552</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1705202587552</updated>
+    </task>
+    <task id="LOCAL-00004" summary="user接口和购物车部分接口提交">
+      <created>1705320828993</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1705320828993</updated>
+    </task>
+    <task id="LOCAL-00005" summary="user接口和购物车部分接口提交">
+      <created>1705321412273</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1705321412273</updated>
+    </task>
+    <task id="LOCAL-00006" summary="user接口和购物车部分接口提交">
+      <created>1705321717201</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1705321717201</updated>
+    </task>
+    <task id="LOCAL-00007" summary="user接口和购物车部分接口第二次提交">
+      <created>1705370482063</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1705370482063</updated>
+    </task>
+    <task id="LOCAL-00008" summary="图书类和购物车返回类修改">
+      <created>1705459413093</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1705459413093</updated>
+    </task>
+    <task id="LOCAL-00009" summary="购物车类接口再次修改">
+      <created>1705476280696</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1705476280696</updated>
+    </task>
+    <task id="LOCAL-00010" summary="订单接口和图书类别接口">
+      <created>1705580494220</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1705580494220</updated>
+    </task>
+    <task id="LOCAL-00011" summary="去掉UserController中的注解">
+      <created>1705583066462</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1705583066462</updated>
+    </task>
+    <task id="LOCAL-00012" summary="用户信息修改和增加订单参数修改">
+      <created>1705628596617</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1705628596617</updated>
+    </task>
+    <task id="LOCAL-00013" summary="头像上传修改">
+      <created>1705651694638</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1705651694638</updated>
+    </task>
+    <task id="LOCAL-00014" summary="订单修改和图书类别修改">
+      <created>1705886057904</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1705886057905</updated>
+    </task>
+    <task id="LOCAL-00015" summary="订单修改和图书类别修改">
+      <created>1705886227890</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1705886227890</updated>
+    </task>
+    <task id="LOCAL-00016" summary="头像保存修改">
+      <created>1705889647853</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1705889647853</updated>
+    </task>
+    <task id="LOCAL-00017" summary="orders类修改和轮播图是否展示">
+      <created>1705893511058</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1705893511058</updated>
+    </task>
+    <task id="LOCAL-00018" summary="图书类别查询修改">
+      <created>1705895406626</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1705895406626</updated>
+    </task>
+    <task id="LOCAL-00019" summary="状态码">
+      <created>1705913640491</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1705913640491</updated>
+    </task>
+    <task id="LOCAL-00020" summary="状态码">
+      <created>1705914656385</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1705914656385</updated>
+    </task>
+    <task id="LOCAL-00021" summary="轮播图第一次修改">
+      <created>1705925718762</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1705925718762</updated>
+    </task>
+    <task id="LOCAL-00022" summary="删除target文件">
+      <created>1705976151604</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1705976151604</updated>
+    </task>
+    <task id="LOCAL-00023" summary="删除target文件">
+      <created>1705976524814</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1705976524814</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+        <entry key="fe109825-5b8b-46c0-abde-9e05c8dda2fd">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="structure">
+                    <value>
+                      <list>
+                        <option value="dir:D:/案例/onlineBook/OnlineBookstore_Backend/.idea" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="fe109825-5b8b-46c0-abde-9e05c8dda2fd" value="TOOL_WINDOW" />
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="第二修改" />
+    <MESSAGE value="第三修改" />
+    <MESSAGE value="前后台分离的最后一次修改" />
+    <MESSAGE value="user接口和购物车部分接口提交" />
+    <MESSAGE value="user接口和购物车部分接口第二次提交" />
+    <MESSAGE value="图书类和购物车返回类修改" />
+    <MESSAGE value="购物车类接口再次修改" />
+    <MESSAGE value="订单接口和图书类别接口" />
+    <MESSAGE value="去掉UserController中的注解" />
+    <MESSAGE value="用户信息修改和增加订单参数修改" />
+    <MESSAGE value="头像上传修改" />
+    <MESSAGE value="订单修改和图书类别修改" />
+    <MESSAGE value="头像保存修改" />
+    <MESSAGE value="orders类修改和轮播图是否展示" />
+    <MESSAGE value="图书类别查询修改" />
+    <MESSAGE value="状态码" />
+    <MESSAGE value="轮播图第一次修改" />
+    <MESSAGE value="删除target文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="删除target文件" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
