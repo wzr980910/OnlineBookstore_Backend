@@ -53,8 +53,11 @@ public enum ResultCode {
     FILE_UPLOAD_FAILURE(3013,"文件上传失败"),
     /* 数据库错误：4001-4099*/
     DB_INSERT_ERROR(4001,"数据库插入报错"),
+    DB_ERROR(4000,"数据库出错"),
     /* 订单状态错误*/
-    ORDER_STATUS_ERROR(5001,"订单状态异常");
+    ORDER_STATUS_ERROR(5001,"订单状态异常"),
+    /*库存不足*/
+    STOCK_NUM_ZERO(6001,"库存不足");
     private Integer code;
     private String message;
 

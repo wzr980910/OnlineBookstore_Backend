@@ -7,85 +7,132 @@
     <resultMap id="BaseResultMap" type="com.bookStore.pojo.OrdersShow">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="orderId" column="orderId" jdbcType="BIGINT"/>
-        <result property="accountNumber" column="accountNumber" jdbcType="VARCHAR"/>
-        <result property="date" column="date" jdbcType="DATE"/>
+        <result property="userId" column="userId" jdbcType="BIGINT"/>
+        <result property="addressId" column="addressId" jdbcType="BIGINT"/>
         <result property="totalPrice" column="totalPrice" jdbcType="DECIMAL"/>
-        <result property="toShoppingAddress" column="toShoppingAddress" jdbcType="VARCHAR"/>
-        <result property="contact" column="contact" jdbcType="VARCHAR"/>
-        <result property="status" column="status" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+        <result property="payTime" column="payTime" jdbcType="TIMESTAMP"/>
     </resultMap>
-
-
-    <select id="selectOrderPage" resultType="com.bookStore.pojo.vo.OrderBook">
-        select c.bookName,
-        c.ISBN,
-        c.author,
-        c.picture,
-        d.publishName,
-        c.publishDate,
-        c.content,
-        c.price,
-        b.number,
-        e.province,
-        e.city,
-        e.county,
-        e.detail,
-        e.userName,
-        e.phone,
-        a.orderId,
-        a.totalPrice,
-        a.status,
-        a.date
-        from orders_show a
-        left outer join orders b on a.orderId = b.orderId
-        left outer join book c on b.bookId = c.id
-        left outer join publishing_house d on c.publishId = d.id
-        left outer join address e on a.addressId = e.id
+    <select id="selectOrderPage" resultType="com.bookStore.pojo.respojo.OrderReturn">
+        select orders_show.id orderShowId,
+        orders_show.orderId,
+        orders_show.addressId,
+        orders_show.totalPrice,
+        orders_show.status,
+        orders_show.createTime,
+        orders_show.payTime,
+        book.id bookId,
+        book.bookName,
+        book.price,
+        book.picture,
+        orders.number,
+        address.province,
+        address.city,
+        address.county,
+        address.detail,
+        address.phone,
+        address.userName from orders_show
+        left join orders on orders_show.orderId = orders.orderId
+        left join book on orders.bookId = book.id
+        left join address on orders_show.addressId = address.id
         <where>
-            <if test="orderId != null">
-                a.orderId = #{orderId}
+            <!--只能查询本人订单-->
+            <if test="1==1">
+                orders_show.userId=#{userId}
+                <!--查询给定创建时间段的订单信息-->
+                and orders_show.createTime between #{orderSelectVo.createDateOld} and #{orderSelectVo.createDateNew}
+                <!--查询未删除-->
+                and orders_show.isDeleted = 0
             </if>
-            <if test="bookName != null">
-                AND c.bookName like CONCAT('%',#{bookName},'%')
+            <!--根据订单编号查询-->
+            <if test="orderSelectVo.orderId != null and !orderSelectVo.orderId.equals('')">
+                and orders_show.orderId = #{orderSelectVo.orderId}
             </if>
-            <if test="userId!=null">
-                AND a.userId = #{userId}
+            <!--根据订单状态查询-->
+            <if test="orderSelectVo.status != null and !orderSelectVo.status.equals('')">
+                and orders_show.status = #{orderSelectVo.status}
+            </if>
+            <!--根据书名查询-->
+            <if test="orderSelectVo.bookName != null">
+                and book.bookName like CONCAT('%',#{orderSelectVo.bookName},'%')
             </if>
         </where>
-    </select>
+        <!--按照创建时间降序排序-->
+        order by orders_show.createTime desc
 
-    <select id="selectOrderPageByStatus" resultType="com.bookStore.pojo.vo.OrderBook">
-        select c.bookName,
-        c.ISBN,
-        c.author,
-        c.picture,
-        d.publishName,
-        c.publishDate,
-        c.content,
-        c.price,
-        b.number,
-        e.province,
-        e.city,
-        e.county,
-        e.detail,
-        e.userName,
-        e.phone,
-        a.orderId,
-        a.totalPrice,
-        a.status,
-        a.date
-        from orders_show a
-        left outer join orders b on a.orderId = b.orderId
-        left outer join book c on b.bookId = c.id
-        left outer join publishing_house d on c.publishId = d.id
-        left outer join address e on a.addressId = e.id
-        <where>
-            <if test="orderStatus != null">
-                AND a.status = #{orderStatus}
-            </if>
-            <if test="userId != null">
-                AND a.userId = #{userId}
-            </if>
-        </where>
     </select>
+    <!--    <select id="selectOrderPage" resultType="com.bookStore.pojo.vo.OrderBook">-->
+    <!--        select c.bookName,-->
+    <!--        c.ISBN,-->
+    <!--        c.author,-->
+    <!--        c.picture,-->
+    <!--        d.publishName,-->
+    <!--        c.publishDate,-->
+    <!--        c.content,-->
+    <!--        c.price,-->
+    <!--        b.number,-->
+    <!--        e.province,-->
+    <!--        e.city,-->
+    <!--        e.county,-->
+    <!--        e.detail,-->
+    <!--        e.userName,-->
+    <!--        e.phone,-->
+    <!--        a.orderId,-->
+    <!--        a.totalPrice,-->
+    <!--        a.status,-->
+    <!--        a.date-->
+    <!--        from orders_show a-->
+    <!--        left outer join orders b on a.orderId = b.orderId-->
+    <!--        left outer join book c on b.bookId = c.id-->
+    <!--        left outer join publishing_house d on c.publishId = d.id-->
+    <!--        left outer join address e on a.addressId = e.id-->
+    <!--        <where>-->
+    <!--            <if test="orderId != null">-->
+    <!--                a.orderId = #{orderId}-->
+    <!--            </if>-->
+    <!--            <if test="bookName != null">-->
+    <!--                AND c.bookName like CONCAT('%',#{bookName},'%')-->
+    <!--            </if>-->
+    <!--            <if test="userId!=null">-->
+    <!--                AND a.userId = #{userId}-->
+    <!--            </if>-->
+    <!--        </where>-->
+    <!--    </select>-->
+
+    <!--    <select id="selectOrderPageByStatus" resultType="com.bookStore.pojo.vo.OrderBook">-->
+    <!--        select c.bookName,-->
+    <!--        c.ISBN,-->
+    <!--        c.author,-->
+    <!--        c.picture,-->
+    <!--        d.publishName,-->
+    <!--        c.publishDate,-->
+    <!--        c.content,-->
+    <!--        c.price,-->
+    <!--        b.number,-->
+    <!--        e.province,-->
+    <!--        e.city,-->
+    <!--        e.county,-->
+    <!--        e.detail,-->
+    <!--        e.userName,-->
+    <!--        e.phone,-->
+    <!--        a.orderId,-->
+    <!--        a.totalPrice,-->
+    <!--        a.status,-->
+    <!--        a.date-->
+    <!--        from orders_show a-->
+    <!--        left outer join orders b on a.orderId = b.orderId-->
+    <!--        left outer join book c on b.bookId = c.id-->
+    <!--        left outer join publishing_house d on c.publishId = d.id-->
+    <!--        left outer join address e on a.addressId = e.id-->
+    <!--        <where>-->
+    <!--            <if test="orderStatus != null">-->
+    <!--                AND a.status = #{orderStatus}-->
+    <!--            </if>-->
+    <!--            <if test="userId != null">-->
+    <!--                AND a.userId = #{userId}-->
+    <!--            </if>-->
+    <!--        </where>-->
+    <!--    </select>-->
 </mapper>

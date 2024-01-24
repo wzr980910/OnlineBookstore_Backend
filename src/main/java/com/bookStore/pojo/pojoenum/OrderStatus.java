@@ -6,6 +6,7 @@ package com.bookStore.pojo.pojoenum;
  * @date 2024/01/17 18:34
  */
 public enum OrderStatus {
+
     /**
      * 待付款
      */
@@ -17,8 +18,19 @@ public enum OrderStatus {
     /**
      * 待收货
      */
-    WAIT_RECEIVE(2);
-
+    WAIT_RECEIVE(2),
+    /**
+     * 删除/隐藏订单
+     */
+    /**
+     * 已收货
+     */
+    ALREADY_RECEIVE(3),
+    IS_DELETED(4),
+    /**
+     * 订单取消
+     */
+    CANCEL(5);
     private Integer code;
 
     OrderStatus(Integer code){

@@ -1,8 +1,12 @@
 package com.bookStore.mapper;
 
+import com.bookStore.pojo.Orders;
 import com.bookStore.pojo.Stock;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author 邓桂材
@@ -12,7 +16,7 @@ import org.apache.ibatis.annotations.Mapper;
 */
 @Mapper
 public interface StockMapper extends BaseMapper<Stock> {
-
+    void updateBatch(@Param("ordersList") List<Orders> ordersList);
 }
 
 

@@ -33,7 +33,4 @@ public class OrderNumberGeneratorUtil {
         return Long.valueOf(orderNumber.toString());
     }
 
-    public static void main(String[] args) {
-        System.out.println(generateOrderNumber());
-    }
 }

@@ -24,7 +24,7 @@ public interface ShoppingMapper extends BaseMapper<Shopping> {
     int updateShopping(Integer number,Long bookId);
 
     int deleteShopping(@Param("userId") Long userId, @Param("bookIdsList") List<String> bookIdsList);
-
+    void insertOrUpdateBatch(@Param("shoppingList") List<Shopping> shoppingList);
 }
 
 

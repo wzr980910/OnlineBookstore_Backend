@@ -44,4 +44,17 @@
             </foreach>
         </if>
     </delete>
+    <insert id="insertOrUpdateBatch">
+        <foreach collection="shoppingList" item="shopping"  separator=";">
+            <choose>
+                <when test="shopping.id == null">
+                    insert into shopping(bookId,userId,bookName,price,number,createTime,updateTime)
+                    values(#{shopping.bookId}, #{shopping.userId},#{shopping.bookName},#{shopping.price},#{shopping.number},now(),now())
+                </when>
+                <otherwise>
+                    update shopping set number=number+#{shopping.number} , updateTime=now() where id=#{shopping.id}
+                </otherwise>
+            </choose>
+        </foreach>
+    </insert>
 </mapper>

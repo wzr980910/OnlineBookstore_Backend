@@ -8,15 +8,20 @@
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="orderId" column="orderId" jdbcType="BIGINT"/>
         <result property="bookId" column="bookId" jdbcType="BIGINT"/>
-        <result property="price" column="price" jdbcType="DECIMAL"/>
+        <result property="number" column="number" jdbcType="INTEGER"/>
     </resultMap>
 
 
-    <insert id="insertOrdersBatch" parameterType="java.util.List">
+    <insert id="insertOrdersBatch" >
         insert into orders (orderId, bookId, number)
         values
         <foreach collection="ordersList" item="orders" separator=",">
             (#{orders.orderId},#{orders.bookId},#{orders.number})
         </foreach>
     </insert>
+    <select id="selectBookInfo" resultType="com.bookStore.pojo.Shopping">
+        select orders.number ,orders.bookId ,book.bookName,book.price from orders
+                                                                               left join book on orders.bookId = book.id
+        where orders.orderId = #{orderId}
+    </select>
 </mapper>

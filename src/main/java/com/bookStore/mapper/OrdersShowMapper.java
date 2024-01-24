@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.bookStore.pojo.OrdersShow;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bookStore.pojo.pojoenum.OrderStatus;
+import com.bookStore.pojo.respojo.OrderReturn;
+import com.bookStore.pojo.vo.OrderSelectVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @author 邓桂材
@@ -14,9 +17,9 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface OrdersShowMapper extends BaseMapper<OrdersShow> {
-    IPage<OrdersShow> selectOrderPage(IPage<?> page, Long userId, Long orderId, String bookName);
+    IPage<OrderReturn> selectOrderPage(IPage<?> page, @Param("userId") Long userId, @Param("orderSelectVo") OrderSelectVo orderSelectVo);
 
-    IPage<OrdersShow> selectOrderPageByStatus(IPage<?> page, Long userId, Integer orderStatus);
+//    IPage<OrdersShow> selectOrderPageByStatus(IPage<?> page, Long userId, Integer orderStatus);
 
 }
 

@@ -99,7 +99,7 @@ public class AddressController {
     @ApiOperation(value = "查询地址", notes = "查询地址")
     @GetMapping("selectAddress")
     public RestResult selectAddress() {
-        Long userId = (Long) ThreadLocalUtil.get();
+        Long userId = ThreadLocalUtil.get();
         RestResult restResult = new RestResult(ResultCode.SUCCESS);
         Map<String, Object> addressMap = addressService.selectAddress(userId);
         restResult.setData(addressMap);

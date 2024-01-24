@@ -38,8 +38,8 @@ public class Address implements Serializable {
     @ApiModelProperty(value = "城市", example = "成都",required = true)
     private String city;
 
-    @ApiModelProperty(value = "国家", example = "中国",required = true)
-    private String county = "中国";
+    @ApiModelProperty(value = "区县", example = "区县",required = true)
+    private String county ;
 
     @ApiModelProperty(value = "详细地址", example = "xx县xx镇",required = true)
     private String detail;
@@ -50,7 +50,7 @@ public class Address implements Serializable {
     private String phone;
 
     @NotBlank
-    @ApiModelProperty(value = "用户姓名", example = "张三",required = true)
+    @ApiModelProperty(value = "姓名", example = "张三",required = true)
     private String userName;
 
     @EnumValue
@@ -62,6 +62,9 @@ public class Address implements Serializable {
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
+
+    @ApiModelProperty(value = "逻辑删除", notes = "0未删除1已删除，默认未0")
+    private Integer isDeleted=0;
 
     private static final long serialVersionUID = 1L;
 }

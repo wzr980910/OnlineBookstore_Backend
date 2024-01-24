@@ -19,4 +19,9 @@
         bookName,createTime,updateTime,
         isDeleted
     </sql>
+    <update id="updateBatch">
+        <foreach collection="ordersList" item="orders" separator=";">
+            update stock set stockNum=#{orders.number}+stockNum where stock.bookId=#{orders.bookId}
+        </foreach>
+    </update>
 </mapper>
