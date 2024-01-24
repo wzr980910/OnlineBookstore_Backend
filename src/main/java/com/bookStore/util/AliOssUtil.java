@@ -6,7 +6,9 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.OSSException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -22,6 +24,8 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @Slf4j
+@ConfigurationProperties(prefix = "sky.alioss")
+@NoArgsConstructor
 public class AliOssUtil {
     private String endpoint;
     private String accessKeyId;
@@ -76,7 +80,6 @@ public class AliOssUtil {
                 .append("/")
                 .append(objectName);
 
-        log.info("文件上传到:{}", stringBuilder.toString());
 
         return stringBuilder.toString();
     }

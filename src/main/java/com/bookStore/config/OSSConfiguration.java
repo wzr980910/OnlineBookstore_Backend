@@ -21,9 +21,7 @@ public class OSSConfiguration {
     //AliOssProperties是已经注入的bean，作为aliOssUtil的参数
     @Bean
     @ConditionalOnMissingBean
-    public AliOssUtil aliOssUtil(AliOssProperties aliOssProperties){
-        log.info("开始注入阿里云oss文件上传工具类对象：{}",aliOssProperties);
-        return new AliOssUtil(aliOssProperties.getEndpoint(),aliOssProperties.getAccessKeyId(),
-                aliOssProperties.getAccessKeySecret(),aliOssProperties.getBucketName() );
+    public AliOssUtil aliOssUtil(){
+        return new AliOssUtil();
     }
 }
