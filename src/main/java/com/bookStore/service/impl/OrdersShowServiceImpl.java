@@ -138,6 +138,12 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
                 return -1;
             }
             List<Shopping> shoppings = shoppingMapper.selectBatchIds(shoppingIdList);
+            for (Shopping shopping : shoppings) {
+                if (!shopping.getUserId().equals(userId)) {
+                    //传入参数错误
+                    return -3;
+                }
+            }
             int rows = orderGenerate(userId, orderVo, shoppings);
             //批量删除shopping表中的数据
             shoppingMapper.deleteBatchIds(shoppingIdList);
@@ -287,14 +293,14 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
             }
             //将每一个shopping加入shopping表中
             //查询该用户中购物车项（shopping）信息
-            LambdaQueryWrapper<Shopping> shoppingLambdaQueryWrapper =new LambdaQueryWrapper<>();
-            shoppingLambdaQueryWrapper.eq(Shopping::getUserId,userId);
-            shoppingLambdaQueryWrapper.select(Shopping::getId,Shopping::getBookId);
+            LambdaQueryWrapper<Shopping> shoppingLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            shoppingLambdaQueryWrapper.eq(Shopping::getUserId, userId);
+            shoppingLambdaQueryWrapper.select(Shopping::getId, Shopping::getBookId);
             List<Shopping> shoppings = shoppingMapper.selectList(shoppingLambdaQueryWrapper);
             //将bookId相同的shopping的id赋值给shoppingList中shopping的Id，用于标识shopping数据需要添加或更新
             for (Shopping shopping : shoppings) {
                 for (Shopping shoppingEntity : shoppingList) {
-                    if(shopping.getBookId().equals(shoppingEntity.getBookId())){
+                    if (shopping.getBookId().equals(shoppingEntity.getBookId())) {
                         shoppingEntity.setId(shopping.getId());
                     }
                 }

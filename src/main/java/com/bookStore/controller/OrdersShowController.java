@@ -99,6 +99,9 @@ public class OrdersShowController {
         } else if (rows == -1) {//传入参数缺失
             restResult = new RestResult(ResultCode.PARAM_NOT_COMPLETE);
             return restResult;
+        } else if (rows == -3) {
+            restResult = new RestResult(ResultCode.PARAM_IS_INVALID);
+            return restResult;
         }
         return restResult;
     }
@@ -146,10 +149,7 @@ public class OrdersShowController {
 
     @GetMapping("cancelOrders")
     @ApiOperation(value = "取消未付款订单")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderId", value = "订单编号", required = true),
-            @ApiImplicitParam(name = "addToCart", value = "取消订单后商品加入购物车,0否1是")
-    })
+    @ApiImplicitParams({@ApiImplicitParam(name = "orderId", value = "订单编号", required = true), @ApiImplicitParam(name = "addToCart", value = "取消订单后商品加入购物车,0否1是")})
     public RestResult cancelOrders(@RequestParam Long orderId, @RequestParam(defaultValue = "0") Integer addToCart) {
         Long userId = ThreadLocalUtil.get();
         if (orderId == null || orderId.toString().isEmpty()) {
