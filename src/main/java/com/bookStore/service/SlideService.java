@@ -8,16 +8,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
-* @author 邓桂材
-* @description 针对表【slide】的数据库操作Service
-* @createDate 2024-01-22 11:08:14
-*/
+ * @author 邓桂材
+ * @description 针对表【slide】的数据库操作Service
+ * @createDate 2024-01-22 11:08:14
+ */
 public interface SlideService extends IService<Slide> {
     Integer addSlide(Slide slide);
 
     Integer updateSlide(Slide slide);
 
-    Map<String,Object> querySlidePage(Integer currentPage, Integer size);
+    Map<String,Object> queryAllSlide();
 
     Integer deleteSlide(List<String> ids);
 

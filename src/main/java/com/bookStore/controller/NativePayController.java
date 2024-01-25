@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,8 +36,7 @@ public class NativePayController {
 
     //支付成功后微信通知调用的接口
     @PostMapping("/notify")
-    public Map<String, String> payNotify(@RequestBody NotifyDto dto) {
-        System.out.println("收到微信回调");
+    public Map<String, String> payNotify(@RequestBody NotifyDto dto) throws GeneralSecurityException {
         Map<String, String> resMap = new HashMap<>();
         String res = nativePayService.payNotify(dto);
         if (res.equals("Success")) {

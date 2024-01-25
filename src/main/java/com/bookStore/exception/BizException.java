@@ -11,18 +11,18 @@ import com.bookStore.util.result.ResultCode;
  * @Create: 2024/1/24 -23:34
  * @Version: v1.0
  */
-public class DBOperateException extends RuntimeException{
+public class BizException extends RuntimeException{
     private Integer errorCode;
     private String msg;
-    public DBOperateException(String msg){
+    public BizException(String msg){
         super(msg);
     }
-    public DBOperateException(Integer errorCode, String msg){
+    public BizException(Integer errorCode, String msg){
         super(msg);
         this.errorCode=errorCode;
         this.msg=msg;
     }
-    public DBOperateException(ResultCode resultCode){
+    public BizException(ResultCode resultCode){
         super(resultCode.getMessage());
         this.errorCode=resultCode.getCode();
         this.msg=resultCode.getMessage();

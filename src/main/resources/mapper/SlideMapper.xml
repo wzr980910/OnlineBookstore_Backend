@@ -5,7 +5,7 @@
 <mapper namespace="com.bookStore.mapper.SlideMapper">
 
 
-    <select id="queryAllPage" resultType="com.bookStore.pojo.Slide">
+    <select id="queryAllSlide" resultType="com.bookStore.pojo.Slide">
         select slide.id,
                slide.imgUrl,
                slide.isDisplay,
@@ -13,7 +13,8 @@
                slide.updateTime,
                slide.isDelete
         from slide
-        where slide.isDelete = 0
+        where slide.isDelete = 0 and slide.isDisplay = 1
+        order by slide.createTime desc
     </select>
 
     <update id="deleteBatchSlideIds" parameterType="java.util.List">

@@ -2,6 +2,8 @@ package com.bookStore.service;
 
 import com.bookStore.pojo.pay.wxpay.NotifyDto;
 
+import java.security.GeneralSecurityException;
+
 /**
  * ClassName: NativePayService
  * Package: com.bookStore.service
@@ -15,5 +17,5 @@ public interface NativePayService {
     String pay(Long orderId);
 
 
-    String payNotify(NotifyDto dto) ;
+    String payNotify(NotifyDto dto) throws GeneralSecurityException;
 }

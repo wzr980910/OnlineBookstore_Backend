@@ -1,6 +1,6 @@
 package com.bookStore.controller;
 
-import com.bookStore.exception.DBOperateException;
+import com.bookStore.exception.BizException;
 import com.bookStore.pojo.Address;
 import com.bookStore.service.AddressService;
 import com.bookStore.util.ThreadLocalUtil;
@@ -37,7 +37,7 @@ public class AddressController {
         int rows = addressService.addAddress(userId, address);
         //插入成功
         if (rows == 0) {
-            throw new DBOperateException(ResultCode.DB_INSERT_ERROR);
+            throw new BizException(ResultCode.DB_INSERT_ERROR);
         } else {
             return new RestResult(ResultCode.SUCCESS);
         }
@@ -61,7 +61,7 @@ public class AddressController {
         if (rows > 0) {
             return new RestResult(ResultCode.SUCCESS);
         } else {
-            throw new DBOperateException(ResultCode.DB_UPDATE_ERROR);
+            throw new BizException(ResultCode.DB_UPDATE_ERROR);
         }
     }
 
@@ -85,7 +85,7 @@ public class AddressController {
         if (rows > 0) {
             return new RestResult(ResultCode.SUCCESS);
         } else {
-            throw new DBOperateException(ResultCode.DB_DELETE_ERROR);
+            throw new BizException(ResultCode.DB_DELETE_ERROR);
         }
     }
 

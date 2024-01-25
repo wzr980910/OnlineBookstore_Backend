@@ -1,6 +1,5 @@
 package com.bookStore.advice;
 
-import com.bookStore.exception.DBOperateException;
 import com.bookStore.util.result.RestResult;
 import com.bookStore.util.result.ResultCode;
 import org.springframework.context.annotation.Configuration;
@@ -53,4 +52,5 @@ public class GlobalExceptionAdvice {
     }
 //    @ExceptionHandler(IllegalArgumentException.class)
 //    @ExceptionHandler(DBOperateException.class)
+//    @ExceptionHandler(GeneralSecurityException.class)
 }

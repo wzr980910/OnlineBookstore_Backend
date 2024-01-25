@@ -3,7 +3,7 @@ package com.bookStore.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bookStore.exception.DBOperateException;
+import com.bookStore.exception.BizException;
 import com.bookStore.pojo.Address;
 import com.bookStore.pojo.pojoenum.DefaultAddress;
 import com.bookStore.service.AddressService;
@@ -48,7 +48,7 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address>
                 wrapperChangeDefault.set(Address::getDefaultAddress, DefaultAddress.NOT_DEFAULT_ADDRESS.getValue());
                 int rows = addressMapper.update(wrapperChangeDefault);
                 if (rows == 0) {
-                    throw new DBOperateException(ResultCode.DB_UPDATE_ERROR);
+                    throw new BizException(ResultCode.DB_UPDATE_ERROR);
                 }
             }
         }
@@ -68,7 +68,7 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address>
             //更新之前先把以前的默认地址修改
             int rows = addressMapper.update(wrapperOld);
             if (rows == 0) {
-                throw new DBOperateException(ResultCode.DB_UPDATE_ERROR);
+                throw new BizException(ResultCode.DB_UPDATE_ERROR);
             }
         } else {
             //用户想将该地址设置为非默认地址
@@ -80,7 +80,7 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address>
             try {
                 addressDefault = addressMapper.selectOne(wrapperSelectDefault);
             } catch (Exception e) {
-                throw new DBOperateException(ResultCode.DB_SELECT_ONE_ERROR);
+                throw new BizException(ResultCode.DB_SELECT_ONE_ERROR);
             }
             //如果该地址是数据库中的默认地址，并且用户想将该地址改为非默认地址
             if (addressDefault.getId().equals(address.getId())) {
@@ -112,7 +112,7 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address>
         Address address = addressMapper.selectOne(wrapper);
         //未查询到地址信息
         if (address == null) {
-            throw new DBOperateException(ResultCode.DB_SELECT_ERROR);
+            throw new BizException(ResultCode.DB_SELECT_ERROR);
         }
         //如果该地址是默认地址，将数据库中最近一次更新的非默认地址设置成为默认地址
         if (address.getDefaultAddress().equals(DefaultAddress.DEFAULT_ADDRESS.getValue())) {
@@ -133,7 +133,7 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address>
         try {
             addressLatestUpdate = addressMapper.selectOne(wrapperOld);
         } catch (Exception e) {
-            throw new DBOperateException(ResultCode.DB_SELECT_ONE_ERROR);
+            throw new BizException(ResultCode.DB_SELECT_ONE_ERROR);
         }
         //如果存在最后一次更新的地址
         if (addressLatestUpdate != null) {
@@ -142,7 +142,7 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address>
             wrapperUpdateDefault.set(Address::getDefaultAddress, DefaultAddress.DEFAULT_ADDRESS.getValue());
             int rows = addressMapper.update(wrapperUpdateDefault);
             if (rows == 0) {
-                throw new DBOperateException(ResultCode.DB_UPDATE_ERROR);
+                throw new BizException(ResultCode.DB_UPDATE_ERROR);
             }
         }
     }

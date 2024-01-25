@@ -81,10 +81,9 @@ public class SlideController {
     }
 
     @GetMapping("/queryAllSlide")
-    @ApiOperation(value = "分页查询轮播图", notes = "分页查询")
-    public RestResult queryAllSlide(@RequestParam(defaultValue = "1") Integer currentPage,
-                                    @RequestParam(defaultValue = "10") Integer size) {
-        Map<String, Object> map = slideService.querySlidePage(currentPage, size);
+    @ApiOperation(value = "查询轮播图", notes = "查询")
+    public RestResult queryAllSlide() {
+        Map<String, Object> map = slideService.queryAllSlide();
         if (map != null) {
             return RestResult.success(ResultCode.SUCCESS, "查询成功", map);
         } else {

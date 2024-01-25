@@ -37,12 +37,11 @@ public class SlideServiceImpl extends ServiceImpl<SlideMapper, Slide>
     }
 
     @Override
-    public Map<String,Object> querySlidePage(Integer currentPage, Integer size) {
-        Page<Slide> page = new Page<>(currentPage,size);
-        IPage<Slide> slideIPage = slideMapper.queryAllPage(page);
-        Map<String,Object> pageInfo = new HashMap<>();
-        pageInfo.put("pageInfo",slideIPage);
-        return pageInfo;
+    public Map<String,Object> queryAllSlide() {
+        List<Slide> slides = slideMapper.queryAllSlide();
+        Map<String,Object> map = new HashMap<>();
+        map.put("slidesList",slides);
+        return map;
     }
 
     @Override
