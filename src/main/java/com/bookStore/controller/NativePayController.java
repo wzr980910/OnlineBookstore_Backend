@@ -63,6 +63,7 @@ public class NativePayController {
     public void wxPay(HttpServletResponse response, Long orderId) throws IOException {
         //支付url
         String code_url = nativePayService.pay(orderId);
+        System.out.println(code_url);
         response.setContentType("image/png");
         ServletOutputStream outputStream = null;
         outputStream = response.getOutputStream();
@@ -74,13 +75,7 @@ public class NativePayController {
     public RestResult queryPayResult(Long orderId) {
         Long userId = ThreadLocalUtil.get();
         String msg = nativePayService.queryPayResult(userId, orderId);
-        if (msg.equals("SUCCESS")) {
-            int rows = nativePayService.updateOrderShowStatus(orderId);
-            if (rows == 0) {
-                return new RestResult(ResultCode.DB_UPDATE_ERROR);
-            }
-        }
-        return new RestResult(ResultCode.SUCCESS);
+        return new RestResult(ResultCode.SUCCESS,msg);
     }
 
 }

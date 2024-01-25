@@ -23,6 +23,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,6 +46,8 @@ import java.util.UUID;
 //说明接口文件
 @Api(value = "用户接口", tags = "用户管理相关的接口", description = "用户测试接口")
 public class UserController {
+    @Value("${localhost}")
+    private String localHostUrl;
     private UserService userService;
     private JwtHelper jwtHelper;
     @Autowired
@@ -294,7 +297,7 @@ public class UserController {
     public void wxLogin(HttpServletResponse response, HttpSession session) throws IOException {
         this.session = session;
         //redirece_url是回调的地址，要转成UrlEncode格式
-        String redirecrUrl = URLEncoder.encode("http://72bc314d.r5.cpolar.top/user/wxCallback", StandardCharsets.UTF_8);
+        String redirecrUrl = URLEncoder.encode(localHostUrl+"/user/wxCallback", StandardCharsets.UTF_8);
         //构造二维码地址
         String url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + wxMpConfig.getAppid()
                 + "&redirect_uri=" + redirecrUrl + "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";

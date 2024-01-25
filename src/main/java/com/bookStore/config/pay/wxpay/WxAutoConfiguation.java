@@ -1,4 +1,4 @@
-package com.bookStore.config.wxpay;
+package com.bookStore.config.pay.wxpay;
 
 import com.bookStore.util.WxPay;
 import com.wechat.pay.contrib.apache.httpclient.WechatPayHttpClientBuilder;

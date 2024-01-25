@@ -38,5 +38,6 @@ public interface OrdersShowService extends IService<OrdersShow> {
     int cancelOrders(Long userId, Long orderId,Integer addToCart);
 
 //    Integer addOrders(Long userId, InOrderBook inOrderBook);
+    int updateOrderShowStatus(Long outTradeNo);
 
 }

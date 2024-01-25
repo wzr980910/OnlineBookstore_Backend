@@ -1,6 +1,7 @@
 package com.bookStore.controller;
 
 import com.bookStore.exception.BizException;
+import com.bookStore.log.MethodLog;
 import com.bookStore.pojo.Address;
 import com.bookStore.service.AddressService;
 import com.bookStore.util.ThreadLocalUtil;
@@ -50,6 +51,7 @@ public class AddressController {
             @ApiResponse(code = 101, message = "操作失败"),
             @ApiResponse(code = 1004, message = "参数缺失")
     })
+    @MethodLog
     @PutMapping("updateAddress")
     public RestResult updateAddress(@RequestBody @Valid Address address) {
         //没有地址id值
@@ -92,6 +94,7 @@ public class AddressController {
 
     //说明是什么方法(可以理解为方法注释)
     @ApiOperation(value = "查询地址", notes = "查询地址")
+    @MethodLog
     @GetMapping("selectAddress")
     public RestResult selectAddress() {
         Long userId = ThreadLocalUtil.get();

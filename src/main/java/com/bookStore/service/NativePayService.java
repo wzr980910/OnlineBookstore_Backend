@@ -20,5 +20,5 @@ public interface NativePayService {
     String payNotify(NotifyDto dto) throws GeneralSecurityException;
 
     String queryPayResult(Long userId, Long orderId);
-    int updateOrderShowStatus(Long outTradeNo);
+
 }

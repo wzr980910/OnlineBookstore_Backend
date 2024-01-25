@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bookStore.pojo.Logs;
 import com.bookStore.service.LogsService;
 import com.bookStore.mapper.LogsMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,7 +15,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class LogsServiceImpl extends ServiceImpl<LogsMapper, Logs>
     implements LogsService{
+@Autowired
+private LogsMapper logsMapper;
+    @Override
+    public void saveLog(String logInfo) {
+        Logs logs = new Logs();
+        logs.setContent(logInfo);
 
+    }
 }
 
 

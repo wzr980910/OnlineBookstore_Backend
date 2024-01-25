@@ -9,5 +9,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2024-01-14 16:56:54
 */
 public interface LogsService extends IService<Logs> {
-
+    public void saveLog(String logInfo);
 }

@@ -1,4 +1,4 @@
-package com.bookStore.config.wxpay;
+package com.bookStore.config.pay.wxpay;
 
 import lombok.Data;
 import org.apache.http.impl.client.CloseableHttpClient;

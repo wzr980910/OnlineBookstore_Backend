@@ -9,6 +9,7 @@ import com.bookStore.pojo.OrdersShow;
 import com.bookStore.pojo.pojoenum.OrderStatus;
 import com.bookStore.pojo.pay.wxpay.NotifyDto;
 import com.bookStore.service.NativePayService;
+import com.bookStore.service.OrdersShowService;
 import com.bookStore.util.WxPay;
 import com.bookStore.util.result.ResultCode;
 import com.google.gson.Gson;
@@ -39,6 +40,8 @@ public class NativePayServiceImpl implements NativePayService {
     private WxPay wxPay;
     @Autowired
     private OrdersShowMapper ordersShowMapper;
+    @Autowired
+    private OrdersShowService ordersShowService;
 
 
     @Override
@@ -57,11 +60,6 @@ public class NativePayServiceImpl implements NativePayService {
         if (ordersShow == null || !ordersShow.getStatus().equals(OrderStatus.WAIT_PAYMENT.getCode())) {
             throw new BizException(ResultCode.ORDER_STATUS_ERROR);
         }
-//        //将订单状态改为待付款
-//        LambdaUpdateWrapper<OrdersShow> updateWrapper = new LambdaUpdateWrapper<>();
-//        updateWrapper.eq(OrdersShow::getOrderId, ordersShow.getOrderId());
-//        updateWrapper.set(OrdersShow::getStatus, OrderStatus.WAIT_PAYMENT.getCode());
-//        ordersShowMapper.update(updateWrapper);
         String code_url;
 
         try {
@@ -92,7 +90,7 @@ public class NativePayServiceImpl implements NativePayService {
 //        USERPAYING：用户支付中（付款码支付）
 //        PAYERROR：支付失败(其他原因，如银行返回失败)
         if (tradeCode.equals("SUCCESS")) {
-            updateOrderShowStatus(Long.parseLong(outTradeNo));
+            ordersShowService.updateOrderShowStatus(Long.parseLong(outTradeNo));
             return "Success";
         } else {
             return "FAIL";
@@ -100,34 +98,33 @@ public class NativePayServiceImpl implements NativePayService {
     }
 
     //将订单状态改为代发货
-    @Override
-    public int updateOrderShowStatus(Long outTradeNo) {
-        LambdaUpdateWrapper<OrdersShow> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(OrdersShow::getOrderId, outTradeNo);
-        wrapper.set(OrdersShow::getStatus, OrderStatus.WAIT_SEND.getCode());
-        return ordersShowMapper.update(wrapper);
 
-    }
 
     @Override
     public String queryPayResult(Long userId, Long orderId) {
-        LambdaQueryWrapper<OrdersShow> wrapper=new LambdaQueryWrapper<>();
-        wrapper.eq(OrdersShow::getUserId,userId);
-        wrapper.eq(OrdersShow::getOrderId,orderId);
+        LambdaQueryWrapper<OrdersShow> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(OrdersShow::getUserId, userId);
+        wrapper.eq(OrdersShow::getOrderId, orderId);
         OrdersShow ordersShow;
         try {
             ordersShow = ordersShowMapper.selectOne(wrapper);
         } catch (Exception e) {
             throw new BizException(ResultCode.DB_SELECT_ONE_ERROR);
         }
-        if(ordersShow == null){
+        if (ordersShow == null) {
             throw new BizException(ResultCode.DB_SELECT_ERROR);
         }
+        String message;
         try {
-            return wxPay.queryOrder(String.valueOf(orderId));
+            message = wxPay.queryOrder(String.valueOf(orderId));
         } catch (Exception e) {
             log.info("支付信息查询异常", e);
             throw new BizException(ResultCode.PAY_SELECT_ERROR);
         }
+        if (message.equals("SUCCESS")) {
+            ordersShowService.updateOrderShowStatus(orderId);
+        }
+        return message;
+
     }
 }

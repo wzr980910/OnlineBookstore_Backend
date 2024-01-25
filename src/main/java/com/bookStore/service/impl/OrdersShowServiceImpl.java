@@ -317,6 +317,14 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
         ordersShowLambdaUpdateWrapper.set(OrdersShow::getStatus, OrderStatus.CANCEL.getCode());
         return ordersShowMapper.update(ordersShowLambdaUpdateWrapper);
     }
+
+    @Override
+    public int updateOrderShowStatus(Long outTradeNo) {
+        LambdaUpdateWrapper<OrdersShow> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(OrdersShow::getOrderId, outTradeNo);
+        wrapper.set(OrdersShow::getStatus, OrderStatus.WAIT_SEND.getCode());
+        return ordersShowMapper.update(wrapper);
+    }
 }
 
 

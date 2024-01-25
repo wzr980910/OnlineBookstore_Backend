@@ -1,6 +1,6 @@
 package com.bookStore.util;
 
-import com.bookStore.config.wxpay.WxPayProperties;
+import com.bookStore.config.pay.wxpay.WxPayProperties;
 import com.bookStore.pojo.pay.wxpay.Amount;
 import com.bookStore.pojo.pay.wxpay.NativePayParams;
 import com.google.gson.Gson;
@@ -11,6 +11,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -31,6 +32,8 @@ public class WxPay {
     @Autowired
     private WxPayProperties wxPayProperties;
     private CloseableHttpClient httpClient;
+    @Value("${localhost}")
+    private String localHostUrl;
 
     public WxPay(WxPayProperties wxPayProperties, CloseableHttpClient httpClient) {
         this.wxPayProperties = wxPayProperties;
@@ -51,7 +54,7 @@ public class WxPay {
                 .mchid(wxPayProperties.getMchId())
                 .description(description)
                 .out_trade_no(String.valueOf(outTradeNo))
-                .notify_url("http://72bc314d.r5.cpolar.top/native/notify")
+                .notify_url(localHostUrl+"/native/notify")
                 .amount(amount)
                 .build();
         Gson gson = new Gson();
