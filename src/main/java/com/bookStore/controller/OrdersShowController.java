@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -93,7 +94,9 @@ public class OrdersShowController {
         Long userId = ThreadLocalUtil.get();
         //生成订单
         Long  orderId = ordersShowService.addOrders(userId, orderVo);
-        return new RestResult(ResultCode.SUCCESS,orderId);
+        Map<String,Long> map=new HashMap<>();
+        map.put("orderId",orderId);
+        return new RestResult(ResultCode.SUCCESS,map);
     }
 
     @PostMapping("selectOrders")
