@@ -1,5 +1,7 @@
 package com.bookStore.controller;
 
+import cn.hutool.extra.qrcode.QrCodeUtil;
+import com.bookStore.exception.BizException;
 import com.bookStore.pojo.pay.wxpay.NotifyDto;
 import com.bookStore.service.NativePayService;
 import com.bookStore.service.OrdersShowService;
@@ -8,12 +10,16 @@ import com.bookStore.util.result.ResultCode;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +33,7 @@ import java.util.Map;
  * @Create: 2024/1/19 -11:46
  * @Version: v1.0
  */
+@Slf4j
 @RestController
 @RequestMapping("/native")
 public class NativePayController {
@@ -51,19 +58,17 @@ public class NativePayController {
 
     @ApiOperation(value = "微信支付", notes = "微信支付")
     @ApiResponses({
-            @ApiResponse(code=200,message = "操作成功"),
-            @ApiResponse(code = 5001,message = "订单状态异常")
+            @ApiResponse(code = 200, message = "操作成功"),
+            @ApiResponse(code = 5001, message = "订单状态异常")
     })
     @PostMapping("wxpay")
-    public RestResult wxPay(Long orderId) {
-        RestResult restResult;
-        //支付
+    public void wxPay(HttpServletResponse response, Long orderId) throws IOException {
+        //支付url
         String code_url = nativePayService.pay(orderId);
-        if (code_url.equals("Fail")) {
-            restResult = new RestResult(ResultCode.ORDER_STATUS_ERROR);
-            return restResult;
-        }
-        return new RestResult(ResultCode.SUCCESS, code_url);
+        response.setContentType("image/png");
+        ServletOutputStream outputStream = null;
+        outputStream = response.getOutputStream();
+        QrCodeUtil.generate(code_url, 300, 300, "jpg", outputStream);
     }
 
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -53,4 +54,5 @@ public class GlobalExceptionAdvice {
 //    @ExceptionHandler(IllegalArgumentException.class)
 //    @ExceptionHandler(DBOperateException.class)
 //    @ExceptionHandler(GeneralSecurityException.class)
+//    @ExceptionHandler(IOException.class)
 }

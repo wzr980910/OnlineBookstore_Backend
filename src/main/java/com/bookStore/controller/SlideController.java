@@ -1,5 +1,6 @@
 package com.bookStore.controller;
 
+import com.bookStore.annotation.PassToken;
 import com.bookStore.pojo.Slide;
 import com.bookStore.service.SlideService;
 import com.bookStore.util.AliOssUtil;
@@ -80,6 +81,7 @@ public class SlideController {
         }
     }
 
+    @PassToken
     @GetMapping("/queryAllSlide")
     @ApiOperation(value = "查询轮播图", notes = "查询")
     public RestResult queryAllSlide() {
