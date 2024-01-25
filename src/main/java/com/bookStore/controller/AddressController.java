@@ -37,7 +37,7 @@ public class AddressController {
         int rows = addressService.addAddress(userId, address);
         //插入成功
         if (rows == 0) {
-            throw new BizException(ResultCode.DB_INSERT_ERROR);
+            return new RestResult(ResultCode.DB_INSERT_ERROR);
         } else {
             return new RestResult(ResultCode.SUCCESS);
         }
@@ -54,14 +54,14 @@ public class AddressController {
     public RestResult updateAddress(@RequestBody @Valid Address address) {
         //没有地址id值
         if (address.getId() == null) {
-            throw new IllegalArgumentException();
+            return new RestResult(ResultCode.PARAM_NOT_COMPLETE);
         }
         Long userId = ThreadLocalUtil.get();
         int rows = addressService.updateAddress(userId, address);
         if (rows > 0) {
             return new RestResult(ResultCode.SUCCESS);
         } else {
-            throw new BizException(ResultCode.DB_UPDATE_ERROR);
+            return new RestResult(ResultCode.DB_UPDATE_ERROR);
         }
     }
 
@@ -78,14 +78,14 @@ public class AddressController {
     public RestResult deleteAddress(@NotNull Long addressId) {
         //没有传入地址Id
         if (addressId == null) {
-            throw new IllegalArgumentException();
+            return new RestResult(ResultCode.PARAM_NOT_COMPLETE);
         }
         Long userId = ThreadLocalUtil.get();
         int rows = addressService.deleteAddress(userId, addressId);
         if (rows > 0) {
             return new RestResult(ResultCode.SUCCESS);
         } else {
-            throw new BizException(ResultCode.DB_DELETE_ERROR);
+            return new RestResult(ResultCode.DB_DELETE_ERROR);
         }
     }
 

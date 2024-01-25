@@ -5,6 +5,7 @@ import com.bookStore.exception.BizException;
 import com.bookStore.pojo.pay.wxpay.NotifyDto;
 import com.bookStore.service.NativePayService;
 import com.bookStore.service.OrdersShowService;
+import com.bookStore.util.ThreadLocalUtil;
 import com.bookStore.util.result.RestResult;
 import com.bookStore.util.result.ResultCode;
 import io.swagger.annotations.ApiOperation;
@@ -12,10 +13,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -61,7 +59,7 @@ public class NativePayController {
             @ApiResponse(code = 200, message = "操作成功"),
             @ApiResponse(code = 5001, message = "订单状态异常")
     })
-    @PostMapping("wxpay")
+    @GetMapping("wxpay")
     public void wxPay(HttpServletResponse response, Long orderId) throws IOException {
         //支付url
         String code_url = nativePayService.pay(orderId);
@@ -69,6 +67,20 @@ public class NativePayController {
         ServletOutputStream outputStream = null;
         outputStream = response.getOutputStream();
         QrCodeUtil.generate(code_url, 300, 300, "jpg", outputStream);
+    }
+
+    @ApiOperation(value = "查询支付结果", notes = "支付成功未通知的兜底")
+    @GetMapping("queryPayResult")
+    public RestResult queryPayResult(Long orderId) {
+        Long userId = ThreadLocalUtil.get();
+        String msg = nativePayService.queryPayResult(userId, orderId);
+        if (msg.equals("SUCCESS")) {
+            int rows = nativePayService.updateOrderShowStatus(orderId);
+            if (rows == 0) {
+                return new RestResult(ResultCode.DB_UPDATE_ERROR);
+            }
+        }
+        return new RestResult(ResultCode.SUCCESS);
     }
 
 }

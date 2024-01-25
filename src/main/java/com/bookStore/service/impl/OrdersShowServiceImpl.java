@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bookStore.exception.BizException;
 import com.bookStore.mapper.*;
 import com.bookStore.pojo.*;
 import com.bookStore.pojo.pojoenum.OrderStatus;
@@ -14,6 +15,7 @@ import com.bookStore.pojo.vo.OrderSelectVo;
 import com.bookStore.pojo.vo.OrderVo;
 import com.bookStore.service.*;
 import com.bookStore.util.OrderNumberGeneratorUtil;
+import com.bookStore.util.result.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -111,11 +113,11 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
 //    }
 
     @Override
-    public Integer addOrders(Long userId, OrderVo orderVo) {
+    public Long addOrders(Long userId, OrderVo orderVo) {
         if (orderVo.getShoppingIds() == null || orderVo.getShoppingIds().length == 0) {//直接购买图书
             if (orderVo.getBookId() == null) {
                 //传入参数缺失，增加订单失败
-                return -1;
+                throw new BizException(ResultCode.PARAM_NOT_COMPLETE);
             }
             Shopping shopping = new Shopping();
             shopping.setBookId(orderVo.getBookId());
@@ -127,26 +129,29 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
             List<Long> shoppingIdList = Arrays.asList(orderVo.getShoppingIds());
             if (shoppingIdList.size() == 0) {
                 //传入参数缺失，增加订单失败
-                return -1;
+                throw new BizException(ResultCode.PARAM_NOT_COMPLETE);
             }
             List<Shopping> shoppings = shoppingMapper.selectBatchIds(shoppingIdList);
             for (Shopping shopping : shoppings) {
                 if (!shopping.getUserId().equals(userId)) {
                     //传入参数错误
-                    return -3;
+                    throw new BizException(ResultCode.PARAM_IS_INVALID);
                 }
             }
-            if(shoppings.size() == 0){
+            if (shoppings.size() == 0) {
                 throw new IllegalArgumentException();
             }
-            int rows = orderGenerate(userId, orderVo, shoppings);
+            Long orderId = orderGenerate(userId, orderVo, shoppings);
             //批量删除shopping表中的数据
-            shoppingMapper.deleteBatchIds(shoppingIdList);
-            return rows;
+            int rows = shoppingMapper.deleteBatchIds(shoppingIdList);
+            if (rows == 0) {
+                throw new BizException(ResultCode.DB_DELETE_ERROR);
+            }
+            return orderId;
         }
     }
 
-    private int orderGenerate(Long userId, OrderVo orderVo, List<Shopping> shoppings) {
+    private Long orderGenerate(Long userId, OrderVo orderVo, List<Shopping> shoppings) {
         //验证库存，如果某一项库存不足，那么整体结算失败
         LambdaQueryWrapper<Stock> stockWrapper = new LambdaQueryWrapper<>();
         List<Long> bookIds = new ArrayList<>();
@@ -166,7 +171,7 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
             for (Shopping shopping : shoppings) {
                 if (shopping.getBookId().equals(bookId)) {
                     if (shopping.getNumber() > stockNum) {//该项商品库存不足
-                        return -2;
+                        throw new BizException(ResultCode.STOCK_NUM_ZERO);
                     } else {//更新库存
                         Stock stock = new Stock();
                         stock.setId(id);
@@ -178,7 +183,10 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
             }
         }
         //批量更新库存
-        stockService.updateBatchById(stockList);
+        boolean b = stockService.updateBatchById(stockList);
+        if (!b) {
+            throw new BizException(ResultCode.DB_UPDATE_ERROR);
+        }
         //查询图书id和图书价格
         LambdaQueryWrapper<Book> bookWrapper = new LambdaQueryWrapper<>();
         bookWrapper.in(Book::getId, bookIds);
@@ -211,10 +219,16 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
             ordersShow.setTotalPrice(totalPrice);
         }
         //批量添加到Orders表中
-        ordersService.saveBatch(ordersList);
+        boolean saveBoolean = ordersService.saveBatch(ordersList);
+        if (!saveBoolean) {
+            throw new BizException(ResultCode.DB_INSERT_ERROR);
+        }
         //批量添加到OrderShow表中
-        ordersShowMapper.insert(ordersShow);
-        return shoppings.size();
+        int insert = ordersShowMapper.insert(ordersShow);
+        if (insert == 0) {
+            throw new BizException(ResultCode.DB_INSERT_ERROR);
+        }
+        return orderId;
     }
 
     @Override
@@ -230,20 +244,14 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
         //订单中修改的地址不会保存到用户的地址列表中
         address.setIsDeleted(1);
         address.setDefaultAddress(0);
-        int rows = 0;
-        try {
-            rows = addressMapper.insert(address);
-        } catch (Exception e) {
-            //参数缺失异常
-            throw new RuntimeException(e);
-        }
+        int rows = addressMapper.insert(address);
         if (rows == 0) {
             //插入地址失败
-            return 0;
+            throw new BizException(ResultCode.DB_INSERT_ERROR);
         }
         LambdaUpdateWrapper<OrdersShow> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(OrdersShow::getOrderId, orderId);
-        wrapper.set(rows > 0, OrdersShow::getAddressId, address.getId());
+        wrapper.set(OrdersShow::getAddressId, address.getId());
         return ordersShowMapper.update(wrapper);
     }
 
@@ -257,9 +265,9 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
         wrapper.set(OrdersShow::getStatus, OrderStatus.IS_DELETED.getCode());
         return ordersShowMapper.update(wrapper);
     }
+
+
     //取消订单
-
-
     @Override
     public int cancelOrders(Long userId, Long orderId, Integer addToCart) {
         LambdaQueryWrapper<OrdersShow> wrapper = new LambdaQueryWrapper<>();
@@ -268,12 +276,10 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
         try {
             ordersShow = ordersShowMapper.selectOne(wrapper);
         } catch (Exception e) {
-            //数据库查询出错
-            throw new RuntimeException(e);
+            throw new BizException(ResultCode.DB_SELECT_ONE_ERROR);
         }
         if (ordersShow == null || !ordersShow.getStatus().equals(0)) {
-            //订单状态异常
-            return -1;
+            throw new BizException(ResultCode.ORDER_STATUS_ERROR);
         }
         //先从orders表中查询订单详情，以便增加shopping表信息以及增加库存
         LambdaQueryWrapper<Orders> ordersWrapper = new LambdaQueryWrapper<>();

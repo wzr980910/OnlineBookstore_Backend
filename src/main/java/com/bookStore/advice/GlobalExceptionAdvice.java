@@ -55,4 +55,5 @@ public class GlobalExceptionAdvice {
 //    @ExceptionHandler(DBOperateException.class)
 //    @ExceptionHandler(GeneralSecurityException.class)
 //    @ExceptionHandler(IOException.class)
+//    @ExceptionHandler(NullPointerException.class);
 }

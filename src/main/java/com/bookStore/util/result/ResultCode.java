@@ -60,6 +60,8 @@ public enum ResultCode {
     DB_ERROR(4000,"数据库出错"),
     /* 订单状态错误*/
     ORDER_STATUS_ERROR(5001,"订单状态异常"),
+    /*支付信息错误*/
+    PAY_SELECT_ERROR(5002,"支付信息查询异常"),
     /*库存不足*/
     STOCK_NUM_ZERO(6001,"库存不足");
     private Integer code;

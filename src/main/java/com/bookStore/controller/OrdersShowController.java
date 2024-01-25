@@ -2,6 +2,7 @@ package com.bookStore.controller;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.bookStore.exception.BizException;
 import com.bookStore.pojo.Address;
 import com.bookStore.pojo.OrdersShow;
 import com.bookStore.pojo.Shopping;
@@ -89,32 +90,19 @@ public class OrdersShowController {
     @PostMapping("/addOrders")
     @ApiOperation(value = "添加订单")
     public RestResult addOrders(@RequestBody OrderVo orderVo) {
-        RestResult restResult = new RestResult(ResultCode.SUCCESS);
         Long userId = ThreadLocalUtil.get();
         //生成订单
-        Integer rows = ordersShowService.addOrders(userId, orderVo);
-        if (rows == -2) {//库存不足
-            restResult = new RestResult(ResultCode.STOCK_NUM_ZERO);
-            return restResult;
-        } else if (rows == -1) {//传入参数缺失
-            restResult = new RestResult(ResultCode.PARAM_NOT_COMPLETE);
-            return restResult;
-        } else if (rows == -3) {
-            restResult = new RestResult(ResultCode.PARAM_IS_INVALID);
-            return restResult;
-        }
-        return restResult;
+        Long  orderId = ordersShowService.addOrders(userId, orderVo);
+        return new RestResult(ResultCode.SUCCESS,orderId);
     }
 
     @PostMapping("selectOrders")
     @ApiOperation(value = "查询订单")
     public RestResult selectOrders(@RequestBody OrderSelectVo orderSelectVo) {
-        RestResult restResult = new RestResult(ResultCode.SUCCESS);
         Long userId = ThreadLocalUtil.get();
         //查询订单
         IPage<OrderReturn> page = ordersShowService.selectOrders(userId, orderSelectVo);
-        restResult.setData(page);
-        return restResult;
+        return new RestResult(ResultCode.SUCCESS, page);
     }
 
     @PostMapping("updateOrders")
@@ -127,7 +115,7 @@ public class OrdersShowController {
         }
         int rows = ordersShowService.updateOrders(userId, orderId, address);
         if (rows == 0) {
-            return new RestResult(ResultCode.DB_ERROR);
+            return new RestResult(ResultCode.DB_UPDATE_ERROR);
         }
         return new RestResult(ResultCode.SUCCESS);
     }

@@ -27,7 +27,7 @@ public interface OrdersShowService extends IService<OrdersShow> {
 //    Map<String,Object> queryOrdersPageByStatus(Integer currentPage, Integer size,
 //                                               Long userId,Integer status);
 
-    Integer addOrders(Long userId, OrderVo orderVo);
+    Long addOrders(Long userId, OrderVo orderVo);
 
     IPage<OrderReturn> selectOrders(Long userId, OrderSelectVo orderSelectVo);
 

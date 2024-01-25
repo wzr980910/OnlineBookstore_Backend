@@ -92,7 +92,7 @@ public class NativePayServiceImpl implements NativePayService {
 //        USERPAYING：用户支付中（付款码支付）
 //        PAYERROR：支付失败(其他原因，如银行返回失败)
         if (tradeCode.equals("SUCCESS")) {
-            updateOrderShowStatus(outTradeNo);
+            updateOrderShowStatus(Long.parseLong(outTradeNo));
             return "Success";
         } else {
             return "FAIL";
@@ -100,10 +100,34 @@ public class NativePayServiceImpl implements NativePayService {
     }
 
     //将订单状态改为代发货
-    private void updateOrderShowStatus(String outTradeNo) {
+    @Override
+    public int updateOrderShowStatus(Long outTradeNo) {
         LambdaUpdateWrapper<OrdersShow> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(OrdersShow::getOrderId, outTradeNo);
         wrapper.set(OrdersShow::getStatus, OrderStatus.WAIT_SEND.getCode());
-        ordersShowMapper.update(wrapper);
+        return ordersShowMapper.update(wrapper);
+
+    }
+
+    @Override
+    public String queryPayResult(Long userId, Long orderId) {
+        LambdaQueryWrapper<OrdersShow> wrapper=new LambdaQueryWrapper<>();
+        wrapper.eq(OrdersShow::getUserId,userId);
+        wrapper.eq(OrdersShow::getOrderId,orderId);
+        OrdersShow ordersShow;
+        try {
+            ordersShow = ordersShowMapper.selectOne(wrapper);
+        } catch (Exception e) {
+            throw new BizException(ResultCode.DB_SELECT_ONE_ERROR);
+        }
+        if(ordersShow == null){
+            throw new BizException(ResultCode.DB_SELECT_ERROR);
+        }
+        try {
+            return wxPay.queryOrder(String.valueOf(orderId));
+        } catch (Exception e) {
+            log.info("支付信息查询异常", e);
+            throw new BizException(ResultCode.PAY_SELECT_ERROR);
+        }
     }
 }
