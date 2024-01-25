@@ -1,5 +1,6 @@
-package com.bookStore.config;
+package com.bookStore.advice;
 
+import com.bookStore.exception.DBOperateException;
 import com.bookStore.util.result.RestResult;
 import com.bookStore.util.result.ResultCode;
 import org.springframework.context.annotation.Configuration;
@@ -11,13 +12,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 @RestControllerAdvice
 @Configuration
-public class GlobalExceptionHandler {
+public class GlobalExceptionAdvice {
 
     //方法请求参数校验异常
 
@@ -51,4 +51,6 @@ public class GlobalExceptionHandler {
         restResult.setCode(ResultCode.PARAM_ERROR.getCode());
         return restResult;
     }
+//    @ExceptionHandler(IllegalArgumentException.class)
+//    @ExceptionHandler(DBOperateException.class)
 }

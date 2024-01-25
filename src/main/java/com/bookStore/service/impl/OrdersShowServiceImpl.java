@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.support.ReflectLambdaMeta;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bookStore.exception.DBOperateException;
 import com.bookStore.mapper.*;
 import com.bookStore.pojo.*;
 import com.bookStore.pojo.pojoenum.OrderStatus;
@@ -144,6 +145,9 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
                     return -3;
                 }
             }
+            if(shoppings.size() == 0){
+                throw new IllegalArgumentException();
+            }
             int rows = orderGenerate(userId, orderVo, shoppings);
             //批量删除shopping表中的数据
             shoppingMapper.deleteBatchIds(shoppingIdList);
@@ -192,9 +196,14 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
         //Orders表中增加数据
         List<Orders> ordersList = new ArrayList<>();
         //OrderShow表中增加数据
-        List<OrdersShow> ordersShowList = new ArrayList<>();
+        Long orderId = OrderNumberGeneratorUtil.generateOrderNumber();
+        OrdersShow ordersShow = new OrdersShow();
+        ordersShow.setOrderId(orderId);
+        ordersShow.setUserId(userId);
+        ordersShow.setAddressId(orderVo.getAddressId());
+        BigDecimal totalPrice = new BigDecimal(0);
+        ordersShow.setStatus(0);
         for (Shopping shopping : shoppings) { //对每一个购物车项插入一条订单信息
-            Long orderId = OrderNumberGeneratorUtil.generateOrderNumber();
             Orders orders = new Orders();
             orders.setOrderId(orderId);
             orders.setBookId(shopping.getBookId());
@@ -204,21 +213,16 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
             for (Map<String, Object> bookIdPriceMap : bookIdPriceMaps) {
                 Long bookId = ((BigInteger) bookIdPriceMap.get("id")).longValue();
                 if (shopping.getBookId().equals(bookId)) {
-                    OrdersShow ordersShow = new OrdersShow();
-                    ordersShow.setOrderId(orderId);
-                    ordersShow.setUserId(userId);
-                    ordersShow.setAddressId(orderVo.getAddressId());
                     BigDecimal price = (BigDecimal) bookIdPriceMap.get("price");
-                    ordersShow.setTotalPrice(price.multiply(new BigDecimal(shopping.getNumber())));
-                    ordersShow.setStatus(0);
-                    ordersShowList.add(ordersShow);
+                    totalPrice = totalPrice.add(price.multiply(new BigDecimal(shopping.getNumber())));
                 }
             }
+            ordersShow.setTotalPrice(totalPrice);
         }
         //批量添加到Orders表中
         ordersService.saveBatch(ordersList);
         //批量添加到OrderShow表中
-        super.saveBatch(ordersShowList);
+        ordersShowMapper.insert(ordersShow);
         return shoppings.size();
     }
 

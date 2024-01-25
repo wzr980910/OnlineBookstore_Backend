@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 
 /**
@@ -28,8 +29,8 @@ import java.security.PrivateKey;
 public class WxAutoConfiguation {
     @Bean
     public CloseableHttpClient httpClient(WxPayProperties wxPayProperties) throws IOException {
-        PrivateKey merchantPrivateKey = PemUtil.loadPrivateKey(new ByteArrayInputStream(wxPayProperties.getPrivateKey().getBytes("utf-8")));
-        AutoUpdateCertificatesVerifier verifier = new AutoUpdateCertificatesVerifier(new WechatPay2Credentials(wxPayProperties.getMchId(), new PrivateKeySigner(wxPayProperties.getMchSerialNo(), merchantPrivateKey)), wxPayProperties.getApiV3Key().getBytes("utf-8"));
+        PrivateKey merchantPrivateKey = PemUtil.loadPrivateKey(new ByteArrayInputStream(wxPayProperties.getPrivateKey().getBytes(StandardCharsets.UTF_8)));
+        AutoUpdateCertificatesVerifier verifier = new AutoUpdateCertificatesVerifier(new WechatPay2Credentials(wxPayProperties.getMchId(), new PrivateKeySigner(wxPayProperties.getMchSerialNo(), merchantPrivateKey)), wxPayProperties.getApiV3Key().getBytes(StandardCharsets.UTF_8));
         return WechatPayHttpClientBuilder.create().withMerchant(wxPayProperties.getMchId(), wxPayProperties.getMchSerialNo(), merchantPrivateKey).withValidator(new WechatPay2Validator(verifier)).build();
     }
     @Bean

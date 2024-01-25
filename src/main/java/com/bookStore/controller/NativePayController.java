@@ -29,8 +29,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/native")
 public class NativePayController {
-    @Autowired
-    private OrdersShowService ordersShowService;
+
     @Autowired
     private NativePayService nativePayService;
 

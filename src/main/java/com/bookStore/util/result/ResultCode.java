@@ -53,6 +53,10 @@ public enum ResultCode {
     FILE_UPLOAD_FAILURE(3013,"文件上传失败"),
     /* 数据库错误：4001-4099*/
     DB_INSERT_ERROR(4001,"数据库插入报错"),
+    DB_DELETE_ERROR(4002,"数据库删除异常"),
+    DB_UPDATE_ERROR(4003,"数据库修改异常"),
+    DB_SELECT_ERROR(4004,"数据库查询异常"),
+    DB_SELECT_ONE_ERROR(4005,"查询结果不唯一"),
     DB_ERROR(4000,"数据库出错"),
     /* 订单状态错误*/
     ORDER_STATUS_ERROR(5001,"订单状态异常"),

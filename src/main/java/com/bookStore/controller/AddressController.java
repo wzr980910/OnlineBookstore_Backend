@@ -1,5 +1,6 @@
 package com.bookStore.controller;
 
+import com.bookStore.exception.DBOperateException;
 import com.bookStore.pojo.Address;
 import com.bookStore.service.AddressService;
 import com.bookStore.util.ThreadLocalUtil;
@@ -27,71 +28,65 @@ public class AddressController {
     //说明是什么方法(可以理解为方法注释)
     @ApiOperation(value = "添加地址", notes = "添加地址,此时地址Id不需要")
     @ApiResponses({
-            @ApiResponse(code=200,message = "操作成功"),
-            @ApiResponse(code = 101,message = "操作失败")
+            @ApiResponse(code = 200, message = "操作成功"),
+            @ApiResponse(code = 101, message = "操作失败")
     })
     @PostMapping("addAddress")
     public RestResult addAddress(@RequestBody @Valid Address address) {
-        RestResult restResult = new RestResult(ResultCode.OPERATION_FAILURE);
-        Long userId =  ThreadLocalUtil.get();
+        Long userId = ThreadLocalUtil.get();
         int rows = addressService.addAddress(userId, address);
         //插入成功
-        if (rows > 0) {
-            restResult = new RestResult(ResultCode.SUCCESS);
+        if (rows == 0) {
+            throw new DBOperateException(ResultCode.DB_INSERT_ERROR);
+        } else {
+            return new RestResult(ResultCode.SUCCESS);
         }
-        return restResult;
     }
 
     //说明是什么方法(可以理解为方法注释)
     @ApiOperation(value = "修改地址", notes = "修改地址")
     @ApiResponses({
-            @ApiResponse(code=200,message = "操作成功"),
-            @ApiResponse(code = 101,message = "操作失败"),
-            @ApiResponse(code = 1004,message = "参数缺失")
+            @ApiResponse(code = 200, message = "操作成功"),
+            @ApiResponse(code = 101, message = "操作失败"),
+            @ApiResponse(code = 1004, message = "参数缺失")
     })
     @PutMapping("updateAddress")
     public RestResult updateAddress(@RequestBody @Valid Address address) {
-        RestResult restResult =null;
         //没有地址id值
         if (address.getId() == null) {
-            restResult=new RestResult(ResultCode.PARAM_NOT_COMPLETE);
-            return restResult;
+            throw new IllegalArgumentException();
         }
-        Long userId = (Long) ThreadLocalUtil.get();
+        Long userId = ThreadLocalUtil.get();
         int rows = addressService.updateAddress(userId, address);
         if (rows > 0) {
-            restResult = new RestResult(ResultCode.SUCCESS);
-        }else {
-            restResult = new RestResult(ResultCode.OPERATION_FAILURE);
+            return new RestResult(ResultCode.SUCCESS);
+        } else {
+            throw new DBOperateException(ResultCode.DB_UPDATE_ERROR);
         }
-        return restResult;
     }
 
-    //说明是什么方法(可以理解为方法注释)
 
-    @ApiImplicitParam(name="addreddId",value="需要删除地址的Id",required = true,paramType = "form")
+    //说明是什么方法(可以理解为方法注释)
+    @ApiImplicitParam(name = "addreddId", value = "需要删除地址的Id", required = true, paramType = "form")
     @ApiOperation(value = "删除地址", notes = "删除地址")
     @ApiResponses({
-            @ApiResponse(code=200,message = "操作成功"),
-            @ApiResponse(code = 101,message = "操作失败"),
-            @ApiResponse(code = 1004,message = "参数缺失")
+            @ApiResponse(code = 200, message = "操作成功"),
+            @ApiResponse(code = 101, message = "操作失败"),
+            @ApiResponse(code = 1004, message = "参数缺失")
     })
     @DeleteMapping("deleteAddress")
     public RestResult deleteAddress(@NotNull Long addressId) {
-        RestResult restResult = null;
         //没有传入地址Id
-        if(addressId == null){
-            restResult=new RestResult(ResultCode.PARAM_NOT_COMPLETE);
-            return restResult;
+        if (addressId == null) {
+            throw new IllegalArgumentException();
         }
-        Long userId = (Long) ThreadLocalUtil.get();
+        Long userId = ThreadLocalUtil.get();
         int rows = addressService.deleteAddress(userId, addressId);
         if (rows > 0) {
-            restResult = new RestResult(ResultCode.SUCCESS);
-        }else {
-            restResult = new RestResult(ResultCode.OPERATION_FAILURE);
+            return new RestResult(ResultCode.SUCCESS);
+        } else {
+            throw new DBOperateException(ResultCode.DB_DELETE_ERROR);
         }
-        return restResult;
     }
 
 
@@ -100,9 +95,7 @@ public class AddressController {
     @GetMapping("selectAddress")
     public RestResult selectAddress() {
         Long userId = ThreadLocalUtil.get();
-        RestResult restResult = new RestResult(ResultCode.SUCCESS);
         Map<String, Object> addressMap = addressService.selectAddress(userId);
-        restResult.setData(addressMap);
-        return restResult;
+        return new RestResult(ResultCode.SUCCESS,addressMap);
     }
 }
