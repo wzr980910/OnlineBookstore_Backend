@@ -82,6 +82,10 @@ public class UserController {
         //用户不存在
         if (userTemp == null) {
             userService.insert(user);
+            //这里给用户一个默认头像
+            String imgPath = "https://bookstore-picture.oss-cn-chengdu.aliyuncs.com/userPicture/93d5bcc1-7ff0-4645-b524-ce70cc5535bb.jpg";
+            user.setPicture(imgPath);
+            userService.insert(user);
             //插入成功
             return new RestResult(ResultCode.SUCCESS);
         } else {//用户已存在
@@ -193,6 +197,8 @@ public class UserController {
     @PostMapping(value = "/updateUser")
     @ApiOperation(value = "修改用户基本信息", notes = "参数可选")
     public RestResult updateUser(@RequestBody User user) {
+        Long userId = ThreadLocalUtil.get();
+        user.setId(userId);
         //通过id查到该用户
         Integer rows = userService.updateUser(user);
         if (rows > 0) {
@@ -202,23 +208,17 @@ public class UserController {
         }
     }
 
-    /**
-     * 忘记密码 将用户密码重置为123456
-     *
-     * @param phone
-     * @param accountNumber
-     * @return
-     */
-    @PostMapping(value = "/forgetPassword")
-    @ApiOperation(value = "忘记密码", notes = "账号 电话号码 必填")
-    public RestResult forgetPassword(@RequestParam String phone, @RequestParam String accountNumber) {
-        User user = userService.forgetPassword(phone, accountNumber);
-        if (user != null) {
-            return RestResult.success(ResultCode.SUCCESS, "密码已重置为123456!", user);
-        } else {
-            return RestResult.failure(ResultCode.OPERATION_FAILURE, "操作失败,账号或手机号填写有误!");
-        }
-    }
+
+//    @PostMapping(value = "/forgetPassword")
+//    @ApiOperation(value = "忘记密码", notes = "账号 电话号码 必填")
+//    public RestResult forgetPassword(@RequestParam String phone, @RequestParam String accountNumber) {
+//        User user = userService.forgetPassword(phone, accountNumber);
+//        if (user != null) {
+//            return RestResult.success(ResultCode.SUCCESS, "密码已重置为123456!", user);
+//        } else {
+//            return RestResult.failure(ResultCode.OPERATION_FAILURE, "操作失败,账号或手机号填写有误!");
+//        }
+//    }
 
     /**
      * userId 查询用户信息
@@ -226,28 +226,33 @@ public class UserController {
      * @param id
      * @return
      */
-    @GetMapping(value = "/queryUserById")
-    @ApiOperation(value = "通过id查用户信息", notes = "用户id 必填")
-    public RestResult queryUserById(Long id) {
-        User user = userService.queryUserById(id);
-        if (user == null) {
-            return RestResult.failure(ResultCode.OPERATION_FAILURE, "查询失败");
-        }
-        return RestResult.success(ResultCode.SUCCESS, "查询成功", user);
-    }
+//    @GetMapping(value = "/queryUserById")
+//    @ApiOperation(value = "通过id查用户信息", notes = "用户id 必填")
+//    public RestResult queryUserById(Long id) {
+//        User user = userService.queryUserById(id);
+//        if (user == null) {
+//            return RestResult.failure(ResultCode.OPERATION_FAILURE, "查询失败");
+//        }
+//        return RestResult.success(ResultCode.SUCCESS, "查询成功", user);
+//    }
 
-    @PatchMapping(value = "/updateAvatar")
-    @ApiOperation(value = "更新用户头像信息", notes = "传入一个头像的url地址,param传参：avatarUrl")
-    public RestResult updateAvatar(@RequestParam @URL String avatarUrl) {
-        Long userId = (Long) ThreadLocalUtil.get();
-        int rows = userService.updateUserAvatar(userId, avatarUrl);
-        RestResult restResult = new RestResult(ResultCode.SUCCESS);
-        if (rows == 0) {
-            restResult = new RestResult(ResultCode.OPERATION_FAILURE);
-        }
-        return restResult;
-    }
+//    @PatchMapping(value = "/updateAvatar")
+//    @ApiOperation(value = "更新用户头像信息", notes = "传入一个头像的url地址,param传参：avatarUrl")
+//    public RestResult updateAvatar(@RequestParam @URL String avatarUrl) {
+//        Long userId = (Long) ThreadLocalUtil.get();
+//        int rows = userService.updateUserAvatar(userId, avatarUrl);
+//        RestResult restResult = new RestResult(ResultCode.SUCCESS);
+//        if (rows == 0) {
+//            restResult = new RestResult(ResultCode.OPERATION_FAILURE);
+//        }
+//        return restResult;
+//    }
 
+    /**
+     * 更新头像直接调用此接口
+     * @param file
+     * @return
+     */
     @PostMapping("/upload")
     @ApiOperation("头像上传")
     public RestResult imgUpload(@RequestParam(value = "file") MultipartFile file) {

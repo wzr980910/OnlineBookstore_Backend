@@ -76,8 +76,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public Integer updateUser(User user) {
-        Long userId = ThreadLocalUtil.get();
-        user.setId(userId);
         int insert = userMapper.updateById(user);
         return insert;
     }
@@ -85,10 +83,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public int updateUserAvatar(Long userId, String avatarUrl) {
         LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
-        if (avatarUrl == null) {
-            //如果用户没有上传头像，那就设置一个默认头像地址
-            avatarUrl = "这里需要一个好看的默认头像地址";
-        }
         wrapper.eq(User::getId, userId);
         wrapper.set(User::getPicture, avatarUrl);
         return userMapper.update(wrapper);
