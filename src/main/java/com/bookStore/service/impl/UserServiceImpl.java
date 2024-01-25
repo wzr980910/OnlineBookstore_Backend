@@ -5,12 +5,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bookStore.exception.BizException;
 import com.bookStore.pojo.User;
 import com.bookStore.service.UserService;
 import com.bookStore.mapper.UserMapper;
 import com.bookStore.util.JwtHelper;
 import com.bookStore.util.MD5Util;
 import com.bookStore.util.ThreadLocalUtil;
+import com.bookStore.util.result.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -37,10 +39,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public User selectByAccount(String accountNumber) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getAccountNumber, accountNumber);
-        String sql = wrapper.getSqlSegment();
-        System.out.println(sql);
-        User userTemp = userMapper.selectOne(wrapper);
-        return userTemp;
+        User user;
+        try {
+            user = userMapper.selectOne(wrapper);
+        } catch (Exception e) {
+            throw new BizException(ResultCode.DB_SELECT_ONE_ERROR);
+        }
+        return user;
     }
 
     @Override
@@ -50,8 +55,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             user.setPassword(passwordEncrypt);
         }
         user.setIsDeleted(0);
-        int insert = userMapper.insert(user);
-        return insert;
+        int rows = userMapper.insert(user);
+        if (rows == 0) {
+            throw new BizException(ResultCode.DB_INSERT_ERROR);
+        }
+        return rows;
     }
 
     @Override

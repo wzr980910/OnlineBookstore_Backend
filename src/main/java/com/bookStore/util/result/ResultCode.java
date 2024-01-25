@@ -64,6 +64,7 @@ public enum ResultCode {
     PAY_SELECT_ERROR(5002,"支付信息查询异常"),
     /*库存不足*/
     STOCK_NUM_ZERO(6001,"库存不足");
+
     private Integer code;
     private String message;
 

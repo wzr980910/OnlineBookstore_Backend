@@ -69,7 +69,7 @@ public class UserController {
     /**
      * 保存数据
      *
-     * @param user
+     * @param
      * @return
      */
 
@@ -77,27 +77,16 @@ public class UserController {
     //方法参数说明，name参数名；value参数说明，备注；dataType参数类型；required 是否必传；defaultValue 默认值
     @ApiOperation(value = "添加用户", notes = "添加用户")
     public RestResult regist(@Valid @RequestBody User user) {
-        RestResult restResult = new RestResult();
         //验证用户是否以及存在
         User userTemp = userService.selectByAccount(user.getAccountNumber());
         //用户不存在
         if (userTemp == null) {
-            Integer rows = userService.insert(user);
+            userService.insert(user);
             //插入成功
-            if (rows > 0) {
-                restResult.setCode(ResultCode.SUCCESS.getCode());
-                restResult.setMessage(ResultCode.SUCCESS.getMessage());
-                //插入失败
-            } else {
-                restResult.setCode(ResultCode.UNKNOWN_ERROR.getCode());
-                restResult.setMessage(ResultCode.UNKNOWN_ERROR.getMessage());
-            }
-            //用户已存在
-        } else {
-            restResult.setCode(ResultCode.USER_HAS_EXISTED.getCode());
-            restResult.setMessage(ResultCode.USER_HAS_EXISTED.getMessage());
+            return new RestResult(ResultCode.SUCCESS);
+        } else {//用户已存在
+            return new RestResult(ResultCode.USER_HAS_EXISTED);
         }
-        return restResult;
     }
 
     @GetMapping("/checkUserAccount")
@@ -106,15 +95,13 @@ public class UserController {
     //说明是什么方法(可以理解为方法注释)
     @ApiOperation(value = "校验用户账号是否已经存在")
     public RestResult checkUserAccount(String accountNumber) {
-        RestResult restResult = null;
         //验证用户是否以及存在
         User userTemp = userService.selectByAccount(accountNumber);
         if (userTemp != null) {
-            restResult = new RestResult(ResultCode.USER_HAS_EXISTED);
+            return new RestResult(ResultCode.USER_HAS_EXISTED);
         } else {
-            restResult = new RestResult(ResultCode.USER_NOT_EXIST);
+            return new RestResult(ResultCode.USER_NOT_EXIST);
         }
-        return restResult;
     }
 
     /**
@@ -268,9 +255,9 @@ public class UserController {
         Long userId = ThreadLocalUtil.get();
         try {
             //返回文件请求路径
-            String filePath = aliOssUtil.upload(file.getBytes(), file,basePath);
+            String filePath = aliOssUtil.upload(file.getBytes(), file, basePath);
             //保存到user表中
-            userService.updateUserAvatar(userId,filePath);
+            userService.updateUserAvatar(userId, filePath);
             return RestResult.success(filePath);
         } catch (IOException e) {
             e.printStackTrace();
@@ -289,7 +276,7 @@ public class UserController {
                       @RequestParam(required = false) String timestamp,
                       @RequestParam(required = false) String nonce,
                       @RequestParam(required = false) String echostr
-                      )  {
+    ) {
         if (!this.weChatMpService.checkSignature(timestamp, nonce, signature)) {
             return null;
         }
