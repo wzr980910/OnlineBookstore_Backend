@@ -67,6 +67,14 @@ public class ShoppingServiceImpl extends ServiceImpl<ShoppingMapper, Shopping>
         return rows;
     }
 
+    @Override
+    public Integer updateShopping(Long userId,Shopping shopping) {
+        QueryWrapper<Shopping> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id",shopping.getId()).eq("userId",userId);
+        int update = shoppingMapper.update(shopping,queryWrapper);
+        return update;
+    }
+
 
 }
 

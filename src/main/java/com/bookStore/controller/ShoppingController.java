@@ -77,4 +77,15 @@ public class ShoppingController {
         return RestResult.failure(ResultCode.OPERATION_FAILURE, "删除失败");
     }
 
+    @PostMapping(value = "/updateShopping")
+    @ApiOperation(value = "更新购物车信息", notes = "更新购物车信息")
+    public RestResult updateShopping(@RequestBody Shopping shopping) {
+        Long userId = ThreadLocalUtil.get();
+        Integer rows = shoppingService.updateShopping(userId, shopping);
+        if (rows > 0) {
+            return RestResult.success(ResultCode.SUCCESS,"更新成功",rows);
+        }
+        return RestResult.failure(ResultCode.OPERATION_FAILURE, "更新失败");
+    }
+
 }

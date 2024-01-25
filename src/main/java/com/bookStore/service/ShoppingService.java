@@ -31,5 +31,10 @@ public interface ShoppingService extends IService<Shopping> {
     */
    Integer deleteShopping(Long userId,List<String> bookIdsList);
 
+   /**
+    * 更新购物车
+    */
+   Integer updateShopping(Long userId,Shopping shopping);
+
 
 }
