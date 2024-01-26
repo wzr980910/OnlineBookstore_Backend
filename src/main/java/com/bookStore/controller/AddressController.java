@@ -21,12 +21,13 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/address")
-@Api(value = "地址接口", tags = "地址相关的接口", description = "地址测试接口")
+@Api(value = "地址接口", tags = "地址相关的接口")
 public class AddressController {
     @Autowired
     private AddressService addressService;
 
     //说明是什么方法(可以理解为方法注释)
+    @MethodLog
     @ApiOperation(value = "添加地址", notes = "添加地址,此时地址Id不需要")
     @ApiResponses({
             @ApiResponse(code = 200, message = "操作成功"),
@@ -59,12 +60,8 @@ public class AddressController {
             return new RestResult(ResultCode.PARAM_NOT_COMPLETE);
         }
         Long userId = ThreadLocalUtil.get();
-        int rows = addressService.updateAddress(userId, address);
-        if (rows > 0) {
-            return new RestResult(ResultCode.SUCCESS);
-        } else {
-            return new RestResult(ResultCode.DB_UPDATE_ERROR);
-        }
+        addressService.updateAddress(userId, address);
+        return new RestResult(ResultCode.SUCCESS);
     }
 
 
@@ -76,6 +73,7 @@ public class AddressController {
             @ApiResponse(code = 101, message = "操作失败"),
             @ApiResponse(code = 1004, message = "参数缺失")
     })
+    @MethodLog
     @DeleteMapping("deleteAddress")
     public RestResult deleteAddress(@NotNull Long addressId) {
         //没有传入地址Id
@@ -99,6 +97,6 @@ public class AddressController {
     public RestResult selectAddress() {
         Long userId = ThreadLocalUtil.get();
         Map<String, Object> addressMap = addressService.selectAddress(userId);
-        return new RestResult(ResultCode.SUCCESS,addressMap);
+        return new RestResult(ResultCode.SUCCESS, addressMap);
     }
 }

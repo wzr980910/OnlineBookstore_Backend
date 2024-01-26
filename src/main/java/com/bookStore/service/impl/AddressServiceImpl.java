@@ -11,6 +11,7 @@ import com.bookStore.mapper.AddressMapper;
 import com.bookStore.util.result.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +29,7 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address>
     private AddressMapper addressMapper;
 
     @Override
+    @Transactional
     public int addAddress(Long userId, Address address) {
         address.setUserId(userId);
         //查询数据库中是否存在该用户的默认地址
@@ -57,6 +59,7 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address>
     }
 
     @Override
+    @Transactional
     public int updateAddress(Long userId, Address address) {
         address.setUserId(userId);
         if (address.getDefaultAddress().equals(DefaultAddress.DEFAULT_ADDRESS.getValue())) {
@@ -66,17 +69,14 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address>
             wrapperOld.eq(Address::getUserId, address.getUserId());
             wrapperOld.set(Address::getDefaultAddress, DefaultAddress.NOT_DEFAULT_ADDRESS.getValue());
             //更新之前先把以前的默认地址修改
-            int rows = addressMapper.update(wrapperOld);
-            if (rows == 0) {
-                throw new BizException(ResultCode.DB_UPDATE_ERROR);
-            }
+            addressMapper.update(wrapperOld);
         } else {
             //用户想将该地址设置为非默认地址
             //查询数据库中默认地址
             LambdaQueryWrapper<Address> wrapperSelectDefault = new LambdaQueryWrapper<>();
             wrapperSelectDefault.eq(Address::getDefaultAddress, DefaultAddress.DEFAULT_ADDRESS.getValue());
             wrapperSelectDefault.eq(Address::getUserId, userId);
-            Address addressDefault = null;
+            Address addressDefault;
             try {
                 addressDefault = addressMapper.selectOne(wrapperSelectDefault);
             } catch (Exception e) {
@@ -121,6 +121,7 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address>
         //删除该地址
         return addressMapper.deleteById(address);
     }
+
 
     private void setDefaultAddress(Long userId) {
         //查询最后一次更新的地址，将其设置为默认地址

@@ -58,7 +58,7 @@
             </if>
             <!--书名不为空，根据书名模糊查询 -->
             <if test="bookVo.bookName != null">
-                and bookName like CONCAT('%',#{bookVo.bookName},'%')
+                and book.bookName like CONCAT('%',#{bookVo.bookName},'%')
             </if>
             <!-- 作者不为空，根据作者模糊查询-->
             <if test="bookVo.author != null">

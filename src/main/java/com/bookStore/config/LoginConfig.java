@@ -31,6 +31,7 @@ public class LoginConfig implements WebMvcConfigurer {
         authRegistration.excludePathPatterns(       //添加不拦截路径
                 "/native/notify",
                 "/user/login",
+                "/user/regist",
                 "/user/wx",
                 "/user/wxCallback",
                 "/user/wxLogin",

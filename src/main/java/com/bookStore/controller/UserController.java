@@ -4,6 +4,7 @@ package com.bookStore.controller;
 import cn.hutool.db.Session;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.json.JSON;
+import com.bookStore.exception.BizException;
 import com.bookStore.pojo.User;
 import com.bookStore.pojo.login.wxlogin.WechatUser;
 import com.bookStore.pojo.login.wxlogin.WxMpConfig;
@@ -84,7 +85,6 @@ public class UserController {
         User userTemp = userService.selectByAccount(user.getAccountNumber());
         //用户不存在
         if (userTemp == null) {
-            userService.insert(user);
             //这里给用户一个默认头像
             String imgPath = "https://bookstore-picture.oss-cn-chengdu.aliyuncs.com/userPicture/93d5bcc1-7ff0-4645-b524-ce70cc5535bb.jpg";
             user.setPicture(imgPath);
@@ -122,7 +122,7 @@ public class UserController {
     @ApiOperation(value = "登录接口", notes = "用户登录（只传手机号和密码参数即可）,用接口测试前请先登录（缓存用户信息）", httpMethod = "GET")
     @GetMapping("/login")
     public RestResult login(@RequestParam String accountNumber, @RequestParam String password) {
-        RestResult restResult = null;
+        RestResult restResult;
         Long userId = null;
         if (this.session != null) {
             userId = (Long) this.session.getAttribute("userId");
@@ -253,6 +253,7 @@ public class UserController {
 
     /**
      * 更新头像直接调用此接口
+     *
      * @param file
      * @return
      */
@@ -261,16 +262,16 @@ public class UserController {
     public RestResult imgUpload(@RequestParam(value = "file") MultipartFile file) {
         String basePath = "userPicture/";
         Long userId = ThreadLocalUtil.get();
+        String filePath;
         try {
             //返回文件请求路径
-            String filePath = aliOssUtil.upload(file.getBytes(), file, basePath);
-            //保存到user表中
-            userService.updateUserAvatar(userId, filePath);
-            return RestResult.success(filePath);
+            filePath = aliOssUtil.upload(file.getBytes(), file, basePath);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new BizException(ResultCode.FILE_UPLOAD_IO_ERROR);
         }
-        return RestResult.failure("文件上传失败");
+        //保存到user表中
+        userService.updateUserAvatar(userId, filePath);
+        return RestResult.success(filePath);
     }
 
     /*
@@ -297,7 +298,7 @@ public class UserController {
     public void wxLogin(HttpServletResponse response, HttpSession session) throws IOException {
         this.session = session;
         //redirece_url是回调的地址，要转成UrlEncode格式
-        String redirecrUrl = URLEncoder.encode(localHostUrl+"/user/wxCallback", StandardCharsets.UTF_8);
+        String redirecrUrl = URLEncoder.encode(localHostUrl + "/user/wxCallback", StandardCharsets.UTF_8);
         //构造二维码地址
         String url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + wxMpConfig.getAppid()
                 + "&redirect_uri=" + redirecrUrl + "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";

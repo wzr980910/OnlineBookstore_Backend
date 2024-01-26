@@ -1,4 +1,4 @@
-package com.bookStore.pojo.strategy;
+package com.bookStore.pojo.order;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;

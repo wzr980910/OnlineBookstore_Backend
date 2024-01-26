@@ -1,6 +1,7 @@
 package com.bookStore.log;
 
 import com.bookStore.mapper.LogsMapper;
+import com.bookStore.service.LogsService;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -26,12 +27,14 @@ import java.util.logging.LogManager;
 @Slf4j
 public class MethosLogAspect {
     @Autowired
-    private LogsMapper logsMapper;
+    private LogsService logsService;
+
     //定义切点
     @Pointcut("@annotation(com.bookStore.log.MethodLog)")
     public void methodLog() {
 
     }
+
 
     @Around("methodLog()")
     public Object log(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -47,24 +50,28 @@ public class MethosLogAspect {
     }
 
     private void EndRecord(Long time) {
-        log.info("excute time:{}ms", time);
-        log.info("====================log end====================");
+        String logInfo = "excute time:" + time + "ms" + "\n<<<log end";
+        logsService.saveLog(logInfo);
     }
 
-    private static void StartRecord(ProceedingJoinPoint joinPoint) {
+    private void StartRecord(ProceedingJoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        log.info("====================log start====================");
         //请求的方法名
         String className = joinPoint.getTarget().getClass().getName();
         String methodName = signature.getName();
-        log.info("request method:{}", className + "." + methodName + "()");
         //请求的参数
         Object[] args = joinPoint.getArgs();
         Gson gson = new Gson();
         String params = gson.toJson(args);
-        String logInfo="log start>>>\n"
-                +"request method:"+ className + "." + methodName + "()\n"
-                +"params:"+params+"\n";
+        String logInfo = "log start>>>\n"
+                + "request method:" + className + "." + methodName + "()\n"
+                + "params:" + params + "\n";
+        logsService.saveLog(logInfo);
+    }
+
+    @AfterReturning(value = "execution(* com.bookStore.advice..*.*(..))", returning = "result")
+    public void exLog(Object result) {
+        logsService.saveLog(result.toString());
     }
 
 }

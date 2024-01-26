@@ -57,7 +57,6 @@ public enum ResultCode {
     DB_UPDATE_ERROR(4003,"数据库修改异常"),
     DB_SELECT_ERROR(4004,"数据库查询异常"),
     DB_SELECT_ONE_ERROR(4005,"查询结果不唯一"),
-    DB_ERROR(4000,"数据库出错"),
     /* 订单状态错误*/
     ORDER_STATUS_ERROR(5001,"订单状态异常"),
     /*支付信息错误*/

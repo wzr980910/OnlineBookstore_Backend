@@ -21,7 +21,7 @@ private LogsMapper logsMapper;
     public void saveLog(String logInfo) {
         Logs logs = new Logs();
         logs.setContent(logInfo);
-
+        logsMapper.insert(logs);
     }
 }
 

@@ -116,10 +116,7 @@ public class OrdersShowController {
             //参数缺失
             return new RestResult(ResultCode.PARAM_NOT_COMPLETE);
         }
-        int rows = ordersShowService.updateOrders(userId, orderId, address);
-        if (rows == 0) {
-            return new RestResult(ResultCode.DB_UPDATE_ERROR);
-        }
+        ordersShowService.updateOrders(userId, orderId, address);
         return new RestResult(ResultCode.SUCCESS);
     }
 

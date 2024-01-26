@@ -183,10 +183,7 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
             }
         }
         //批量更新库存
-        boolean b = stockService.updateBatchById(stockList);
-        if (!b) {
-            throw new BizException(ResultCode.DB_UPDATE_ERROR);
-        }
+        stockService.updateBatchById(stockList);
         //查询图书id和图书价格
         LambdaQueryWrapper<Book> bookWrapper = new LambdaQueryWrapper<>();
         bookWrapper.in(Book::getId, bookIds);
