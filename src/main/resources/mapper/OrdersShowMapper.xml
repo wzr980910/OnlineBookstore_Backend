@@ -13,7 +13,7 @@
         <result property="status" column="status" jdbcType="TINYINT"/>
         <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
-        <result property="payTime" column="payTime" jdbcType="TIMESTAMP"/>
+
     </resultMap>
     <select id="selectOrderPage" resultType="com.bookStore.pojo.respojo.OrderReturn">
         select orders_show.id orderShowId,
@@ -22,7 +22,6 @@
         orders_show.totalPrice,
         orders_show.status,
         orders_show.createTime,
-        orders_show.payTime,
         book.id bookId,
         book.bookName,
         book.price,

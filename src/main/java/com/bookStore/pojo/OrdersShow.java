@@ -40,8 +40,6 @@ public class OrdersShow implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
-    private Date payTime;
 
     private Integer isDeleted;
 

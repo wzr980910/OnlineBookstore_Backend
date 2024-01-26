@@ -36,9 +36,9 @@ public class User implements Serializable {
     @ApiModelProperty(value = "用户密码",notes ="密码长度在8到20个字符之间，可以包含字母、数字和特殊字符")
     private String password;
 
-    @Pattern(regexp = "^[a-zA-Z0-9]{3,20}$", message = "用户名只包含字母和数字，长度在3到20个字符之间")
+    @Pattern(regexp = "^(?=.*[\\u4E00-\\u9FA5])[a-zA-Z0-9\\u4E00-\\u9FA5]{2,10}$", message = "用户名只包含字母和数字、中文，长度在2到10个字符之间")
     @ApiModelProperty(value = "用户密码",notes ="用户名只包含字母和数字，长度在3到20个字符之间")
-    private String username;
+    private String userName;
 
     @ApiModelProperty(value = "用户密码",notes = "1表示男，2表示女,0未知")
     private Integer gender;

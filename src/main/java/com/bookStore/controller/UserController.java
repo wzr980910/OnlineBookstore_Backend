@@ -39,6 +39,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 @RestController
@@ -329,8 +330,19 @@ public class UserController {
         if (user == null) {
             User userAdd = new User();
             //将微信提供的信息设置到用户信息中
+            while (true) {//生成随机账户
+                Random random = new Random();
+                long randomNumber = random.nextLong();
+                User userTemp = userService.selectByAccount(String.valueOf(randomNumber));
+                if (userTemp == null) {
+                    userAdd.setAccountNumber(String.valueOf(randomNumber));
+                    break;
+                }
+            }
+            //设置微信注册账户的默认密码
+            userAdd.setPassword("123456");
             userAdd.setWechatId(wechatUser.getOpenid());
-            userAdd.setUsername(wechatUser.getNickname());
+            userAdd.setUserName(wechatUser.getNickname());
             userAdd.setPicture(wechatUser.getHeadimgurl());
             userAdd.setGender(wechatUser.getSex());
             userService.insert(userAdd);

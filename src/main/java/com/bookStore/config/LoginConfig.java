@@ -32,6 +32,7 @@ public class LoginConfig implements WebMvcConfigurer {
                 "/native/notify",
                 "/user/login",
                 "/user/regist",
+                "/user/checkUserAccount",
                 "/user/wx",
                 "/user/wxCallback",
                 "/user/wxLogin",

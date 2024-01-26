@@ -31,8 +31,6 @@ public class OrderReturn implements Serializable {
     private Integer status;
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
-    @ApiModelProperty(value = "支付时间")
-    private Date payTime;
     @ApiModelProperty(value = "书籍ID", example = "1")
     private Long bookId;
     @ApiModelProperty(value = "书籍名称", example = "Java编程思想")
