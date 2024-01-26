@@ -18,6 +18,7 @@ import com.bookStore.util.OrderNumberGeneratorUtil;
 import com.bookStore.util.result.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -111,6 +112,7 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
 //    }
 
     @Override
+    @Transactional
     public Long addOrders(Long userId, OrderVo orderVo) {
         if (orderVo.getShoppingIds() == null || orderVo.getShoppingIds().length == 0) {//直接购买图书
             if (orderVo.getBookId() == null) {
@@ -148,6 +150,7 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
             return orderId;
         }
     }
+
 
     private Long orderGenerate(Long userId, OrderVo orderVo, List<Shopping> shoppings) {
         //验证库存，如果某一项库存不足，那么整体结算失败
@@ -234,6 +237,7 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
     }
 
     @Override
+    @Transactional
     public int updateOrders(Long userId, Long orderId, Address address) {
         address.setUserId(userId);
         //订单中修改的地址不会保存到用户的地址列表中
@@ -264,6 +268,7 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
 
     //取消订单
     @Override
+    @Transactional
     public int cancelOrders(Long userId, Long orderId, Integer addToCart) {
         LambdaQueryWrapper<OrdersShow> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(OrdersShow::getOrderId, orderId);
