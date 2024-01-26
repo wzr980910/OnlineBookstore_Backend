@@ -287,7 +287,7 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
         List<Orders> ordersList = ordersMapper.selectList(ordersWrapper);
         if (addToCart.equals(1)) {//用户想将取消订单的商品加回购物车
             //查询每一本书的价格，以及购买数量
-            List<Shopping> shoppingList = ordersMapper.selectBookInfo(ordersList, orderId);
+            List<Shopping> shoppingList = ordersMapper.selectBookInfo(orderId);
             //shoppingList是要插入或更新到shopping中的实体集合
             for (Shopping shopping : shoppingList) {
                 shopping.setUserId(userId);

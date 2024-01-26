@@ -19,7 +19,7 @@ public interface OrdersMapper extends BaseMapper<Orders> {
 
     int insertOrdersBatch(@Param("ordersList") List<Orders> ordersList);
 
-    List<Shopping> selectBookInfo(@Param("ordersList") List<Orders> ordersList,@Param("orderId") Long orderId);
+    List<Shopping> selectBookInfo(@Param("orderId") Long orderId);
 }
 
 

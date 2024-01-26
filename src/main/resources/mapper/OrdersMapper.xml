@@ -19,6 +19,7 @@
             (#{orders.orderId},#{orders.bookId},#{orders.number})
         </foreach>
     </insert>
+
     <select id="selectBookInfo" resultType="com.bookStore.pojo.Shopping">
         select orders.number ,orders.bookId ,book.bookName,book.price from orders
                                                                                left join book on orders.bookId = book.id

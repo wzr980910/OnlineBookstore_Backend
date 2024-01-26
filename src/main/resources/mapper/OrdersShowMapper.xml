@@ -44,7 +44,7 @@
                 <!--查询给定创建时间段的订单信息-->
                 and orders_show.createTime between #{orderSelectVo.createDateOld} and #{orderSelectVo.createDateNew}
                 <!--查询未删除-->
-                and orders_show.isDeleted = 0
+                and orders_show.status != 4
             </if>
             <!--根据订单编号查询-->
             <if test="orderSelectVo.orderId != null and !orderSelectVo.orderId.equals('')">
