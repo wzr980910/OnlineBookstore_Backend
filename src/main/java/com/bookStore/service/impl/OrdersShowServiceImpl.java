@@ -39,8 +39,6 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
     @Autowired
     private ShoppingMapper shoppingMapper;
     @Autowired
-    private ShoppingService shoppingService;
-    @Autowired
     private StockService stockService;
     @Autowired
     private OrdersMapper ordersMapper;
