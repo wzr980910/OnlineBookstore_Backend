@@ -65,7 +65,6 @@ public class NativePayServiceImpl implements NativePayService {
         try {
             code_url = wxPay.CreateOrder(ordersShow.getTotalPrice(), "购买图书", ordersShow.getOrderId());
         } catch (Exception e) {
-            log.info("支付信息生成失败", e);
             throw new BizException("支付信息生成失败");
         }
         return code_url;
@@ -118,7 +117,6 @@ public class NativePayServiceImpl implements NativePayService {
         try {
             message = wxPay.queryOrder(String.valueOf(orderId));
         } catch (Exception e) {
-            log.info("支付信息查询异常", e);
             throw new BizException(ResultCode.PAY_SELECT_ERROR);
         }
         if (message.equals("SUCCESS")) {

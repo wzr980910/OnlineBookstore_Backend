@@ -166,6 +166,9 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
         //查询图书id和图书库存
         stockWrapper.select(Stock::getBookId, Stock::getStockNum, Stock::getId);
         List<Map<String, Object>> bookNumMaps = stockMapper.selectMaps(stockWrapper);
+        if(bookNumMaps.size()<bookIds.size()){//存在某件商品在库存表中没有记录
+            throw new BizException(ResultCode.STOCK_NUM_ZERO);
+        }
         List<Stock> stockList = new ArrayList<>();
         for (Map<String, Object> bookNumMap : bookNumMaps) {
             //查询到的bookNumMaps不会按照bookIds中的id排序，需要重新遍历
