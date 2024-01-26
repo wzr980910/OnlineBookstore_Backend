@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bookStore.exception.BizException;
 import com.bookStore.mapper.*;
 import com.bookStore.pojo.*;
+import com.bookStore.pojo.pojoenum.DefaultAddress;
+import com.bookStore.pojo.pojoenum.DeleteState;
 import com.bookStore.pojo.pojoenum.OrderStatus;
 import com.bookStore.pojo.respojo.OrderReturn;
 import com.bookStore.pojo.vo.OrderSelectVo;
@@ -131,6 +133,7 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
                 //传入参数缺失，增加订单失败
                 throw new BizException(ResultCode.PARAM_NOT_COMPLETE);
             }
+            //通过传入的多个购物车id查
             List<Shopping> shoppings = shoppingMapper.selectBatchIds(shoppingIdList);
             for (Shopping shopping : shoppings) {
                 if (!shopping.getUserId().equals(userId)) {
@@ -199,7 +202,8 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
         ordersShow.setUserId(userId);
         ordersShow.setAddressId(orderVo.getAddressId());
         BigDecimal totalPrice = new BigDecimal(0);
-        ordersShow.setStatus(0);
+        //订单的状态设为待付款
+        ordersShow.setStatus(OrderStatus.WAIT_PAYMENT.getCode());
         for (Shopping shopping : shoppings) { //对每一个购物车项插入一条订单信息
             Orders orders = new Orders();
             orders.setOrderId(orderId);
@@ -241,8 +245,9 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
     public int updateOrders(Long userId, Long orderId, Address address) {
         address.setUserId(userId);
         //订单中修改的地址不会保存到用户的地址列表中
-        address.setIsDeleted(1);
-        address.setDefaultAddress(0);
+        address.setIsDeleted(DeleteState.IS_DELETE.getCode());
+        //不是默认地址
+        address.setDefaultAddress(DefaultAddress.NOT_DEFAULT_ADDRESS.getValue());
         int rows = addressMapper.insert(address);
         if (rows == 0) {
             //插入地址失败
@@ -278,7 +283,7 @@ public class OrdersShowServiceImpl extends ServiceImpl<OrdersShowMapper, OrdersS
         } catch (Exception e) {
             throw new BizException(ResultCode.DB_SELECT_ONE_ERROR);
         }
-        if (ordersShow == null || !ordersShow.getStatus().equals(0)) {
+        if (ordersShow == null || !ordersShow.getStatus().equals(OrderStatus.WAIT_PAYMENT.getCode())) {
             throw new BizException(ResultCode.ORDER_STATUS_ERROR);
         }
         //先从orders表中查询订单详情，以便增加shopping表信息以及增加库存
