@@ -29,11 +29,13 @@ public class User implements Serializable {
     @Pattern(regexp = "^\\d{3,20}$",
             message = "账号数字组成长度在3到20个字符之间")
     @ApiModelProperty(value = "用户账号",notes = "账号数字组成长度在3到20个字符之间")
+    @NotBlank(message = "账号不能为空")
     private String accountNumber;
 
     @Pattern(regexp = "^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>?]{8,20}$"
             , message = "密码长度在8到20个字符之间，可以包含字母、数字和特殊字符")
     @ApiModelProperty(value = "用户密码",notes ="密码长度在8到20个字符之间，可以包含字母、数字和特殊字符")
+    @NotBlank(message = "密码不能为空")
     private String password;
 
     @Pattern(regexp = "^(?=.*[\\u4E00-\\u9FA5])[a-zA-Z0-9\\u4E00-\\u9FA5]{2,10}$", message = "用户名只包含字母和数字、中文，长度在2到10个字符之间")
